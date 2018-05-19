@@ -1,6 +1,6 @@
 <template>
   <div class="cp-schema">
-    Confluent schema: (#{{id}}) {{name}}
+    Schema user: (#{{id}}) {{name}}
   </div>
 </template>
 
