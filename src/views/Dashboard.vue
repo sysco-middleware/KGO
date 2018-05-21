@@ -1,6 +1,8 @@
 <template>
   <div>
-    <Schema v-for="user of users" :key="user.id" :id="user.id" :name="user.first_name"/>
+    <span v-for="subject of subjects" :key="subject">
+      <span v-if="info[subject]">(#{{info[subject].latest.id}})</span> {{subject}}
+    </span>
   </div>
 </template>
 
@@ -15,12 +17,20 @@ export default {
     Schema
   },
   computed: {
-    ...mapState('schemas', [
-      'users'
-    ])
+    ...mapState('subjects', {
+      subjects: 'availible',
+      info: 'info'
+    })
   },
-  created () {
-    this.$store.dispatch('schemas/fetchAllUsers')
+  watch: {
+    subjects () {
+      for (let subject of this.subjects) {
+        this.$store.dispatch('subjects/fetchLatest', subject)
+      }
+    }
+  },
+  async created () {
+    await this.$store.dispatch('subjects/fetchAvailible')
   }
 }
 </script>

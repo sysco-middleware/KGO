@@ -6,6 +6,7 @@ import getters from './getters'
 import actions from './actions'
 import state from './state'
 
+import subjects from './modules/subjects'
 import schemas from './modules/schemas'
 
 Vue.use(Vuex)
@@ -16,6 +17,7 @@ export default new Vuex.Store({
   actions,
   state,
   modules: {
+    subjects,
     schemas
   }
 })
