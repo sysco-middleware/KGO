@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <div>
-      <router-link to="/">Dashboard</router-link>
-    </div>
-    <router-view/>
+    <router-view class="cpp-content"/>
   </div>
 </template>
 
