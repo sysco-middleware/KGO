@@ -84,95 +84,7 @@
         </ul>
       </div>
       <div class="column col-8">
-        <div class="panel">
-          <div class="panel-header text-center">
-            <div class="panel-title h5 mt-10">events</div>
-            <div class="panel-subtitle">id: 2, v.1</div>
-          </div>
-          <nav class="panel-nav">
-            <ul class="tab tab-block">
-              <li class="tab-item">
-                <a href="#panels">Schema</a>
-              </li>
-              <li class="tab-item">
-                <a href="#panels">Info</a>
-              </li>
-              <li class="tab-item active" @click="selected='config'">
-                <a href="#panels">Config</a>
-              </li>
-              <li class="tab-item" @click="selected='history'">
-                <a href="#panels">History</a>
-              </li>
-            </ul>
-          </nav>
-          <div class="panel-body" v-if="selected == 'config'">
-            <table class="table table-striped table-scroll">
-              <thead>
-                <tr>
-                  <th>name</th>
-                  <th>type</th>
-                  <th>default</th>
-                  <th>documentation</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>payment_type</td>
-                  <td>int</td>
-                  <td>0</td>
-                  <td>A numeric code signifying how the passenger paid for the trip. 1: Credit card 2: Cash 3: No charge 4: Dispute 5: Unknown 6: Voided trip</td>
-                </tr>
-                <tr>
-                  <td>trip_distance</td>
-                  <td>double</td>
-                  <td>0.0</td>
-                  <td>The elapsed trip distance in miles reported by the taximeter.</td>
-                </tr>
-                <tr>
-                  <td>tpep_dropoff_datetime</td>
-                  <td>string</td>
-                  <td></td>
-                  <td>The date and time when the meter was disengaged.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="panel-body" v-if="selected == 'history'">
-            <code>
-    },
-    {
-      "name": "number3",
-      "type": "float",
-      "default": 1
-            </code>
-            <div class="divider text-center" data-content="DIFF"></div>
-            <code>
-    {
-  "type": "record",
-  "name": "evolution",
-  "namespace": "com.landoop",
-  "doc": "This is a sample Avro schema to get you started. Please edit",
-  "fields": [
-    {
-      "name": "name",
-      "type": "string"
-    },
-    {
-      "name": "number1",
-      "type": "int"
-    },
-    {
-      "name": "number2",
-      "type": "float"
-    }
-  ]
-}
-            </code>
-          </div>
-          <div class="panel-footer">
-            <!-- <button class="btn btn-primary btn-block">Save</button> -->
-          </div>
-        </div>
+        <SchemaPanel />
       </div>
     </div>
   </div>
@@ -180,24 +92,19 @@
 
 <script>
 // @ is an alias to /src
-import Schema from '@/components/Schema.vue'
 import { mapState } from 'vuex'
+import SchemaPanel from '@/components/schema/Panel.vue'
 
 export default {
   name: 'dashboard',
   components: {
-    Schema
+    SchemaPanel
   },
   computed: {
     ...mapState('subjects', {
       subjects: 'availible',
       info: 'info'
     })
-  },
-  data () {
-    return {
-      selected: 'config'
-    }
   },
   watch: {
     subjects () {
