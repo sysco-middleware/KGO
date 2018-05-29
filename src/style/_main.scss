@@ -1,5 +1,32 @@
-// See BECM naming guidelines (https://github.com/jeroenrinzema/BECM)
+@import 'variables';
 
-@import 'normalizer';
-@import 'helpers';
+// Import components
 @import 'components/main';
+
+// Import spectre
+@import 'node_modules/spectre.css/src/spectre';
+
+.cpp-content {
+  max-width: 1200px;
+  width: 90%;
+  padding: 1rem 0;
+  margin: 0 auto;
+}
+
+.cpp-schemas {
+  margin: 1.5rem 0;
+}
+
+.flex-center {
+  justify-content: center;
+}
+
+.menu {
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+}
+
+.menu .menu-badge {
+  font-size: .6rem;
+  padding: .35rem 0;
+}
