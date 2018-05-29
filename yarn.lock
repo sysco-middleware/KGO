@@ -736,6 +736,10 @@
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.0.2.tgz#d056b68999769728a1cff8d643bc59eb6f0be436"
 
+"@sysco-middleware/vue-ace@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@sysco-middleware/vue-ace/-/vue-ace-0.2.1.tgz#e6dbef46ee0c99b1ab7ad0d44e19e61b11c8d11a"
+
 "@vue/babel-preset-app@^3.0.0-beta.10":
   version "3.0.0-beta.10"
   resolved "https://registry.yarnpkg.com/@vue/babel-preset-app/-/babel-preset-app-3.0.0-beta.10.tgz#0640f90677d2e627ab3e5e39a1d9bf01e77e8c4b"
@@ -1440,6 +1444,10 @@ brace-expansion@^1.1.7:
   dependencies:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
+
+brace@^0.11.1:
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/brace/-/brace-0.11.1.tgz#4896fcc9d544eef45f4bb7660db320d3b379fe58"
 
 braces@^1.8.2:
   version "1.8.5"
@@ -6367,6 +6375,10 @@ spdy@^3.4.1:
     safe-buffer "^5.0.1"
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
+
+spectre.css@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/spectre.css/-/spectre.css-0.5.1.tgz#bd60345584bd88143f7d0930119c8f4bbd2822c7"
 
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"
