@@ -21,6 +21,14 @@
   justify-content: center;
 }
 
+.flex-middle {
+  align-items: center;
+}
+
+.text-dark {
+  color: $dark-color;
+}
+
 .menu {
   -webkit-transform: translateY(0);
   transform: translateY(0);
@@ -29,4 +37,16 @@
 .menu .menu-badge {
   font-size: .6rem;
   padding: .35rem 0;
+}
+
+.menu .pagination {
+  padding-top: 1.5rem;
+}
+
+.ace_editor {
+  height: 350px;
+}
+
+.panel .panel-body {
+  padding: 1.2rem .8rem;
 }
