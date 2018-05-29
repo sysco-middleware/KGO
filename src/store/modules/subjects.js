@@ -63,7 +63,7 @@ const mutations = {
     }
   },
   setSubjectVersions (state, subjectName, versions) {
-    state.subjects[subjectName] = versions
+    Vue.set(state.subjects, subjectName, versions)
   },
   setSubject (state, subject) {
     state.subject = subject
