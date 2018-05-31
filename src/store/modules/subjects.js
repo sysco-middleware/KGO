@@ -2,10 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 
 const state = {
-  availible: [],
-  info: {},
-  subjects: [],
-  subject: {}
+  subjects: {}
 }
 
 const getters = {
@@ -13,60 +10,54 @@ const getters = {
 
 const actions = {
   async fetchAvailible ({commit}) {
-    const {data: subjectNames} = await axios.get('/subjects')
-    commit('setSubjects', subjectNames)
+    const {data: subjects} = await axios.get('/subjects')
+    commit('setAvailible', subjects)
   },
-  async fetchVersions ({commit}, subjectName) {
-    const {data: versions} = await axios.get(`/subjects/${subjectName}/versions`)
-    commit('setSubjectVersions', subjectName, versions)
+  async fetchAllVersions ({dispatch, state}, name) {
+    for (let subject in state.subjects) {
+      await dispatch('fetchVersions', subject)
+    }
   },
-  async fetchLatestSubject ({commit}, subjectName) {
-    const {data: subject} = await axios.get(`/subjets/${subjectName}/versions/latest`)
-    commit('setSubject', subject)
+  async fetchVersions ({commit}, name) {
+    const {data: versions} = await axios.get(`/subjects/${name}/versions`)
+
+    commit('setVersions', {
+      name,
+      versions
+    })
   },
-  async fetchSubjectByVersion ({commit}, subjectName, version) {
-    const {data: subject} = await axios.get(`/subjets/${subjectName}/versions/${version}`)
-    commit('setSubject', subject)
-  },
-  async fetchLatest ({commit}, id) {
-    const {data: schema} = await axios.get(`/subjects/${id}/versions/latest`)
-    commit('setSubjectVersion', schema)
+  async fetchSchemaByVersion ({commit}, {name, version}) {
+    const {data: schema} = await axios.get(`/subjets/${name}/versions/${version}`)
+
+    commit('setSchema', {
+      name,
+      schema,
+      version
+    })
   }
 }
 
 const mutations = {
-  clearState (state, subjects) {
-    state.availible = []
-    state.info = {}
+  clearState (state) {
+    state.subjects = {}
   },
-  setSubjects (state, subjectNames) {
-    state.availible = subjectNames
-    state.subjects = subjectNames.map(subjectName => {
-      var s = {}
-      s[subjectName] = []
-      return s
-    })
-    console.log(state.subjects)
-  },
-  setSubjectVersion (state, schema) {
-    if (!state.info[schema.subject]) Vue.set(state.info, schema.subject, {})
-    Vue.set(state.info[schema.subject], schema.version, schema)
-
-    // Set the latest schema version
-    const latest = state.info[schema.subject].latest
-    if (!latest) {
-      Vue.set(state.info[schema.subject], 'latest', schema)
-    } else {
-      if (!latest.version < schema.version) {
-        Vue.set(state.info[schema.subject], 'latest', schema)
+  setAvailible (state, subjects) {
+    for (let subject of subjects) {
+      if (!state.subjects[subject]) {
+        Vue.set(state.subjects, subject, {})
       }
     }
   },
-  setSubjectVersions (state, subjectName, versions) {
-    Vue.set(state.subjects, subjectName, versions)
+  setSchema (state, {name, version, schema}) {
+    if (!state.subjects[name]) Vue.set(state.subjects, name, {})
+    Vue.set(state.subjects[name], version, schema)
   },
-  setSubject (state, subject) {
-    state.subject = subject
+  setVersions (state, {name, versions}) {
+    if (!state.subjects[name]) Vue.set(state.subjects, name, {})
+
+    for (let version of versions) {
+      Vue.set(state.subjects[name], version, {})
+    }
   }
 }
 
