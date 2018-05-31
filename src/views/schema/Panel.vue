@@ -127,22 +127,22 @@ export default {
     }
   },
   mounted () {
-    this.version = this.latest
-
-    this.compareLeft = this.versions.length > 1 ? this.latest - 1 : 0
-    this.compareRight = this.latest
+    this.initPanel()
   },
   watch: {
     subject () {
-      this.version = this.latest
-
-      this.compareLeft = this.versions.length > 1 ? this.latest - 1 : 0
-      this.compareRight = this.latest
+      this.initPanel()
     }
   },
   methods: {
     jsonToString (json) {
       return JSON.stringify(json, null, '\t')
+    },
+    initPanel () {
+      this.version = this.latest
+
+      this.compareLeft = this.versions.length > 1 ? this.latest - 1 : 0
+      this.compareRight = this.latest
     }
   }
 }
