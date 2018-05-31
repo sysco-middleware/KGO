@@ -31,7 +31,7 @@
               <div class="menu-badge">
                 <label class="label label-rounded label-primary">v{{schema.version}}</label>
               </div>
-              <a @click="selectSchema(key, schema.version)" class="active">{{key}}</a>
+              <a @click="selectSchema(key)" class="c-hand" :class="{active: key === selected}">{{key}}</a>
             </li>
             <li class="menu-item">
               <ul class="pagination flex-center">
@@ -62,7 +62,7 @@
         </ul>
       </div>
       <div class="column col-8">
-        <SchemaPanel />
+        <SchemaPanel v-if="selected" :schema="selected" />
       </div>
     </div>
   </div>
@@ -85,7 +85,7 @@ export default {
   },
   data () {
     return {
-
+      selected: ''
     }
   },
   async created () {
@@ -93,8 +93,8 @@ export default {
     // await this.$store.dispatch('schemas/fetchAllVersions')
   },
   methods: {
-    selectSchema (schema, version) {
-
+    selectSchema (schema) {
+      this.selected = schema
     }
   }
 }

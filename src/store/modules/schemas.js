@@ -12,11 +12,11 @@ const state = {
     commands: {
       1: {
         id: 2,
-        schema: '{\n  "type": "record",\n  "name": "events",\n  "namespace": "com.sysco",\n  "doc": "This is a sample Avro schema to get you started. Please edit",\n  "fields": [\n    {\n      "name": "name",\n      "type": "string"\n    },\n    {\n      "name": "number1",\n      "type": "int"\n    },\n    {\n      "name": "number2",\n      "type": "float"\n    }\n  ]\n}'
+        schema: '{\n  "type": "record",\n  "name": "commands",\n  "namespace": "com.sysco.v1",\n  "doc": "This is a sample Avro schema to get you started. Please edit",\n  "fields": [\n    {\n      "name": "name",\n      "type": "string"\n    },\n    {\n      "name": "number1",\n      "type": "int"\n    },\n    {\n      "name": "number2",\n      "type": "float"\n    }\n  ]\n}'
       },
       2: {
         id: 3,
-        schema: '{\n  "type": "record",\n  "name": "events",\n  "namespace": "com.sysco",\n  "doc": "This is a sample Avro schema to get you started. Please edit",\n  "fields": [\n    {\n      "name": "name",\n      "type": "string"\n    },\n    {\n      "name": "number1",\n      "type": "int"\n    },\n    {\n      "name": "number2",\n      "type": "float"\n    }\n  ]\n}'
+        schema: '{\n  "type": "record",\n  "name": "commands",\n  "namespace": "com.sysco.v2",\n  "doc": "This is a sample Avro schema to get you started. Please edit",\n  "fields": [\n    {\n      "name": "name",\n      "type": "string"\n    },\n    {\n      "name": "number1",\n      "type": "int"\n    },\n    {\n      "name": "number2",\n      "type": "float"\n    }\n  ]\n}'
       }
     }
   }

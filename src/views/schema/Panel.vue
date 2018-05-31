@@ -3,14 +3,13 @@
     <div class="panel-header bg-primary text-white">
       <div class="columns flex-middle">
         <div class="column">
-          <div class="panel-title h5 mt-10">Schema: events</div>
-          <div class="panel-subtitle">ID: 1</div>
+          <div class="panel-title h5 mt-10">Schema: {{schema}}</div>
+          <div class="panel-subtitle">ID: {{selected.id}}</div>
         </div>
         <div class="column">
           <div class="form-group text-dark">
-            <select class="form-select select-sm">
-              <option>v1</option>
-              <option>v2</option>
+            <select class="form-select select-sm" v-model="version">
+              <option v-for="version of versions" :key="version" :value="version">v{{version}}</option>
             </select>
           </div>
         </div>
@@ -18,7 +17,7 @@
     </div>
     <Tabs nav="panel-nav" body="panel-body">
       <Tab name="Schema">
-        <Editor :content="code" />
+        <Editor :content="selected.schema" />
       </Tab>
       <Tab name="Info">
         <table class="table table-striped table-scroll">
@@ -57,47 +56,56 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
 import Editor from '@/components/Editor.vue'
 
 export default {
   props: {
-    name: String,
-    id: String,
-    versions: Array
+    schema: {
+      type: String,
+      required: true
+    }
   },
   components: {
     Tab,
     Tabs,
     Editor
   },
-  data () {
-    return {
-      editor: null,
-      code: `{
-  "type": "record",
-  "name": "events",
-  "namespace": "com.sysco",
-  "doc": "This is a sample Avro schema to get you started. Please edit",
-  "fields": [
-    {
-      "name": "name",
-      "type": "string"
+  computed: {
+    ...mapState('schemas', [
+      'subjects'
+    ]),
+    schemas () {
+      return this.subjects[this.schema]
     },
-    {
-      "name": "number1",
-      "type": "int"
+    versions () {
+      return Object.keys(this.schemas)
     },
-    {
-      "name": "number2",
-      "type": "float"
-    }
-  ]
-}`
+    latest () {
+      return Math.max(...this.versions)
+    },
+    selected () {
+      return {
+        ...this.schemas[this.version],
+        version: this.version
+      }
     }
   },
-  mounted () {
+  data () {
+    return {
+      version: 0
+    }
+  },
+  created () {
+    this.version = this.latest
+  },
+  watch: {
+    schema () {
+      this.version = this.latest
+    }
   }
 }
 </script>
