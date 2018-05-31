@@ -80,7 +80,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      latest: 'subjects/latest'
+      latest: 'schemas/latest'
     })
   },
   data () {
@@ -89,8 +89,8 @@ export default {
     }
   },
   async created () {
-    // await this.$store.dispatch('subjects/fetchAvailible')
-    // await this.$store.dispatch('subjects/fetchAllVersions')
+    // await this.$store.dispatch('schemas/fetchAvailible')
+    // await this.$store.dispatch('schemas/fetchAllVersions')
   },
   methods: {
     selectSchema (schema, version) {
