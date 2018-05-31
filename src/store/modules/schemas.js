@@ -10,7 +10,7 @@ const state = {
           type: 'record',
           name: 'events',
           namespace: 'com.sysco',
-          doc: 'This is a sample Avro schema to get you started. Please edit',
+          doc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mollis magna nisi. In non ligula lorem. In facilisis at nibh eu posuere. Morbi aliquet magna ac efficitur auctor',
           fields: [
             {
               name: 'name',
@@ -34,7 +34,7 @@ const state = {
           type: 'record',
           name: 'events',
           namespace: 'com.sysco',
-          doc: 'This is a sample Avro schema to get you started. Please edit',
+          doc: 'Praesent ac massa non lacus aliquet venenatis quis sit amet odio. Donec ullamcorper sem nec enim hendrerit interdum.',
           fields: [
             {
               name: 'name',
@@ -56,7 +56,7 @@ const state = {
           type: 'record',
           name: 'events',
           namespace: 'com.sysco',
-          doc: 'This is a sample Avro schema to get you started. Please edit',
+          doc: 'Praesent molestie dui non velit elementum bibendum. Curabitur et fermentum sem. Aliquam ex libero, ornare sed condimentum et, tincidunt vel leo.',
           fields: [
             {
               name: 'name',

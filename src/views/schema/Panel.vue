@@ -19,7 +19,18 @@
       <Tab name="Schema">
         <Editor :content="JSON.stringify(selected.schema, null, '\t')" />
       </Tab>
-      <Tab name="Fields">
+      <Tab name="Info">
+        <div class="card">
+          <div class="card-header">
+            <div class="tile-title" v-if="selected.schema.type"><b>Type:</b> {{selected.schema.type}}</div>
+            <div class="tile-title" v-if="selected.schema.record"><b>Record:</b> {{selected.schema.record}}</div>
+            <div class="tile-title" v-if="selected.schema.namespace"><b>Namespace:</b> {{selected.schema.namespace}}</div>
+          </div>
+          <div class="card-body text-gray" v-if="selected.schema.doc">
+            {{selected.schema.doc}}
+          </div>
+        </div>
+
         <table class="table table-striped table-scroll table-inline">
           <thead>
             <tr>
