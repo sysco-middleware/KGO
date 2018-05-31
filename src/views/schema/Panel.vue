@@ -88,10 +88,7 @@ export default {
       return Math.max(...this.versions)
     },
     selected () {
-      return {
-        ...this.schemas[this.version],
-        version: this.version
-      }
+      return this.schemas[this.version]
     }
   },
   data () {
