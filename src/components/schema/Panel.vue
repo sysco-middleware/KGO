@@ -59,7 +59,7 @@
 <script>
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
-import Editor from '@/components/Editor'
+import Editor from '@/components/Editor.vue'
 
 export default {
   props: {

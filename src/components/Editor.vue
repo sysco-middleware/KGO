@@ -1,3 +1,4 @@
+<script>
 import Ace from '@sysco-middleware/vue-ace'
 import 'brace/mode/json'
 
@@ -12,3 +13,4 @@ export default {
     })
   }
 }
+</script>
