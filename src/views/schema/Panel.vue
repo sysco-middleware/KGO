@@ -3,7 +3,7 @@
     <div class="panel-header bg-primary text-white">
       <div class="columns flex-middle">
         <div class="column">
-          <div class="panel-title h5 mt-10">Schema: {{schema}}</div>
+          <div class="panel-title h5 mt-10">Schema: {{subject}}</div>
           <div class="panel-subtitle">ID: {{selected.id}}</div>
         </div>
         <div class="column">
@@ -17,10 +17,10 @@
     </div>
     <Tabs nav="panel-nav" body="panel-body">
       <Tab name="Schema">
-        <Editor :content="selected.schema" />
+        <Editor :content="JSON.stringify(selected.schema, null, '\t')" />
       </Tab>
-      <Tab name="Info">
-        <table class="table table-striped table-scroll">
+      <Tab name="Fields">
+        <table class="table table-striped table-scroll table-inline">
           <thead>
             <tr>
               <th>name</th>
@@ -30,23 +30,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>payment_type</td>
-              <td>int</td>
-              <td>0</td>
-              <td>A numeric code signifying how the passenger paid for the trip. 1: Credit card 2: Cash 3: No charge 4: Dispute 5: Unknown 6: Voided trip</td>
-            </tr>
-            <tr>
-              <td>trip_distance</td>
-              <td>double</td>
-              <td>0.0</td>
-              <td>The elapsed trip distance in miles reported by the taximeter.</td>
-            </tr>
-            <tr>
-              <td>tpep_dropoff_datetime</td>
-              <td>string</td>
-              <td></td>
-              <td>The date and time when the meter was disengaged.</td>
+            <tr v-for="(row, index) of selected.schema.fields" :key="index">
+              <td>{{row.name}}</td>
+              <td>{{row.type}}</td>
+              <td>{{row.default}}</td>
+              <td>{{row.doc}}</td>
             </tr>
           </tbody>
         </table>
@@ -64,7 +52,7 @@ import Editor from '@/components/Editor.vue'
 
 export default {
   props: {
-    schema: {
+    subject: {
       type: String,
       required: true
     }
@@ -79,7 +67,7 @@ export default {
       'subjects'
     ]),
     schemas () {
-      return this.subjects[this.schema]
+      return this.subjects[this.subject]
     },
     versions () {
       return Object.keys(this.schemas)
@@ -100,7 +88,7 @@ export default {
     this.version = this.latest
   },
   watch: {
-    schema () {
+    subject () {
       this.version = this.latest
     }
   }

@@ -6,17 +6,72 @@ const state = {
     events: {
       1: {
         id: 1,
-        schema: '{\n  "type": "record",\n  "name": "events",\n  "namespace": "com.sysco",\n  "doc": "This is a sample Avro schema to get you started. Please edit",\n  "fields": [\n    {\n      "name": "name",\n      "type": "string"\n    },\n    {\n      "name": "number1",\n      "type": "int"\n    },\n    {\n      "name": "number2",\n      "type": "float"\n    }\n  ]\n}'
+        schema: {
+          type: 'record',
+          name: 'events',
+          namespace: 'com.sysco',
+          doc: 'This is a sample Avro schema to get you started. Please edit',
+          fields: [
+            {
+              name: 'name',
+              type: 'string'
+            },
+            {
+              name: 'number1',
+              type: 'int'
+            },
+            {
+              name: 'number2',
+              type: 'float'
+            }
+          ]}
       }
     },
     commands: {
       1: {
         id: 2,
-        schema: '{\n  "type": "record",\n  "name": "commands",\n  "namespace": "com.sysco.v1",\n  "doc": "This is a sample Avro schema to get you started. Please edit",\n  "fields": [\n    {\n      "name": "name",\n      "type": "string"\n    },\n    {\n      "name": "number1",\n      "type": "int"\n    },\n    {\n      "name": "number2",\n      "type": "float"\n    }\n  ]\n}'
+        schema: {
+          type: 'record',
+          name: 'events',
+          namespace: 'com.sysco',
+          doc: 'This is a sample Avro schema to get you started. Please edit',
+          fields: [
+            {
+              name: 'name',
+              type: 'string'
+            },
+            {
+              name: 'number1',
+              type: 'int'
+            },
+            {
+              name: 'number2',
+              type: 'float'
+            }
+          ]}
       },
       2: {
         id: 3,
-        schema: '{\n  "type": "record",\n  "name": "commands",\n  "namespace": "com.sysco.v2",\n  "doc": "This is a sample Avro schema to get you started. Please edit",\n  "fields": [\n    {\n      "name": "name",\n      "type": "string"\n    },\n    {\n      "name": "number1",\n      "type": "int"\n    },\n    {\n      "name": "number2",\n      "type": "float"\n    }\n  ]\n}'
+        schema: {
+          type: 'record',
+          name: 'events',
+          namespace: 'com.sysco',
+          doc: 'This is a sample Avro schema to get you started. Please edit',
+          fields: [
+            {
+              name: 'name',
+              type: 'string'
+            },
+            {
+              name: 'number1',
+              type: 'int'
+            },
+            {
+              name: 'number2',
+              type: 'float',
+              doc: 'A numeric code signifying how the passenger paid for the trip. 1: Credit card 2: Cash 3: No charge 4: Dispute 5: Unknown 6: Voided trip'
+            }
+          ]}
       }
     }
   }

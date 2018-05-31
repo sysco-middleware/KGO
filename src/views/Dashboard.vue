@@ -62,7 +62,7 @@
         </ul>
       </div>
       <div class="column col-8">
-        <SchemaPanel v-if="selected" :schema="selected" />
+        <SchemaPanel v-if="selected" :subject="selected" />
       </div>
     </div>
   </div>
@@ -83,7 +83,7 @@ export default {
       schemas: 'schemas/latest'
     }),
     total () {
-      return Object.keys(this.schemas).length
+      return Object.keys(this.schemas).length // Get the total ammount of keys since schemas is a object
     }
   },
   data () {
