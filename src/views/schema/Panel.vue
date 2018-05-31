@@ -17,7 +17,7 @@
     </div>
     <Tabs nav="panel-nav" body="panel-body">
       <Tab name="Schema">
-        <Editor :content="JSON.stringify(selected.schema, null, '\t')" />
+        <Editor :content="jsonToString(selected.schema)" />
       </Tab>
       <Tab name="Info">
         <div class="card">
@@ -50,6 +50,33 @@
           </tbody>
         </table>
       </Tab>
+      <Tab name="Config">
+      </Tab>
+      <Tab name="Diff">
+        <div class="columns mb-2">
+          <div class="column">
+            <div class="form-group">
+              <select class="form-select select-sm" v-model="compareLeft">
+                <option v-for="version of versions" :key="version" :value="version">v{{version}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="divider-vert"></div>
+          </div>
+
+          <div class="column">
+            <div class="form-group">
+              <select class="form-select select-sm" v-model="compareRight">
+                <option v-for="version of versions" :key="version" :value="version">v{{version}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <Diff :left="jsonToString(schemas[compareLeft])" :right="jsonToString(schemas[compareRight])" />
+      </Tab>
     </Tabs>
   </div>
 </template>
@@ -60,6 +87,7 @@ import { mapState } from 'vuex'
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
 import Editor from '@/components/Editor.vue'
+import Diff from '@/components/Diff.vue'
 
 export default {
   props: {
@@ -71,7 +99,8 @@ export default {
   components: {
     Tab,
     Tabs,
-    Editor
+    Editor,
+    Diff
   },
   computed: {
     ...mapState('schemas', [
@@ -92,15 +121,28 @@ export default {
   },
   data () {
     return {
-      version: 0
+      version: 0,
+      compareLeft: 0,
+      compareRight: 0
     }
   },
-  created () {
+  mounted () {
     this.version = this.latest
+
+    this.compareLeft = this.versions.length > 1 ? this.latest - 1 : 0
+    this.compareRight = this.latest
   },
   watch: {
     subject () {
       this.version = this.latest
+
+      this.compareLeft = this.versions.length > 1 ? this.latest - 1 : 0
+      this.compareRight = this.latest
+    }
+  },
+  methods: {
+    jsonToString (json) {
+      return JSON.stringify(json, null, '\t')
     }
   }
 }
