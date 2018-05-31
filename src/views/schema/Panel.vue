@@ -1,5 +1,5 @@
 <template>
-  <div class="panel">
+  <div class="panel" v-if="selected">
     <div class="panel-header bg-primary text-white">
       <div class="columns flex-middle">
         <div class="column">
