@@ -31,7 +31,7 @@ const getters = {
       const latest = Math.max(...versions)
 
       subjects[schema] = {
-        ...state.subjects[schema][latest],
+        schema: state.subjects[schema][latest],
         version: latest
       }
     }

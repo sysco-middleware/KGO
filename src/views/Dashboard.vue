@@ -19,7 +19,7 @@
           <li class="menu-item">
             <div class="tile tile-centered">
               <div class="tile-content">
-                5 Schemas
+                {{total}} Schemas
               </div>
 
               <button class="btn float-right">New</button>
@@ -27,7 +27,7 @@
           </li>
           <li class="divider"></li>
           <div>
-            <li class="menu-item" v-for="(schema, key) of latest" :key="schema.id">
+            <li class="menu-item" v-for="(schema, key) of schemas" :key="schema.id">
               <div class="menu-badge">
                 <label class="label label-rounded label-primary">v{{schema.version}}</label>
               </div>
@@ -80,8 +80,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      latest: 'schemas/latest'
-    })
+      schemas: 'schemas/latest'
+    }),
+    total () {
+      return Object.keys(this.schemas).length
+    }
   },
   data () {
     return {
