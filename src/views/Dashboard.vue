@@ -26,61 +26,39 @@
             </div>
           </li>
           <li class="divider"></li>
-          <li class="menu-item">
-            <div class="menu-badge">
-              <label class="label label-rounded label-primary">v.2</label>
-            </div>
-            <a href="#menus" class="active">events</a>
-          </li>
-          <li class="menu-item">
-            <div class="menu-badge">
-              <label class="label label-rounded label-primary">v.1</label>
-            </div>
-            <a href="#menus">commands</a>
-          </li>
-          <li class="menu-item">
-            <div class="menu-badge">
-              <label class="label label-rounded label-primary">v.1</label>
-            </div>
-            <a href="#menus">emails</a>
-          </li>
-          <li class="menu-item">
-            <div class="menu-badge">
-              <label class="label label-rounded label-primary">v.2</label>
-            </div>
-            <a href="#menus">reddit_posts</a>
-          </li>
-          <li class="menu-item">
-            <div class="menu-badge">
-              <label class="label label-rounded label-primary">v.1</label>
-            </div>
-            <a href="#menus">reddit_posts-keys</a>
-          </li>
-          <li class="menu-item">
-            <ul class="pagination flex-center">
-              <li class="page-item disabled">
-                <a href="#" tabindex="-1">Previous</a>
-              </li>
-              <li class="page-item active">
-                <a href="#">1</a>
-              </li>
-              <li class="page-item">
-                <a href="#">2</a>
-              </li>
-              <li class="page-item">
-                <a href="#">3</a>
-              </li>
-              <li class="page-item">
-                <span>...</span>
-              </li>
-              <li class="page-item">
-                <a href="#">12</a>
-              </li>
-              <li class="page-item">
-                <a href="#">Next</a>
-              </li>
-            </ul>
-          </li>
+          <div>
+            <li class="menu-item" v-for="(schema, key) of latest" :key="schema.id">
+              <div class="menu-badge">
+                <label class="label label-rounded label-primary">v{{schema.version}}</label>
+              </div>
+              <a @click="selectSchema(key, schema.version)" class="active">{{key}}</a>
+            </li>
+            <li class="menu-item">
+              <ul class="pagination flex-center">
+                <li class="page-item disabled">
+                  <a href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item active">
+                  <a href="#">1</a>
+                </li>
+                <li class="page-item">
+                  <a href="#">2</a>
+                </li>
+                <li class="page-item">
+                  <a href="#">3</a>
+                </li>
+                <li class="page-item">
+                  <span>...</span>
+                </li>
+                <li class="page-item">
+                  <a href="#">12</a>
+                </li>
+                <li class="page-item">
+                  <a href="#">Next</a>
+                </li>
+              </ul>
+            </li>
+          </div>
         </ul>
       </div>
       <div class="column col-8">
@@ -92,8 +70,8 @@
 
 <script>
 // @ is an alias to /src
-import { mapState } from 'vuex'
-import SchemaPanel from '@/components/schema/Panel.vue'
+import { mapGetters } from 'vuex'
+import SchemaPanel from '@/views/schema/Panel.vue'
 
 export default {
   name: 'dashboard',
@@ -101,20 +79,23 @@ export default {
     SchemaPanel
   },
   computed: {
-    ...mapState('subjects', {
-      subjects: 'availible',
-      info: 'info'
+    ...mapGetters({
+      latest: 'subjects/latest'
     })
   },
-  watch: {
-    subjects () {
-      for (let subject of this.subjects) {
-        this.$store.dispatch('subjects/fetchLatest', subject)
-      }
+  data () {
+    return {
+
     }
   },
   async created () {
-    await this.$store.dispatch('subjects/fetchAvailible')
+    // await this.$store.dispatch('subjects/fetchAvailible')
+    // await this.$store.dispatch('subjects/fetchAllVersions')
+  },
+  methods: {
+    selectSchema (schema, version) {
+
+    }
   }
 }
 </script>

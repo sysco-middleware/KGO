@@ -2,10 +2,42 @@ import Vue from 'vue'
 import axios from 'axios'
 
 const state = {
-  subjects: {}
+  subjects: {
+    events: {
+      1: {
+        id: 1,
+        schema: '{\n  "type": "record",\n  "name": "events",\n  "namespace": "com.sysco",\n  "doc": "This is a sample Avro schema to get you started. Please edit",\n  "fields": [\n    {\n      "name": "name",\n      "type": "string"\n    },\n    {\n      "name": "number1",\n      "type": "int"\n    },\n    {\n      "name": "number2",\n      "type": "float"\n    }\n  ]\n}'
+      }
+    },
+    commands: {
+      1: {
+        id: 2,
+        schema: '{\n  "type": "record",\n  "name": "events",\n  "namespace": "com.sysco",\n  "doc": "This is a sample Avro schema to get you started. Please edit",\n  "fields": [\n    {\n      "name": "name",\n      "type": "string"\n    },\n    {\n      "name": "number1",\n      "type": "int"\n    },\n    {\n      "name": "number2",\n      "type": "float"\n    }\n  ]\n}'
+      },
+      2: {
+        id: 3,
+        schema: '{\n  "type": "record",\n  "name": "events",\n  "namespace": "com.sysco",\n  "doc": "This is a sample Avro schema to get you started. Please edit",\n  "fields": [\n    {\n      "name": "name",\n      "type": "string"\n    },\n    {\n      "name": "number1",\n      "type": "int"\n    },\n    {\n      "name": "number2",\n      "type": "float"\n    }\n  ]\n}'
+      }
+    }
+  }
 }
 
 const getters = {
+  latest (state) {
+    let subjects = {}
+
+    for (let schema in state.subjects) {
+      const versions = Object.keys(state.subjects[schema])
+      const latest = Math.max(...versions)
+
+      subjects[schema] = {
+        ...state.subjects[schema][latest],
+        version: latest
+      }
+    }
+
+    return subjects
+  }
 }
 
 const actions = {
