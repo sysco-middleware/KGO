@@ -16,6 +16,10 @@ export default {
     },
     default: {
       type: Boolean
+    },
+    show: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -23,16 +27,18 @@ export default {
       isActive: false
     }
   },
-  created () {
-    if (this.default) {
-      this.isActive = true
-    }
-  },
   computed: {
     hash () {
       return this.id
         ? '#' + this.id
         : '#' + this.name.toLowerCase().replace(/ /g, '-')
+    }
+  },
+  watch: {
+    show () {
+      if (this.isActive) {
+        this.$parent.selectDefault()
+      }
     }
   }
 }

@@ -4,6 +4,7 @@
       <ul class="tab tab-block">
         <li
           v-for="(tab, index) in tabs"
+          v-show="tab.show"
           class="tab-item c-hand"
           :class="{'active': tab.isActive}"
           :key="index">
@@ -29,6 +30,7 @@ export default {
   },
   data () {
     return {
+      default: '',
       active: '',
       tabs: []
     }
@@ -39,8 +41,9 @@ export default {
   mounted () {
     // TODO: load active tab from url/localstorage
 
-    const hasDefaultTab = this.tabs.find((tab) => tab.isActive)
-    if (!hasDefaultTab) this.selectTab(this.tabs[0].hash)
+    const defaultTab = this.findDefault()
+    this.selectTab(defaultTab)
+    this.default = defaultTab
   },
   methods: {
     selectTab (hash) {
@@ -53,6 +56,17 @@ export default {
           tab.isActive = true
         }
       }
+    },
+    selectDefault () {
+      this.selectTab(this.default)
+    },
+    findDefault () {
+      let defaultTab = this.tabs.find((tab) => tab.default)
+      if (!defaultTab) {
+        defaultTab = this.tabs[0].hash
+      }
+
+      return defaultTab
     }
   }
 }

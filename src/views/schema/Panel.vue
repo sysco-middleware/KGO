@@ -52,7 +52,7 @@
       </Tab>
       <Tab name="Config">
       </Tab>
-      <Tab name="Diff">
+      <Tab name="Diff" :show="versions.length > 1">
         <div class="columns mb-2">
           <div class="column">
             <div class="form-group">
