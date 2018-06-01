@@ -33,18 +33,22 @@ export default {
       }
     })
   },
-  destroyed () {
-    this.editor.destroy()
-  },
   watch: {
     left () {
       const {left} = this.editor.getEditors()
       left.setValue(this.left)
+      left.selection.clearSelection()
     },
     right () {
       const {right} = this.editor.getEditors()
       right.setValue(this.right)
+      right.selection.clearSelection()
     }
+  },
+  beforeDestroy () {
+    const {left, right} = this.editor.getEditors()
+    left.destroy()
+    right.destroy()
   }
 }
 </script>
