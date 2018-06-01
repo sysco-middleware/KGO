@@ -75,7 +75,7 @@
           </div>
         </div>
 
-        <Diff :left="jsonToString(schemas[compareLeft])" :right="jsonToString(schemas[compareRight])" />
+        <Diff :leftContent="jsonToString(schemas[compareLeft])" :rightContent="jsonToString(schemas[compareRight])" class="relative" />
       </Tab>
     </Tabs>
   </div>

@@ -736,6 +736,10 @@
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.0.2.tgz#d056b68999769728a1cff8d643bc59eb6f0be436"
 
+"@sysco-middleware/vue-ace-diff@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@sysco-middleware/vue-ace-diff/-/vue-ace-diff-0.1.0.tgz#8e1098b89a42120dd549a45a26891a9e833d0ee5"
+
 "@sysco-middleware/vue-ace@^0.2.1":
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@sysco-middleware/vue-ace/-/vue-ace-0.2.1.tgz#e6dbef46ee0c99b1ab7ad0d44e19e61b11c8d11a"
