@@ -22,7 +22,9 @@
                 {{total}} Schemas
               </div>
 
-              <button class="btn float-right">New</button>
+              <router-link :to="{ name: 'new/schema' }">
+                <button class="btn float-right">New</button>
+              </router-link>
             </div>
           </li>
           <li class="divider"></li>
