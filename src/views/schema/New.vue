@@ -1,27 +1,30 @@
 <template>
   <div class="panel">
-    <div class="panel-header bg-primary text-white">
-      <div class="panel-title h5 mt-10">New subject</div>
+    <div class="panel-header bg-primary text-white text-center">
+      <div class="panel-title h5 mt-10">New Subject</div>
     </div>
-    <div class="panel-body">
-      <form class="form-horizontal">
-        <div class="form-group">
-          <input class="form-input" type="text" placeholder="Subject name">
-        </div>
-
+    <Tabs nav="panel-nav" body="panel-body">
+      <Tab name="Schema">
         <Editor />
-      </form>
-    </div>
+      </Tab>
+      <Tab name="Config">
+      </Tab>
+    </Tabs>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+
 import Editor from '@/components/Editor.vue'
+import Tab from '@/components/Tab.vue'
+import Tabs from '@/components/Tabs.vue'
 
 export default {
   components: {
-    Editor
+    Editor,
+    Tab,
+    Tabs
   },
   data () {
     return {
