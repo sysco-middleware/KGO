@@ -26,39 +26,31 @@
             </div>
           </li>
           <li class="divider"></li>
-          <div>
-            <li class="menu-item" v-for="(schema, key) of schemas" :key="schema.id">
+          <paginate name="schemas" :list="schemasAsArray" :per="5" tag="div">
+            <li class="menu-item" v-for="{key, schema} of paginated('schemas')">
               <div class="menu-badge">
                 <label class="label label-rounded label-primary">v{{schema.version}}</label>
               </div>
               <a @click="selectSchema(key)" class="c-hand" :class="{active: key === selected}">{{key}}</a>
             </li>
-            <li class="menu-item">
-              <ul class="pagination flex-center">
-                <li class="page-item disabled">
-                  <a href="#" tabindex="-1">Previous</a>
-                </li>
-                <li class="page-item active">
-                  <a href="#">1</a>
-                </li>
-                <li class="page-item">
-                  <a href="#">2</a>
-                </li>
-                <li class="page-item">
-                  <a href="#">3</a>
-                </li>
-                <li class="page-item">
-                  <span>...</span>
-                </li>
-                <li class="page-item">
-                  <a href="#">12</a>
-                </li>
-                <li class="page-item">
-                  <a href="#">Next</a>
-                </li>
-              </ul>
-            </li>
-          </div>
+          </paginate>
+
+          <li class="menu-item">
+            <paginate-links
+              class="pagination flex-center"
+              for="schemas"
+
+              :show-step-links="true"
+              :step-links="{
+                next: 'Next',
+                prev: 'Previous'
+              }"
+
+              :classes="{
+                'li': ['page-item', 'c-hand']
+              }">
+            </paginate-links>
+          </li>
         </ul>
       </div>
       <div class="column col-8">
@@ -84,11 +76,25 @@ export default {
     }),
     total () {
       return Object.keys(this.schemas).length // Get the total ammount of keys since schemas is a object
+    },
+    schemasAsArray () {
+      const keys = Object.keys(this.schemas)
+      let array = []
+
+      for (let key of keys) {
+        array.push({
+          key,
+          schema: this.schemas[key]
+        })
+      }
+
+      return array
     }
   },
   data () {
     return {
-      selected: ''
+      selected: '',
+      paginate: ['schemas']
     }
   },
   async created () {
