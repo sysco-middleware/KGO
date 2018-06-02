@@ -8,7 +8,7 @@
         </div>
         <div class="column">
           <div class="form-group text-dark">
-            <select class="form-select select-sm" v-model="version">
+            <select class="form-select select-sm" v-model="version" :disabled="versions.length <= 1">
               <option v-for="version of versions" :key="version" :value="version">v{{version}}</option>
             </select>
           </div>
