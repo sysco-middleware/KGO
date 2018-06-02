@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <Tabs nav="panel-nav" body="panel-body">
+    <Tabs nav="panel-nav" body="panel-body" name="schema" remember>
       <Tab name="Schema">
         <Editor :content="jsonToString(selected.schema)" />
       </Tab>

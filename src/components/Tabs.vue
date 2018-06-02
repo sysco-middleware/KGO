@@ -21,11 +21,13 @@
 <script>
 export default {
   props: {
-    nav: { // Nav class
-      type: String
-    },
-    body: { // Body class
-      type: String
+    nav: String, // Nav class
+    body: String, // Body class
+    remember: Boolean,
+    name: String,
+    prefix: {
+      type: String,
+      default: 'tabs-'
     }
   },
   data () {
@@ -39,15 +41,26 @@ export default {
     this.tabs = this.$children
   },
   mounted () {
-    // TODO: load active tab from url/localstorage
+    let activeTab = null
+    if (this.remember && this.name) {
+      activeTab = localStorage[this.prefix + this.name]
+      this.selectTab(activeTab)
+    }
 
     const defaultTab = this.findDefault()
-    this.selectTab(defaultTab)
     this.default = defaultTab
+
+    if (!activeTab) {
+      this.selectTab(defaultTab)
+    }
   },
   methods: {
     selectTab (hash) {
       this.active = hash
+
+      if (this.remember && this.name) {
+        localStorage[this.prefix + this.name] = hash
+      }
 
       for (let tab of this.tabs) {
         tab.isActive = false
