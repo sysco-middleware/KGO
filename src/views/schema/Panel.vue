@@ -109,13 +109,13 @@ export default {
       return this.subjects[subject]
     },
     versions () {
-      return Object.keys(this.schemas)
+      return Object.keys(this.schemas || {})
     },
     latest () {
       return Math.max(...this.versions)
     },
     selected () {
-      return this.schemas[this.version]
+      return this.version && this.schemas ? this.schemas[this.version] : null
     }
   },
   data () {
