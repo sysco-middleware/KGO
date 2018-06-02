@@ -1,63 +1,48 @@
 <template>
-  <div class="container">
-    <header class="navbar">
-      <section class="navbar-section">
-        <a href="#" class="btn btn-link">Docs</a>
-        <a href="#" class="btn btn-link">Examples</a>
-      </section>
-      <section class="navbar-center">
-        <!-- centered logo or brand -->
-      </section>
-      <section class="navbar-section">
-        <button class="btn">Export Schemas</button>
-      </section>
-    </header>
-
-    <div class="columns cpp-schemas">
-      <div class="column col-4">
-        <ul class="menu">
-          <li class="menu-item">
-            <div class="tile tile-centered">
-              <div class="tile-content">
-                {{total}} Schemas
-              </div>
-
-              <router-link :to="{ name: 'new/schema' }">
-                <button class="btn float-right">New</button>
-              </router-link>
+  <div class="columns">
+    <div class="column col-4">
+      <ul class="menu">
+        <li class="menu-item">
+          <div class="tile tile-centered">
+            <div class="tile-content">
+              {{total}} Schemas
             </div>
+
+            <router-link :to="{ name: 'new/schema' }">
+              <button class="btn float-right">New</button>
+            </router-link>
+          </div>
+        </li>
+        <li class="divider"></li>
+        <paginate name="schemas" :list="schemasAsArray" :per="5" tag="div">
+          <li class="menu-item" v-for="{key, schema} of paginated('schemas')">
+            <div class="menu-badge">
+              <label class="label label-rounded label-primary">v{{schema.version}}</label>
+            </div>
+            <router-link :to="{ name: 'schema', params: { subject: key }}" active-class="active" class="c-hand" :class="{active: key === selected}">{{key}}</router-link>
           </li>
-          <li class="divider"></li>
-          <paginate name="schemas" :list="schemasAsArray" :per="5" tag="div">
-            <li class="menu-item" v-for="{key, schema} of paginated('schemas')">
-              <div class="menu-badge">
-                <label class="label label-rounded label-primary">v{{schema.version}}</label>
-              </div>
-              <router-link :to="{ name: 'schema', params: { subject: key }}" active-class="active" class="c-hand" :class="{active: key === selected}">{{key}}</router-link>
-            </li>
-          </paginate>
+        </paginate>
 
-          <li class="menu-item">
-            <paginate-links
-              class="pagination flex-center"
-              for="schemas"
+        <li class="menu-item">
+          <paginate-links
+            class="pagination flex-center"
+            for="schemas"
 
-              :show-step-links="true"
-              :step-links="{
-                next: 'Next',
-                prev: 'Previous'
-              }"
+            :show-step-links="true"
+            :step-links="{
+              next: 'Next',
+              prev: 'Previous'
+            }"
 
-              :classes="{
-                'li': ['page-item', 'c-hand']
-              }">
-            </paginate-links>
-          </li>
-        </ul>
-      </div>
-      <div class="column col-8">
-        <router-view :key="$route.fullPath"></router-view>
-      </div>
+            :classes="{
+              'li': ['page-item', 'c-hand']
+            }">
+          </paginate-links>
+        </li>
+      </ul>
+    </div>
+    <div class="column col-8">
+      <router-view :key="$route.fullPath"></router-view>
     </div>
   </div>
 </template>
