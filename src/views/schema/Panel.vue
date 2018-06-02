@@ -52,7 +52,7 @@
       </Tab>
       <Tab name="Config">
         <div class="form-group">
-          <label class="form-label">Schema <b>{{subject}}</b> uses the global compatibility level <b class="text-uppercase">[{{compatibilityLevel}}]</b><br>Change compatibility level to:</label>
+          <label class="form-label">Schema <b>{{subject}}</b> uses the global compatibility level <b>[{{compatibilityLevel}}]</b><br>Change compatibility level to:</label>
           <select class="form-select" v-model="compatibilityLevel">
             <option class="c-hand" value="none">None</option>
             <option class="c-hand" value="full">Full</option>

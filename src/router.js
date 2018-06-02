@@ -12,22 +12,22 @@ export default new Router({
   routes: [
     {
       path: '/schemas',
-      name: 'schemas',
       component: SchemaDashboard,
       children: [
         {
           path: '',
+          name: 'schemas',
           component: EmptyPanel
-        },
-        {
-          name: 'schema',
-          path: ':subject',
-          component: SchemaPanel
         },
         {
           name: 'new/schema',
           path: 'new',
           component: NewSchemaPanel
+        },
+        {
+          name: 'schema',
+          path: ':subject',
+          component: SchemaPanel
         }
       ]
     }
