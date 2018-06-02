@@ -51,6 +51,15 @@
         </table>
       </Tab>
       <Tab name="Config">
+        <div class="form-group">
+          <label class="form-label">Schema <b>{{subject}}</b> uses the global compatibility level <b class="text-uppercase">[{{compatibilityLevel}}]</b><br>Change compatibility level to:</label>
+          <select class="form-select" v-model="compatibilityLevel">
+            <option class="c-hand" value="none">None</option>
+            <option class="c-hand" value="full">Full</option>
+            <option class="c-hand" value="forward">Forward</option>
+            <option class="c-hand" value="backward">Backward</option>
+          </select>
+        </div>
       </Tab>
       <Tab name="Diff" :show="versions.length > 1">
         <div class="columns mb-2">
@@ -82,6 +91,10 @@
           class="relative" />
       </Tab>
     </Tabs>
+
+    <div class="panel-footer">
+      <button class="btn btn-block">Update</button>
+    </div>
   </div>
 </template>
 
@@ -124,7 +137,8 @@ export default {
       subject,
       version: 0,
       compareLeft: 0,
-      compareRight: 0
+      compareRight: 0,
+      compatibilityLevel: 'none'
     }
   },
   mounted () {
