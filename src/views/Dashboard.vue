@@ -31,7 +31,7 @@
               <div class="menu-badge">
                 <label class="label label-rounded label-primary">v{{schema.version}}</label>
               </div>
-              <a @click="selectSchema(key)" class="c-hand" :class="{active: key === selected}">{{key}}</a>
+              <router-link :to="{ name: 'schema', params: { subject: key }}" active-class="active" class="c-hand" :class="{active: key === selected}">{{key}}</router-link>
             </li>
           </paginate>
 
@@ -54,7 +54,7 @@
         </ul>
       </div>
       <div class="column col-8">
-        <SchemaPanel v-if="selected" :subject="selected" />
+        <router-view :key="$route.fullPath"></router-view>
       </div>
     </div>
   </div>
@@ -63,13 +63,9 @@
 <script>
 // @ is an alias to /src
 import { mapGetters } from 'vuex'
-import SchemaPanel from '@/views/schema/Panel.vue'
 
 export default {
   name: 'dashboard',
-  components: {
-    SchemaPanel
-  },
   computed: {
     ...mapGetters({
       schemas: 'schemas/latest'

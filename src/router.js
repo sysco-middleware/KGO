@@ -2,15 +2,23 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Dashboard from './views/Dashboard.vue'
+import SchemaPanel from './views/schema/Panel.vue'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'dashboard',
-      component: Dashboard
+      path: '/schemas',
+      name: 'schemas',
+      component: Dashboard,
+      children: [
+        {
+          name: 'schema',
+          path: ':subject',
+          component: SchemaPanel
+        }
+      ]
     }
   ]
 })

@@ -94,12 +94,6 @@ import Editor from '@/components/Editor.vue'
 import DiffEditor from '@/components/DiffEditor.vue'
 
 export default {
-  props: {
-    subject: {
-      type: String,
-      required: true
-    }
-  },
   components: {
     Tab,
     Tabs,
@@ -111,7 +105,8 @@ export default {
       'subjects'
     ]),
     schemas () {
-      return this.subjects[this.subject]
+      const {subject} = this.$route.params
+      return this.subjects[subject]
     },
     versions () {
       return Object.keys(this.schemas)
@@ -124,29 +119,26 @@ export default {
     }
   },
   data () {
+    const {subject} = this.$route.params
     return {
+      subject,
       version: 0,
       compareLeft: 0,
       compareRight: 0
     }
   },
   mounted () {
-    this.initPanel()
-  },
-  watch: {
-    subject () {
-      this.initPanel()
-    }
+    this.version = this.latest
+
+    this.compareLeft = this.versions.length > 1 ? this.latest - 1 : 0
+    this.compareRight = this.latest
   },
   methods: {
+    init () {
+
+    },
     jsonToString (json) {
       return JSON.stringify(json, null, '\t')
-    },
-    initPanel () {
-      this.version = this.latest
-
-      this.compareLeft = this.versions.length > 1 ? this.latest - 1 : 0
-      this.compareRight = this.latest
     }
   }
 }
