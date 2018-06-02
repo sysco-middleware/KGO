@@ -20,46 +20,10 @@
         <Editor :content="jsonToString(selected.schema)" />
       </Tab>
       <Tab name="Info">
-        <div class="card">
-          <div class="card-header">
-            <div class="tile-title" v-if="selected.schema.type"><b>Type:</b> {{selected.schema.type}}</div>
-            <div class="tile-title" v-if="selected.schema.record"><b>Record:</b> {{selected.schema.record}}</div>
-            <div class="tile-title" v-if="selected.schema.namespace"><b>Namespace:</b> {{selected.schema.namespace}}</div>
-          </div>
-          <div class="card-body text-gray" v-if="selected.schema.doc">
-            {{selected.schema.doc}}
-          </div>
-        </div>
-
-        <table class="table table-striped table-scroll table-inline">
-          <thead>
-            <tr>
-              <th>name</th>
-              <th>type</th>
-              <th>default</th>
-              <th>documentation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(row, index) of selected.schema.fields" :key="index">
-              <td>{{row.name}}</td>
-              <td>{{row.type}}</td>
-              <td>{{row.default}}</td>
-              <td>{{row.doc}}</td>
-            </tr>
-          </tbody>
-        </table>
+        <Info :schema="selected.schema" />
       </Tab>
       <Tab name="Config">
-        <div class="form-group">
-          <label class="form-label">Schema <b>{{subject}}</b> uses the global compatibility level <b>[{{compatibilityLevel}}]</b><br>Change compatibility level to:</label>
-          <select class="form-select" v-model="compatibilityLevel">
-            <option class="c-hand" value="none">None</option>
-            <option class="c-hand" value="full">Full</option>
-            <option class="c-hand" value="forward">Forward</option>
-            <option class="c-hand" value="backward">Backward</option>
-          </select>
-        </div>
+        <Config />
       </Tab>
       <Tab name="Diff" :show="versions.length > 1">
         <div class="columns mb-2">
@@ -105,13 +69,17 @@ import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
 import Editor from '@/components/Editor.vue'
 import DiffEditor from '@/components/DiffEditor.vue'
+import Info from '@/views/schema/Info.vue'
+import Config from '@/views/schema/Config.vue'
 
 export default {
   components: {
     Tab,
     Tabs,
     Editor,
-    DiffEditor
+    DiffEditor,
+    Info,
+    Config
   },
   computed: {
     ...mapState('schemas', [

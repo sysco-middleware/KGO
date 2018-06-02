@@ -8,6 +8,7 @@
         <Editor />
       </Tab>
       <Tab name="Config">
+        <Config />
       </Tab>
     </Tabs>
   </div>
@@ -19,12 +20,14 @@ import { mapState } from 'vuex'
 import Editor from '@/components/Editor.vue'
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
+import Config from '@/views/schema/Config.vue'
 
 export default {
   components: {
     Editor,
     Tab,
-    Tabs
+    Tabs,
+    Config
   },
   data () {
     return {
