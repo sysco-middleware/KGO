@@ -6,6 +6,7 @@
 
 <style lang="scss">
   @import '~spectre.css/src/spectre';
+  @import '~spectre.css/src/spectre-icons';
   @import '~ace-diff/dist/ace-diff.min.css';
 
   @import './style/main';
