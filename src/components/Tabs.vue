@@ -41,18 +41,11 @@ export default {
     this.tabs = this.$children
   },
   mounted () {
-    let activeTab = null
-    if (this.remember && this.name) {
-      activeTab = localStorage[this.prefix + this.name]
-      this.selectTab(activeTab)
-    }
-
+    const activeTab = this.findActive()
     const defaultTab = this.findDefault()
-    this.default = defaultTab
 
-    if (!activeTab) {
-      this.selectTab(defaultTab)
-    }
+    this.default = defaultTab
+    this.selectTab(activeTab || defaultTab)
   },
   methods: {
     selectTab (hash) {
@@ -80,6 +73,11 @@ export default {
       }
 
       return defaultTab
+    },
+    findActive () {
+      const storedHash = localStorage[this.prefix + this.name]
+      const activeTab = this.tabs.find((tab) => tab.hash === storedHash && tab.show)
+      return activeTab ? activeTab.hash : null
     }
   }
 }

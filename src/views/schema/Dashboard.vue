@@ -27,6 +27,7 @@
           <paginate-links
             class="pagination flex-center"
             for="schemas"
+            :per="5"
 
             :show-step-links="true"
             :step-links="{
