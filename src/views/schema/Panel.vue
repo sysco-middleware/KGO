@@ -75,7 +75,11 @@
           </div>
         </div>
 
-        <Diff :leftContent="jsonToString(schemas[compareLeft])" :rightContent="jsonToString(schemas[compareRight])" class="relative" />
+        <DiffEditor
+          mode="ace/mode/json"
+          :left="jsonToString(schemas[compareLeft])"
+          :right="jsonToString(schemas[compareRight])"
+          class="relative" />
       </Tab>
     </Tabs>
   </div>
@@ -87,7 +91,7 @@ import { mapState } from 'vuex'
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
 import Editor from '@/components/Editor.vue'
-import Diff from '@/components/Diff.vue'
+import DiffEditor from '@/components/DiffEditor.vue'
 
 export default {
   props: {
@@ -100,7 +104,7 @@ export default {
     Tab,
     Tabs,
     Editor,
-    Diff
+    DiffEditor
   },
   computed: {
     ...mapState('schemas', [

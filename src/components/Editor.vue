@@ -1,16 +1,56 @@
+<template>
+  <div :id="id">
+  </div>
+</template>
+
 <script>
-import Ace from '@sysco-middleware/vue-ace'
+import Ace from 'brace'
 import 'brace/mode/json'
 
 export default {
-  extends: Ace,
+  props: {
+    id: {
+      default: 'ace',
+      type: String
+    },
+    content: {
+      type: String,
+      default: ''
+    }
+  },
+  data () {
+    return {
+      editor: null
+    }
+  },
+  watch: {
+    content () {
+      if (!this.editor) {
+        return
+      }
+
+      this.setValue(this.content)
+    }
+  },
   mounted () {
-    this.createEditor({
+    this.editor = Ace.edit(this.id)
+    this.editor.setOptions({
       showPrintMargin: false,
       tabSize: 2,
       useSoftTabs: true,
       mode: 'ace/mode/json'
     })
+
+    this.setValue(this.content)
+  },
+  methods: {
+    setValue (code) {
+      if (!this.editor) {
+        return
+      }
+
+      this.editor.session.setValue(code)
+    }
   }
 }
 </script>
