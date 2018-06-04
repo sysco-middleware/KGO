@@ -15,7 +15,7 @@
         </li>
         <li class="divider"></li>
         <paginate name="schemas" :list="schemasAsArray" :per="5" tag="div">
-          <li class="menu-item" v-for="{key, schema} of paginated('schemas')">
+          <li class="menu-item" v-for="{key, schema} of paginated('schemas')" :key="key">
             <div class="menu-badge">
               <label class="label label-rounded label-primary">v{{schema.version}}</label>
             </div>
