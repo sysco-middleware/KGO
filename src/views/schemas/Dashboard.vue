@@ -14,32 +14,45 @@
           </div>
         </li>
         <li class="divider"></li>
-        <paginate name="schemas" :list="schemasAsArray" :per="5" tag="div">
-          <li class="menu-item" v-for="{key, schema} of paginated('schemas')" :key="key">
-            <div class="menu-badge">
-              <label class="label label-rounded label-primary">v{{schema.version}}</label>
-            </div>
-            <router-link :to="{ name: 'schema', params: { subject: key }}" active-class="active" class="c-hand" :class="{active: key === selected}">{{key}}</router-link>
+
+        <div v-if="schemasAsArray.length > 0">
+          <paginate name="schemas" :list="schemasAsArray" :per="5" tag="div">
+            <li class="menu-item" v-for="{key, schema} of paginated('schemas')" :key="key">
+              <div class="menu-badge">
+                <label class="label label-rounded label-primary">v{{schema.version}}</label>
+              </div>
+              <router-link :to="{ name: 'schema', params: { subject: key }}" active-class="active" class="c-hand" :class="{active: key === selected}">{{key}}</router-link>
+            </li>
+          </paginate>
+
+          <li class="menu-item">
+            <paginate-links
+              class="pagination flex-center"
+              for="schemas"
+              :per="5"
+
+              :show-step-links="true"
+              :step-links="{
+                next: 'Next',
+                prev: 'Previous'
+              }"
+
+              :classes="{
+                'li': ['page-item', 'c-hand']
+              }">
+            </paginate-links>
           </li>
-        </paginate>
+        </div>
 
-        <li class="menu-item">
-          <paginate-links
-            class="pagination flex-center"
-            for="schemas"
-            :per="5"
-
-            :show-step-links="true"
-            :step-links="{
-              next: 'Next',
-              prev: 'Previous'
-            }"
-
-            :classes="{
-              'li': ['page-item', 'c-hand']
-            }">
-          </paginate-links>
-        </li>
+        <div v-if="schemasAsArray <= 0" class="empty">
+          <p class="empty-title h5">You have no schemas</p>
+          <p class="empty-subtitle">Click the button to create a schema.</p>
+          <div class="empty-action">
+            <router-link :to="{ name: 'new/schema', params: {} }">
+              <button class="btn btn-primary">New schema</button>
+            </router-link>
+          </div>
+        </div>
       </ul>
     </div>
     <div class="column col-8">
