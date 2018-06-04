@@ -37,7 +37,7 @@
 import Editor from '@/components/Editor.vue'
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
-import Config from '@/views/schema/Config.vue'
+import Config from '@/views/schemas/Config.vue'
 
 export default {
   components: {

@@ -69,8 +69,8 @@ import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
 import Editor from '@/components/Editor.vue'
 import DiffEditor from '@/components/DiffEditor.vue'
-import Info from '@/views/schema/Info.vue'
-import Config from '@/views/schema/Config.vue'
+import Info from '@/views/schemas/Info.vue'
+import Config from '@/views/schemas/Config.vue'
 
 export default {
   components: {

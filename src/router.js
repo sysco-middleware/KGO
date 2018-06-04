@@ -3,10 +3,10 @@ import Router from 'vue-router'
 
 import Dashboard from './views/Dashboard.vue'
 
-import SchemaDashboard from './views/schema/Dashboard.vue'
-import EmptyPanel from './views/schema/Empty.vue'
-import SchemaPanel from './views/schema/Panel.vue'
-import NewSchemaPanel from './views/schema/New.vue'
+import SchemaDashboard from './views/schemas/Dashboard.vue'
+import EmptyPanel from './views/schemas/Empty.vue'
+import SchemaPanel from './views/schemas/Panel.vue'
+import NewSchemaPanel from './views/schemas/New.vue'
 
 Vue.use(Router)
 
