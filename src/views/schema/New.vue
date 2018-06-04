@@ -1,22 +1,40 @@
 <template>
   <div class="panel">
-    <div class="panel-header bg-primary text-white text-center">
-      <div class="panel-title h5 mt-10">New Subject</div>
-    </div>
     <Tabs nav="panel-nav" body="panel-body">
       <Tab name="Schema">
-        <Editor />
+        <div class="form-group">
+          <label class="form-label" for="subject-name">Subject name</label>
+          <input class="form-input" id="subject-name" placeholder="" v-model="name">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Schema</label>
+          <Editor>{
+	"type": "record",
+	"name": "",
+	"namespace": "",
+	"doc": "",
+	"fields": [
+		{
+			"name": "example",
+			"type": "string"
+		}
+	]
+}
+          </Editor>
+        </div>
       </Tab>
       <Tab name="Config">
         <Config />
       </Tab>
     </Tabs>
+    <div class="panel-footer">
+      <button class="btn btn-block">Save</button>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 import Editor from '@/components/Editor.vue'
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
@@ -31,6 +49,7 @@ export default {
   },
   data () {
     return {
+      name: ''
     }
   },
   mounted () {

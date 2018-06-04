@@ -1,5 +1,8 @@
 <template>
-  <div :id="id">
+  <div>
+    <div :id="id">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -41,7 +44,9 @@ export default {
       mode: 'ace/mode/json'
     })
 
-    this.setValue(this.content)
+    if (this.content) {
+      this.setValue(this.content)
+    }
   },
   methods: {
     setValue (code) {
