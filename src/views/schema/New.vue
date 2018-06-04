@@ -20,8 +20,7 @@
 			"type": "string"
 		}
 	]
-}
-          </Editor>
+}</Editor>
         </div>
       </Tab>
       <Tab name="Config">
