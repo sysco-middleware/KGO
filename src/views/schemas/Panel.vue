@@ -50,8 +50,8 @@
 
         <DiffEditor
           mode="ace/mode/json"
-          :left="jsonToString(schemas[compareLeft])"
-          :right="jsonToString(schemas[compareRight])"
+          :left="jsonToString(schemas[compareLeft].schema)"
+          :right="jsonToString(schemas[compareRight].schema)"
           class="relative" />
       </Tab>
     </Tabs>
