@@ -2,8 +2,9 @@
   <div class="container">
     <header class="navbar">
       <section class="navbar-section">
-        <a href="#" class="btn btn-link">Docs</a>
-        <a href="#" class="btn btn-link">Examples</a>
+        <router-link :to="{ name: 'schemas' }" class="btn btn-link">Schemas</router-link>
+        <router-link :to="{ name: 'topics' }" class="btn btn-link">Topics</router-link>
+        <router-link :to="{ name: 'topologies' }" class="btn btn-link">Topologies</router-link>
       </section>
       <section class="navbar-center">
         <!-- centered logo or brand -->

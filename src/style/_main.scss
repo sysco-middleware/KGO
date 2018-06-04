@@ -13,3 +13,7 @@
 .cpp-view {
   margin: 1.5rem 0;
 }
+
+.btn.router-link-active {
+  border-color: $primary-color;
+}

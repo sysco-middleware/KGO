@@ -36,6 +36,24 @@ export default new Router({
               component: SchemaPanel
             }
           ]
+        },
+        {
+          path: '/topics',
+          children: [
+            {
+              path: '',
+              name: 'topics'
+            }
+          ]
+        },
+        {
+          path: '/topologies',
+          children: [
+            {
+              path: '',
+              name: 'topologies'
+            }
+          ]
         }
       ]
     }
