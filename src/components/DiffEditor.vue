@@ -44,6 +44,16 @@ export default {
       useSoftTabs: true,
       mode: this.mode
     })
+  },
+  watch: {
+    left () {
+      const {left} = this.editor.getEditors()
+      left.setValue(this.left, 1)
+    },
+    right () {
+      const {right} = this.editor.getEditors()
+      right.setValue(this.right, 1)
+    }
   }
 }
 </script>
