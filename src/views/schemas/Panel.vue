@@ -25,7 +25,7 @@
       <Tab name="Config">
         <Config />
       </Tab>
-      <Tab name="Diff" :show="versions.length > 1">
+      <Tab name="Diff" :show="showDiff">
         <div class="columns mb-2">
           <div class="column">
             <div class="form-group">
@@ -49,6 +49,7 @@
         </div>
 
         <DiffEditor
+          v-if="showDiff"
           mode="ace/mode/json"
           :left="jsonToString(schemas[compareLeft].schema)"
           :right="jsonToString(schemas[compareRight].schema)"
@@ -92,6 +93,9 @@ export default {
     versions () {
       return Object.keys(this.schemas || {})
     },
+    showDiff () {
+      return this.versions.length > 1
+    },
     latest () {
       return Math.max(...this.versions)
     },
@@ -116,9 +120,6 @@ export default {
     this.compareRight = this.latest
   },
   methods: {
-    init () {
-
-    },
     jsonToString (json) {
       return JSON.stringify(json, null, '\t')
     }
