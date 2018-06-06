@@ -9,6 +9,7 @@
 
         <div class="form-group">
           <label class="form-label">Schema</label>
+          <!-- eslint-disable -->
           <Editor>{
 	"type": "record",
 	"name": "",
@@ -21,6 +22,7 @@
 		}
 	]
 }</Editor>
+          <!-- eslint-enable -->
         </div>
       </Tab>
       <Tab name="Config">
