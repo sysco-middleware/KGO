@@ -44,7 +44,7 @@
           </li>
         </div>
 
-        <div v-if="schemasAsArray <= 0" class="empty">
+        <div v-if="schemasAsArray.length <= 0" class="empty">
           <p class="empty-title h5">You have no schemas</p>
           <p class="empty-subtitle">Click the button to create a schema.</p>
           <div class="empty-action">
