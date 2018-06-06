@@ -96,9 +96,9 @@ const getters = {
 }
 
 const actions = {
-  async fetchAvailible ({commit}) {
+  async fetchAvailable ({commit}) {
     const {data: subjects} = await axios.get('/subjects')
-    commit('setAvailible', subjects)
+    commit('setAvailable', subjects)
   },
   async fetchAllVersions ({dispatch, state}, name) {
     for (let subject in state.subjects) {
@@ -128,7 +128,7 @@ const mutations = {
   clearState (state) {
     state.subjects = {}
   },
-  setAvailible (state, subjects) {
+  setAvailable (state, subjects) {
     for (let subject of subjects) {
       if (!state.subjects[subject]) {
         Vue.set(state.subjects, subject, {})
