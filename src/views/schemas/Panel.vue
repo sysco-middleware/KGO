@@ -29,7 +29,7 @@
         <div class="columns mb-2">
           <div class="column">
             <div class="form-group">
-              <select class="form-select select-sm" v-model="compare.left">
+              <select class="form-select select-sm" v-model="compareLeftVersion">
                 <option v-for="version of versions" :key="version" :value="version">v{{version}}</option>
               </select>
             </div>
@@ -41,19 +41,17 @@
 
           <div class="column">
             <div class="form-group">
-              <select class="form-select select-sm" v-model="compare.right">
+              <select class="form-select select-sm" v-model="compareRightVersion">
                 <option v-for="version of versions" :key="version" :value="version">v{{version}}</option>
               </select>
             </div>
           </div>
         </div>
 
-        <!-- <DiffEditor
-          v-if="showDiff"
-          mode="ace/mode/json"
-          :left="schemas[compare.left].schema"
-          :right="schemas[compare.right].schema"
-          class="relative" /> -->
+        <SchemaDiffEditor
+          :left="compareLeftSchema"
+          :right="compareRightSchema"
+          class="relative" />
       </Tab>
     </Tabs>
 
@@ -74,7 +72,7 @@ import { mapState } from 'vuex'
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
 import SchemaEditor from '@/components/SchemaEditor.vue'
-import DiffEditor from '@/components/DiffEditor.vue'
+import SchemaDiffEditor from '@/components/SchemaDiffEditor.vue'
 import Info from '@/views/schemas/Info.vue'
 import Config from '@/views/schemas/Config.vue'
 
@@ -83,7 +81,7 @@ export default {
     Tab,
     Tabs,
     SchemaEditor,
-    DiffEditor,
+    SchemaDiffEditor,
     Info,
     Config
   },
@@ -106,6 +104,12 @@ export default {
     },
     selected () {
       return this.version && this.schemas ? this.schemas[this.version] : null
+    },
+    compareLeftSchema () {
+      return this.schemas ? this.schemas[this.compareLeftVersion] : null
+    },
+    compareRightSchema () {
+      return this.schemas ? this.schemas[this.compareRightVersion] : null
     }
   },
   watch: {
@@ -119,17 +123,15 @@ export default {
       subject,
       version: 0,
       schema: {},
-      compare: {
-        left: 0,
-        right: 0
-      }
+      compareLeftVersion: 0,
+      compareRightVersion: 0
     }
   },
   mounted () {
     this.version = this.latest
 
-    this.compareLeft = this.versions.length > 1 ? this.latest - 1 : 0
-    this.compareRight = this.latest
+    this.compareLeftVersion = this.versions.length > 1 ? this.latest - 1 : 0
+    this.compareRightVersion = this.latest
   }
 }
 </script>
