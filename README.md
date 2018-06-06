@@ -1,6 +1,10 @@
 # cp-schema-registry-ui
 UI for Confluent Schema Registry
 
+## CSS framework
+
+[Spectre](https://picturepan2.github.io/spectre)
+
 ## Getting started
 
 Make sure that CORS is enabled by setting the following properties.
