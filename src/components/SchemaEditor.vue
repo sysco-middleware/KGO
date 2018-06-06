@@ -15,6 +15,11 @@ export default {
       editor: null
     }
   },
+  computed: {
+    code () {
+      return this.content
+    }
+  },
   mounted () {
     this.editor = Ace.edit(this.$refs.editor)
     this.editor.setOptions({
@@ -24,8 +29,8 @@ export default {
       mode: 'ace/mode/json'
     })
 
-    if (this.content) {
-      this.setValue(this.content)
+    if (this.code) {
+      this.setValue(this.code)
     }
 
     this.editor.session.on('change', () => {

@@ -1,5 +1,5 @@
 <template>
-  <section v-if="isActive" :id="hash">
+  <section v-show="isActive" :id="hash">
     <slot />
   </section>
 </template>
