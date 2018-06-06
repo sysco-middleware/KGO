@@ -17,10 +17,10 @@
     </div>
     <Tabs nav="panel-nav" body="panel-body" name="schema" remember>
       <Tab name="Schema">
-        <Editor :content="jsonToString(selected.schema)" />
+        <SchemaEditor :content.sync="schema" />
       </Tab>
       <Tab name="Info">
-        <Info :schema="selected.schema" />
+        <Info :schema="schema" />
       </Tab>
       <Tab name="Config">
         <Config />
@@ -29,7 +29,7 @@
         <div class="columns mb-2">
           <div class="column">
             <div class="form-group">
-              <select class="form-select select-sm" v-model="compareLeft">
+              <select class="form-select select-sm" v-model="compareLeftVersion">
                 <option v-for="version of versions" :key="version" :value="version">v{{version}}</option>
               </select>
             </div>
@@ -41,18 +41,16 @@
 
           <div class="column">
             <div class="form-group">
-              <select class="form-select select-sm" v-model="compareRight">
+              <select class="form-select select-sm" v-model="compareRightVersion">
                 <option v-for="version of versions" :key="version" :value="version">v{{version}}</option>
               </select>
             </div>
           </div>
         </div>
 
-        <DiffEditor
-          v-if="showDiff"
-          mode="ace/mode/json"
-          :left="jsonToString(schemas[compareLeft].schema)"
-          :right="jsonToString(schemas[compareRight].schema)"
+        <SchemaDiffEditor
+          :left="compareLeftSchema"
+          :right="compareRightSchema"
           class="relative" />
       </Tab>
     </Tabs>
@@ -73,8 +71,8 @@ import { mapState } from 'vuex'
 
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
-import Editor from '@/components/Editor.vue'
-import DiffEditor from '@/components/DiffEditor.vue'
+import SchemaEditor from '@/components/SchemaEditor.vue'
+import SchemaDiffEditor from '@/components/SchemaDiffEditor.vue'
 import Info from '@/views/schemas/Info.vue'
 import Config from '@/views/schemas/Config.vue'
 
@@ -82,8 +80,8 @@ export default {
   components: {
     Tab,
     Tabs,
-    Editor,
-    DiffEditor,
+    SchemaEditor,
+    SchemaDiffEditor,
     Info,
     Config
   },
@@ -106,6 +104,17 @@ export default {
     },
     selected () {
       return this.version && this.schemas ? this.schemas[this.version] : null
+    },
+    compareLeftSchema () {
+      return this.schemas ? this.schemas[this.compareLeftVersion] : null
+    },
+    compareRightSchema () {
+      return this.schemas ? this.schemas[this.compareRightVersion] : null
+    }
+  },
+  watch: {
+    selected () {
+      this.schema = this.selected.schema
     }
   },
   data () {
@@ -113,21 +122,16 @@ export default {
     return {
       subject,
       version: 0,
-      compareLeft: 0,
-      compareRight: 0,
-      compatibilityLevel: 'none'
+      schema: {},
+      compareLeftVersion: 0,
+      compareRightVersion: 0
     }
   },
   mounted () {
     this.version = this.latest
 
-    this.compareLeft = this.versions.length > 1 ? this.latest - 1 : 0
-    this.compareRight = this.latest
-  },
-  methods: {
-    jsonToString (json) {
-      return JSON.stringify(json, null, '\t')
-    }
+    this.compareLeftVersion = this.versions.length > 1 ? this.latest - 1 : 0
+    this.compareRightVersion = this.latest
   }
 }
 </script>

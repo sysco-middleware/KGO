@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" class="acediff__container">
+  <div ref="editor" class="acediff__container">
   </div>
 </template>
 
@@ -8,51 +8,53 @@ import AceDiff from 'ace-diff'
 import 'brace/mode/json'
 
 export default {
-  props: {
-    id: {
-      type: String,
-      default: 'ace-diff'
-    },
-    left: {
-      type: String,
-      default: ''
-    },
-    right: {
-      type: String,
-      default: ''
-    },
-    mode: String
-  },
+  props: [
+    'left',
+    'right'
+  ],
   data () {
     return {
       editor: null
     }
   },
+  computed: {
+    prettyLeft () {
+      return this.prettyJSON(this.left)
+    },
+    prettyRight () {
+      return this.prettyJSON(this.right)
+    }
+  },
   mounted () {
     this.editor = new AceDiff({
-      element: `#${this.id}`,
+      element: this.$refs.editor,
       left: {
-        content: this.left,
+        content: this.prettyLeft,
         editable: false
       },
       right: {
-        content: this.right,
+        content: this.prettyRight,
         editable: false
       },
       showPrintMargin: false,
       tabSize: 2,
       useSoftTabs: true,
-      mode: this.mode
+      mode: 'ace/mode/json'
     })
   },
   watch: {
     left () {
       const {left} = this.editor.getEditors()
-      left.setValue(this.left, 1)
+      left.setValue(this.prettyLeft, 1)
     },
     right () {
       const {right} = this.editor.getEditors()
-      right.setValue(this.right, 1)
+      right.setValue(this.prettyRight, 1)
+    }
+  },
+  methods: {
+    prettyJSON (json) {
+      return JSON.stringify(json, null, '\t')
     }
   }
 }
