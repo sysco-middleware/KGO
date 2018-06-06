@@ -57,8 +57,13 @@
       </Tab>
     </Tabs>
 
-    <div class="panel-footer">
-      <button class="btn btn-block">Update</button>
+    <div class="panel-footer columns">
+      <div class="column">
+        <button class="btn btn-block">Validate</button>
+      </div>
+      <div class="column">
+        <button class="btn btn-block btn-primary">Update</button>
+      </div>
     </div>
   </div>
 </template>
