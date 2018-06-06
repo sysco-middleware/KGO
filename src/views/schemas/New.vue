@@ -10,7 +10,7 @@
         <div class="form-group">
           <label class="form-label">Schema</label>
           <!-- eslint-disable -->
-          <Editor>{
+          <SchemaEditor>{
 	"type": "record",
 	"name": "",
 	"namespace": "",
@@ -21,7 +21,7 @@
 			"type": "string"
 		}
 	]
-}</Editor>
+}</SchemaEditor>
           <!-- eslint-enable -->
         </div>
       </Tab>
@@ -36,14 +36,14 @@
 </template>
 
 <script>
-import Editor from '@/components/Editor.vue'
+import SchemaEditor from '@/components/SchemaEditor.vue'
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
 import Config from '@/views/schemas/Config.vue'
 
 export default {
   components: {
-    Editor,
+    SchemaEditor,
     Tab,
     Tabs,
     Config
