@@ -7,6 +7,8 @@ services:
     environment:
       ADV_HOST: 127.0.0.1         # Change to 192.168.99.100 if using Docker Toolbox
       RUNTESTS: 0                 # Disable Running tests so the cluster starts faster
+#      PROXY: "true"
+      KAFKA_REST_SCHEMA_REGISTRY_URL: 127.0.0.1:8081
     ports:
       - "2181:2181"                 # Zookeeper
       - "3030:3030"                 # Landoop UI
