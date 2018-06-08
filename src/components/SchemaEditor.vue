@@ -15,11 +15,6 @@ export default {
       editor: null
     }
   },
-  computed: {
-    code () {
-      return this.content
-    }
-  },
   mounted () {
     this.editor = Ace.edit(this.$refs.editor)
     this.editor.setOptions({
@@ -29,13 +24,16 @@ export default {
       mode: 'ace/mode/json'
     })
 
-    if (this.code) {
-      this.setValue(this.code)
+    if (this.content) {
+      this.setValue(this.content)
     }
 
     this.editor.session.on('change', () => {
-      const content = this.editor.session.getValue()
-      this.$emit('update:content', JSON.parse(content))
+      try {
+        const content = this.editor.session.getValue()
+        const json = JSON.parse(content)
+        this.$emit('update:content', json)
+      } catch (err) {}
     })
   },
   methods: {
