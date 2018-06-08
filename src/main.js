@@ -8,6 +8,7 @@ import store from './store/'
 import './registerServiceWorker'
 
 axios.defaults.baseURL = 'http://127.0.0.1:8081' // TODO: fetch the host from a config file or api
+axios.defaults.headers['Accept'] = 'application/vnd.schemaregistry.v1+json'
 Vue.config.productionTip = false
 
 Vue.use(VuePaginate)
