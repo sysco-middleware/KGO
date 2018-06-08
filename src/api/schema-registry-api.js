@@ -1,84 +1,64 @@
 import axios from 'axios'
 
-const ROOT_URL = 'http://localhost:8081'
-const defaultHeaders = {
-  headers: {
-    Accept: 'application/vnd.schemaregistry.v1+json'
-  }
-}
-
 export default {
   fetchAllSubjects () {
-    return axios.get(`${ROOT_URL}/subjects`, defaultHeaders)
+    return axios.get(`/subjects`)
   },
   deleteSubject (subjectName) {
-    return axios.delete(`${ROOT_URL}/subjects/${subjectName}`, defaultHeaders)
+    return axios.delete(`/subjects/${subjectName}`)
   },
   checkIsSchemaRegisteredUnderSubject (subjectName, schema) {
-    return axios.post(`${ROOT_URL}/subjects/${subjectName}`, {
-      headers: defaultHeaders.headers,
+    return axios.post(`/subjects/${subjectName}`, {
       body: schema
     })
   },
   fetchSubjectVersions (subjectName) {
-    return axios.get(`${ROOT_URL}/subjects/${subjectName}/versions`,
-        defaultHeaders)
+    return axios.get(`/subjects/${subjectName}/versions`)
   },
   registerNewSchemaVersion (subjectName, schema) {
-    return axios.post(`${ROOT_URL}/subjects/${subjectName}/versions`, {
-      headers: defaultHeaders.headers,
+    return axios.post(`/subjects/${subjectName}/versions`, {
       body: schema
     })
   },
   fetchSchema (subjectName, versionId) {
-    return axios.get(
-        `${ROOT_URL}/subjects/${subjectName}/versions/${versionId}`,
-        defaultHeaders)
+    return axios.get(`/subjects/${subjectName}/versions/${versionId}`)
   },
   // TODO: only dev
   deleteSchemaVersion (subjectName, versiondId) {
-    return axios.delete(
-        `${ROOT_URL}/subjects/${subjectName}/versions/${versiondId}`,
-        defaultHeaders)
+    return axios.delete(`/subjects/${subjectName}/versions/${versiondId}`)
   },
   fetchAvroSchema (subjectName, versionId) {
-    return axios.get(
-        `${ROOT_URL}/subjects/${subjectName}/versions/${versionId}/schema`,
-        defaultHeaders)
+    return axios.get(`/subjects/${subjectName}/versions/${versionId}/schema`)
   },
   testSchema (subjectName, versionId, schema) {
-    return axios.post(`${ROOT_URL}/compatibility/subjects/${subjectName}/versions/${versionId}`, {
-          headers: defaultHeaders.headers,
-          body: schema
-        }
-    )
+    return axios.post(`/compatibility/subjects/${subjectName}/versions/${versionId}`, {
+      body: schema
+    })
   },
   /**
    * NONE, FULL, FORWARD, BACKWARD, FULL_TRANSITIVE, FORWARD_TRANSITIVE, BACKWARD_TRANSITIVE
    */
   updateCompatibility (compatibilityLevel) {
-    return axios.put(`${ROOT_URL}/config`, {
-      headers: defaultHeaders.headers,
+    return axios.put(`/config`, {
       body: {
-        'compatibility': `\"${compatibilityLevel}\"`
+        'compatibility': `"${compatibilityLevel}"`
       }
     })
   },
   fetchGlobalCompatibility () {
-    return axios.get(`${ROOT_URL}/config`, defaultHeaders)
+    return axios.get(`/config`)
   },
   /**
    * NONE, FULL, FORWARD, BACKWARD, FULL_TRANSITIVE, FORWARD_TRANSITIVE, BACKWARD_TRANSITIVE
    */
   updateCompatibilityForSubject (subjectName, compatibilityLevel) {
-    return axios.put(`${ROOT_URL}/config/${subjectName}`, {
-      headers: defaultHeaders.headers,
+    return axios.put(`/config/${subjectName}`, {
       body: {
-        'compatibility': `\"${compatibilityLevel}\"`
+        'compatibility': `"${compatibilityLevel}"`
       }
     })
   },
   fetchSubjectCompatibility (subjectName) {
-    return axios.get(`${ROOT_URL}/config/${subjectName}`, defaultHeaders)
+    return axios.get(`/config/${subjectName}`)
   }
 }
