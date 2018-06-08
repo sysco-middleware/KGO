@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import axios from 'axios'
+import api from '../../api/schema-registry-api'
 
 const state = {
   subjects: {
@@ -97,7 +97,9 @@ const getters = {
 
 const actions = {
   async fetchAvailable ({commit}) {
-    const {data: subjects} = await axios.get('/subjects')
+    // const {data: subjects} = await axios.get('/subjects')
+    commit('clearState', state)
+    const {data: subjects} = await api.fetchAllSubjects()
     commit('setAvailable', subjects)
   },
   async fetchAllVersions ({dispatch, state}, name) {
@@ -106,7 +108,8 @@ const actions = {
     }
   },
   async fetchVersions ({commit}, name) {
-    const {data: versions} = await axios.get(`/subjects/${name}/versions`)
+    // const {data: versions} = await axios.get(`/subjects/${name}/versions`)
+    const {data: versions} = await api.fetchSubjectVersions(name)
 
     commit('setVersions', {
       name,
@@ -114,7 +117,8 @@ const actions = {
     })
   },
   async fetchSchemaByVersion ({commit}, {name, version}) {
-    const {data: schema} = await axios.get(`/subjets/${name}/versions/${version}`)
+    // const {data: schema} = await axios.get(`/subjets/${name}/versions/${version}`)
+    const {data: schema} = await api.fetchSchema(name, version)
 
     commit('setSchema', {
       name,
