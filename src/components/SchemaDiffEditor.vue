@@ -11,11 +11,11 @@ export default {
   props: {
     left: {
       type: Object,
-      default: ''
+      default: () => ''
     },
     right: {
       type: Object,
-      default: ''
+      default: () => ''
     }
   },
   data () {
@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     prettyJSON (json) {
-      return JSON.stringify(json, null, '\t')
+      return JSON.stringify(json, null, '  ')
     }
   }
 }
