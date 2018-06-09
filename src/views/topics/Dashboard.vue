@@ -5,44 +5,33 @@
         <li class="menu-item">
           <div class="tile tile-centered">
             <div class="tile-content">
-              {{total}} Schemas
+              {{total}} Topics
             </div>
-
-            <router-link :to="{ name: 'new/schema' }">
-              <button class="btn float-right">New</button>
-            </router-link>
           </div>
         </li>
         <li class="divider"></li>
 
-        <div v-if="schemasAsArray.length > 0">
-          <paginate name="schemas" :list="schemasAsArray" :per="5" tag="div">
-            <li class="menu-item" v-for="{key, schema} of paginated('schemas')" :key="key">
-              <div class="menu-badge">
-                <label class="label label-rounded label-primary">v{{schema.version}}</label>
-              </div>
-              <router-link :to="{ name: 'schema', params: { subject: key }}" active-class="active" class="c-hand">{{key}}</router-link>
+        <li class="menu-item">
+          <div class="menu-badge">
+            <label class="label label-rounded label-primary">AVRO</label>
+          </div>
+          <router-link :to="{ name: 'topic', params: { topic: 'kafka_topic' }}" active-class="active" class="c-hand">
+            reddit_posts
+          </router-link>
+        </li>
+
+        <li class="menu-item">
+          <ul class="pagination flex-center paginate-links schemas" per="5">
+            <li class="left-arrow disabled page-item c-hand">
+              <a>Previous</a>
             </li>
-          </paginate>
-
-          <li class="menu-item">
-            <paginate-links
-              class="pagination flex-center"
-              for="schemas"
-              :per="5"
-
-              :show-step-links="true"
-              :step-links="{
-                next: 'Next',
-                prev: 'Previous'
-              }"
-
-              :classes="{
-                'li': ['page-item', 'c-hand']
-              }">
-            </paginate-links>
-          </li>
-        </div>
+            <li class="number active page-item c-hand">
+              <a>1</a></li>
+            <li class="right-arrow disabled page-item c-hand">
+              <a>Next</a>
+            </li>
+          </ul>
+        </li>
 
         <div v-if="schemasAsArray.length <= 0" class="empty">
           <p class="empty-title h5">You have no schemas</p>

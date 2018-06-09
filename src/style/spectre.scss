@@ -1,0 +1,35 @@
+// MENU
+.menu {
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+
+  .menu-badge {
+    font-size: .6rem;
+    padding: .35rem 0;
+  }
+
+  .pagination {
+    padding-top: 1.5rem;
+  }
+}
+
+// PANEL
+.panel .panel-body {
+  padding: 1.2rem .8rem;
+}
+
+// TABLE
+.table.table-inline {
+  display: inline-table;
+}
+
+// TOAST
+.toast {
+  &.toast-notification {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    max-width: 90%;
+    width: auto;
+  }
+}

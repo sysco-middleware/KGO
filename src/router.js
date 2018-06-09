@@ -4,9 +4,15 @@ import Router from 'vue-router'
 import Dashboard from './views/Dashboard.vue'
 
 import SchemaDashboard from './views/schemas/Dashboard.vue'
-import EmptyPanel from './views/schemas/Empty.vue'
+import SchemaNavigation from './views/schemas/Navigation.vue'
+import SchemaEmptyPanel from './views/schemas/Empty.vue'
 import SchemaPanel from './views/schemas/Panel.vue'
-import NewSchemaPanel from './views/schemas/New.vue'
+import SchemaNewPanel from './views/schemas/New.vue'
+
+import TopicsDashboard from './views/topics/Dashboard.vue'
+import TopicsNavigation from './views/topics/Navigation.vue'
+import TopicsInfo from './views/topics/Info.vue'
+import TopicsPanel from './views/topics/Panel.vue'
 
 Vue.use(Router)
 
@@ -18,17 +24,20 @@ export default new Router({
       children: [
         {
           path: '/schemas',
-          component: SchemaDashboard,
+          components: {
+            default: SchemaDashboard,
+            navigation: SchemaNavigation
+          },
           children: [
             {
               path: '',
               name: 'schemas',
-              component: EmptyPanel
+              component: SchemaEmptyPanel
             },
             {
               name: 'new/schema',
               path: 'new',
-              component: NewSchemaPanel
+              component: SchemaNewPanel
             },
             {
               name: 'schema',
@@ -39,10 +48,20 @@ export default new Router({
         },
         {
           path: '/topics',
+          components: {
+            default: TopicsDashboard,
+            navigation: TopicsNavigation
+          },
           children: [
             {
               path: '',
-              name: 'topics'
+              name: 'topics',
+              component: TopicsInfo
+            },
+            {
+              path: ':topic',
+              name: 'topic',
+              component: TopicsPanel
             }
           ]
         },
