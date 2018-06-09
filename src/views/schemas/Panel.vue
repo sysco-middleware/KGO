@@ -91,7 +91,7 @@ export default {
     ]),
     schemas () {
       const {subject} = this.$route.params
-      return this.subjects[subject]
+      return this.subjects[subject] || {}
     },
     versions () {
       return Object.keys(this.schemas || {})
@@ -106,10 +106,12 @@ export default {
       return this.version && this.schemas ? this.schemas[this.version] : null
     },
     compareLeftSchema () {
-      return this.schemas ? this.schemas[this.compareLeftVersion] : null
+      const subject = this.schemas[this.compareLeftVersion]
+      return subject ? subject.schema : ''
     },
     compareRightSchema () {
-      return this.schemas ? this.schemas[this.compareRightVersion] : null
+      const subject = this.schemas[this.compareRightVersion]
+      return subject ? subject.schema : ''
     }
   },
   watch: {
