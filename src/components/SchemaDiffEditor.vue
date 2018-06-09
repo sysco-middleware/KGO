@@ -29,11 +29,11 @@ export default {
     this.editor = new AceDiff({
       element: this.$refs.editor,
       left: {
-        content: this.prettyLeft,
+        content: this.prettyLeft || '',
         editable: false
       },
       right: {
-        content: this.prettyRight,
+        content: this.prettyRight || '',
         editable: false
       },
       showPrintMargin: false,
