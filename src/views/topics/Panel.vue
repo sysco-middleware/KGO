@@ -3,7 +3,7 @@
     <div class="panel-header bg-primary text-white">
       <div class="columns flex-middle">
         <div class="column">
-          <div class="panel-title h5 mt-10">Topic: reddit posts</div>
+          <div class="panel-title h5 mt-10">Topic: reddit_posts</div>
           <div class="panel-subtitle"></div>
         </div>
       </div>
