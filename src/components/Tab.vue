@@ -1,5 +1,5 @@
 <template>
-  <section v-show="isActive" :id="hash">
+  <section v-show="isActive" :id="hash" :class="[body]">
     <slot />
   </section>
 </template>
@@ -24,7 +24,8 @@ export default {
   },
   data () {
     return {
-      isActive: false
+      isActive: false,
+      body: this.$parent.body
     }
   },
   computed: {

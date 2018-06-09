@@ -12,7 +12,7 @@
         </li>
       </ul>
     </nav>
-    <div :class="[body]">
+    <div>
       <slot />
     </div>
   </div>
