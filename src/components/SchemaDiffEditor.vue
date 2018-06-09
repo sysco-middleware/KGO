@@ -8,10 +8,16 @@ import AceDiff from 'ace-diff'
 import 'brace/mode/json'
 
 export default {
-  props: [
-    'left',
-    'right'
-  ],
+  props: {
+    left: {
+      type: Object,
+      default: ''
+    },
+    right: {
+      type: Object,
+      default: ''
+    }
+  },
   data () {
     return {
       editor: null
@@ -26,20 +32,22 @@ export default {
     }
   },
   mounted () {
-    this.editor = new AceDiff({
-      element: this.$refs.editor,
-      left: {
-        content: this.prettyLeft || '',
-        editable: false
-      },
-      right: {
-        content: this.prettyRight || '',
-        editable: false
-      },
-      showPrintMargin: false,
-      tabSize: 2,
-      useSoftTabs: true,
-      mode: 'ace/mode/json'
+    setTimeout(() => {
+      this.editor = new AceDiff({
+        element: this.$refs.editor,
+        left: {
+          content: this.prettyLeft,
+          editable: false
+        },
+        right: {
+          content: this.prettyRight,
+          editable: false
+        },
+        showPrintMargin: false,
+        tabSize: 2,
+        useSoftTabs: true,
+        mode: 'ace/mode/json'
+      })
     })
   },
   watch: {
