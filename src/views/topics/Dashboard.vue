@@ -15,7 +15,7 @@
           <div class="menu-badge">
             <label class="label label-rounded label-primary">AVRO</label>
           </div>
-          <router-link :to="{ name: 'topic', params: { topic: 'kafka_topic' }}" active-class="active" class="c-hand" :class="{active: key === selected}">
+          <router-link :to="{ name: 'topic', params: { topic: 'kafka_topic' }}" active-class="active" class="c-hand">
             reddit_posts
           </router-link>
         </li>

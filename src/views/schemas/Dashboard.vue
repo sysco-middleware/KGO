@@ -21,7 +21,7 @@
               <div class="menu-badge">
                 <label class="label label-rounded label-primary">v{{schema.version}}</label>
               </div>
-              <router-link :to="{ name: 'schema', params: { subject: key }}" active-class="active" class="c-hand" :class="{active: key === selected}">{{key}}</router-link>
+              <router-link :to="{ name: 'schema', params: { subject: key }}" active-class="active" class="c-hand">{{key}}</router-link>
             </li>
           </paginate>
 
