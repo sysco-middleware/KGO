@@ -9,9 +9,7 @@
       <section class="navbar-center">
         <!-- centered logo or brand -->
       </section>
-      <section class="navbar-section">
-        <button class="btn">Export Schemas</button>
-      </section>
+      <router-view class="navbar-section" name="navigation"></router-view>
     </header>
 
     <router-view class="cpp-view"></router-view>

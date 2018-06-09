@@ -4,11 +4,13 @@ import Router from 'vue-router'
 import Dashboard from './views/Dashboard.vue'
 
 import SchemaDashboard from './views/schemas/Dashboard.vue'
+import SchemaNavigation from './views/schemas/Navigation.vue'
 import SchemaEmptyPanel from './views/schemas/Empty.vue'
 import SchemaPanel from './views/schemas/Panel.vue'
 import SchemaNewPanel from './views/schemas/New.vue'
 
 import TopicsDashboard from './views/topics/Dashboard.vue'
+import TopicsNavigation from './views/topics/Navigation.vue'
 import TopicsInfo from './views/topics/Info.vue'
 import TopicsPanel from './views/topics/Panel.vue'
 
@@ -22,7 +24,10 @@ export default new Router({
       children: [
         {
           path: '/schemas',
-          component: SchemaDashboard,
+          components: {
+            default: SchemaDashboard,
+            navigation: SchemaNavigation
+          },
           children: [
             {
               path: '',
@@ -43,7 +48,10 @@ export default new Router({
         },
         {
           path: '/topics',
-          component: TopicsDashboard,
+          components: {
+            default: TopicsDashboard,
+            navigation: TopicsNavigation
+          },
           children: [
             {
               path: '',
