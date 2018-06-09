@@ -32,6 +32,7 @@ export default {
     }
   },
   mounted () {
+    // FIXME: tmp fix for issue: https://github.com/ace-diff/ace-diff/issues/34
     setTimeout(() => {
       this.editor = new AceDiff({
         element: this.$refs.editor,
