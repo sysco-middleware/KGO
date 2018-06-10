@@ -1,13 +1,34 @@
-# cp-schema-registry-ui
-UI for Confluent Schema Registry
+... is a web UI that enables you to govern your Kafka clusters. When connected to the [Confluent rest proxy](https://docs.confluent.io/current/kafka-rest/docs/intro.html) are you additionally able to track changes and store information.
 
-## CSS framework
+Currently does ... support the following Kafka APIs:
 
-[Spectre](https://picturepan2.github.io/spectre)
+- [Confluent rest proxy](https://docs.confluent.io/current/kafka-rest/docs/intro.html)
+- [Confluent schema registry](https://docs.confluent.io/current/schema-registry/docs/index.html)
 
-## Getting started
+## Getting Started
 
-Make sure that CORS is enabled by setting the following properties.
+...
+
+## Config options
+
+Listed below are all available config options and their default values.
+
+```json
+{
+  "kafka.rest.api": "127.0.0.1:8082",
+  "schema.registry.api": "127.0.0.1:8081"
+}
+```
+
+## Prerequisites Confluent schema registry
+
+You will need to enable CORS in your schema registry service.
+Open and modify the schema registry properties file.
+
+`confluent-x.x.x/etc/schema-registry/schema-registry.properties`
+
+Set the allow origin to any hostname (`*`) or to the hostname where the UI will be hosted (`http://example.com`).
+You can read more about CORS at [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
 
 ```
 access.control.allow.methods=GET,POST,PUT,OPTIONS

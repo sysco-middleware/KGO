@@ -19,8 +19,6 @@ To setup a develop environment do you need to have `node` and `npm` installed. O
 -   Try not to pollute your pull request with unintended changes–keep them simple and small
 -   Try to share which browsers your code has been tested in before submitting a pull request
 
-## CSS naming guidelines
+## CSS framework
 
-We make use of the [BECM naming guidelines](https://github.com/jeroenrinzema/BECM). These guidelines define how class names are constructed and used.
-
-> 🚧 The prefix of this project is: `cp`
+We make use of the CSS framework [Spectre](https://picturepan2.github.io/spectre). When submitting a UI change make sure to use this framework whenever plausible.
