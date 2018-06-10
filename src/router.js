@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Store from './store'
 
 import Dashboard from './views/Dashboard.vue'
 
@@ -16,7 +17,7 @@ import TopicsPanel from './views/topics/Panel.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '',
@@ -78,3 +79,14 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach(async function (to, from, next) {
+  const hasActiveConfig = Store.getters['config/hasActive']
+  if (!hasActiveConfig) {
+    await Store.dispatch('config/fetch')
+  }
+
+  next()
+})
+
+export default router
