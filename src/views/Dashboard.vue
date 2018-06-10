@@ -23,45 +23,6 @@
 
 <script>
 // @ is an alias to /src
-import { mapGetters } from 'vuex'
-
 export default {
-  name: 'dashboard',
-  computed: {
-    ...mapGetters({
-      schemas: 'schemas/latest'
-    }),
-    total () {
-      return Object.keys(this.schemas).length // Get the total ammount of keys since schemas is a object
-    },
-    schemasAsArray () {
-      const keys = Object.keys(this.schemas)
-      let array = []
-
-      for (let key of keys) {
-        array.push({
-          key,
-          schema: this.schemas[key]
-        })
-      }
-
-      return array
-    }
-  },
-  data () {
-    return {
-      selected: '',
-      paginate: ['schemas']
-    }
-  },
-  async created () {
-    // await this.$store.dispatch('schemas/fetchAvailible')
-    // await this.$store.dispatch('schemas/fetchAllVersions')
-  },
-  methods: {
-    selectSchema (schema) {
-      this.selected = schema
-    }
-  }
 }
 </script>
