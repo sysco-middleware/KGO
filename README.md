@@ -7,44 +7,48 @@ Currently does ... support the following Kafka APIs:
 
 ## Getting Started
 
-In order to get started do you need to have [`docker`](https://docs.docker.com/install/) installed.
-Create a project directory and pull the latest docker image. Create a `.env` file to store the configurations.
+In order to get started do you need to have [`docker`](https://docs.docker.com/install/) and [`docker-compose`](https://docs.docker.com/compose/install/) installed.
+Clone the master branch of this repository and pull the latest docker images.
 
 ```
-$ mkdir ...
+$ git clone ...
 $ cd ...
-$ touch .env
-$ docker pull ...
+$ docker-compose pull
 ```
 
-The configuration options are stored as environment variables. All available [options](#config-options) are listed below.
+Modify the configuration [options](#config-options).
 
 > 🚧 When you want to connect ... to the Confluent schema registry [make sure](#prerequisites-confluent-schema-registry) to set the required CORS settings.
 
-`$ nano .env`
+`$ nano config.json`
 
-Once you have set the configuration options, run the docker image.
+By default is ... running on port `8080` if you want to change the default port, update the `docker-compose.yml` file.
+Once you have set the configuration options, run the docker compose containers.
+The `-d` flag runs the docker containers in demonised mode.
 
 ```
-$ docker run --rm -it -p 8000:8080 --env-file .env
+$ docker-compose up -d
 ```
 
 ## Updating
 
-When wanting to update ..., pull the latest images from docker hub.
+When wanting to update ..., pull the latest changes from git and images from docker hub.
 
 ```
-$ docker pull ...
+$ git pull
+$ docker-compose pull
 ```
 
 ## Config options
 
 Listed below are all available config options and their default values.
-All config options are passed on as environment variables. If a API url is not given will that module be disabled.
+If a API url is not given will that module be disabled.
 
 ```
-KAFKA_REST_PROXY_URL=127.0.0.1:8082 # Confluent rest proxy
-SCHEMA_REGISTRY_URL=127.0.0.1:8081 # Confluent schema registry
+{
+  kafka.rest.proxy.api: http://127.0.0.1:8082,
+  schema.registry.api: http://127.0.0.1:8081
+}
 ```
 
 ## Prerequisites Confluent schema registry
