@@ -44,10 +44,10 @@ $ docker-compose pull
 Listed below are all available config options and their default values.
 If a API url is not given will that module be disabled.
 
-```
+```json
 {
-  kafka.rest.proxy.api: http://127.0.0.1:8082,
-  schema.registry.api: http://127.0.0.1:8081
+  "kafka.rest.proxy.api": "http://127.0.0.1:8082",
+  "schema.registry.api": "http://127.0.0.1:8081"
 }
 ```
 
