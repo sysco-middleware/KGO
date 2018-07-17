@@ -11,8 +11,38 @@
     <Tabs nav="panel-nav" body="panel-body" name="topic" remember>
       <Tab name="Data" class="flush-padding">
         <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember>
-          <Tab name="Table"></Tab>
-          <Tab name="RAW"></Tab>
+          <Tab name="Table">
+            <table class="table table-striped table-scroll table-inline">
+              <thead>
+                <tr>
+                  <th class="text-center">Partition</th>
+                  <th class="text-center">Replica</th>
+                  <th class="text-center">Replica broker</th>
+                  <th>Is Leader</th>
+                  <th>Is in-sync</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-center">0</td>
+                  <td class="text-center">0</td>
+                  <td class="text-center">0</td>
+                  <td>true</td>
+                  <td>true</td>
+                </tr>
+                <tr>
+                  <td class="text-center">1</td>
+                  <td class="text-center">0</td>
+                  <td class="text-center">0</td>
+                  <td>false</td>
+                  <td>true</td>
+                </tr>
+              </tbody>
+            </table>
+          </Tab>
+          <Tab name="RAW">
+            <TopicEditor />
+          </Tab>
         </Tabs>
       </Tab>
       <Tab name="Partitions (2)">
@@ -60,11 +90,13 @@
 <script>
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
+import TopicEditor from '@/components/TopicEditor.vue'
 
 export default {
   components: {
     Tab,
-    Tabs
+    Tabs,
+    TopicEditor
   }
 }
 </script>
