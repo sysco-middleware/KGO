@@ -10,7 +10,7 @@
         <div class="form-group">
           <label class="form-label">Schema</label>
           <!-- eslint-disable -->
-          <SchemaEditor>{
+<SchemaEditor>{
 	"type": "record",
 	"name": "",
 	"namespace": "",
