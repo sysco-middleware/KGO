@@ -8,6 +8,7 @@ import state from './state'
 
 import schemas from './modules/schemas'
 import config from './modules/config'
+import topics from './modules/topics'
 
 Vue.use(Vuex)
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
   state,
   modules: {
     schemas,
-    config
+    config,
+    topics
   }
 })
