@@ -6,6 +6,7 @@ import getters from './getters'
 import actions from './actions'
 import state from './state'
 
+import messages from './modules/messages'
 import schemas from './modules/schemas'
 import config from './modules/config'
 import topics from './modules/topics'
@@ -18,6 +19,7 @@ export default new Vuex.Store({
   actions,
   state,
   modules: {
+    messages,
     schemas,
     config,
     topics
