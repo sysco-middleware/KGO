@@ -3,7 +3,7 @@
     <div class="panel-header bg-primary text-white">
       <div class="columns flex-middle">
         <div class="column">
-          <div class="panel-title h5 mt-10">Topic: reddit_posts</div>
+          <div class="panel-title h5 mt-10">Topic: {{name}}</div>
           <div class="panel-subtitle"></div>
         </div>
       </div>
@@ -45,11 +45,11 @@
           </Tab>
         </Tabs>
       </Tab>
-      <Tab name="Partitions (2)">
+      <Tab :name="`Partitions (${totalPartitions})`">
         <div class="card">
           <div class="card-header">
-            <div class="tile-title"><b>Number of Partitions:</b> 5</div>
-            <div class="tile-title"><b>Replication Factor:</b> 1</div>
+            <div class="tile-title"><b>Number of Partitions:</b> {{totalPartitions}}</div>
+            <div class="tile-title"><b>Replication Factor:</b> {{replicationFactor}}</div>
           </div>
         </div>
 
@@ -63,40 +63,92 @@
               <th>Is in-sync</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td class="text-center">0</td>
-              <td class="text-center">0</td>
-              <td class="text-center">0</td>
-              <td>true</td>
-              <td>true</td>
-            </tr>
-            <tr>
-              <td class="text-center">1</td>
-              <td class="text-center">0</td>
-              <td class="text-center">0</td>
-              <td>false</td>
-              <td>true</td>
+          <tbody v-for="partition of topic.partitions" :key="partition.partition">
+            <tr v-for="(replica, id) of partition.replicas" :key="id">
+              <td class="text-center">{{partition.partition}}</td>
+              <td class="text-center">{{id}}</td>
+              <td class="text-center">{{replica.broker}}</td>
+              <td>{{replica.leader}}</td>
+              <td>{{replica.in_sync}}</td>
             </tr>
           </tbody>
         </table>
       </Tab>
       <Tab name="Config">
+        <table class="table table-striped table-scroll table-inline">
+          <thead>
+            <tr>
+              <th>Config</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr v-for="(value, key) of topic.configs">
+              <td>{{key}}</td>
+              <td>{{value}}</td>
+            </tr>
+          </tbody>
+        </table>
       </Tab>
     </Tabs>
   </div>
 </template>
 
 <script>
+import {mapState} from 'vuex'
+
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
 import TopicEditor from '@/components/TopicEditor.vue'
 
 export default {
+  computed: {
+    ...mapState('topics', [
+      'topics'
+    ]),
+    topic () {
+      return this.topics[this.name] || {}
+    },
+    totalPartitions () {
+      const topic = this.topic
+      return topic.partitions ? topic.partitions.length : 0
+    },
+    replicationFactor () {
+      const topic = this.topic || {}
+      const [partition] = topic.partitions || []
+
+      return partition ? partition.replicas.length : 0
+    }
+  },
   components: {
     Tab,
     Tabs,
     TopicEditor
+  },
+  data () {
+    const {topic} = this.$route.params
+    return {
+      name: topic
+    }
+  },
+  async created () {
+    await this.$store.dispatch('topics/fetch', this.name)
+
+    await this.$store.dispatch('messages/consumer', {
+      name: 'kafka_consumer',
+      topic: this.name
+    })
+
+    await this.$store.dispatch('messages/consumer', {
+      name: 'kafka_consumer',
+      topic: this.name
+    })
+
+    await this.$store.dispatch('messages/fetch', {
+      name: 'kafka_consumer',
+      topic: this.name
+    })
   }
 }
 </script>
