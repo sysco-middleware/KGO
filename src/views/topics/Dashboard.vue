@@ -11,36 +11,38 @@
         </li>
         <li class="divider"></li>
 
-        <li class="menu-item">
-          <div class="menu-badge">
-            <label class="label label-rounded label-primary">AVRO</label>
-          </div>
-          <router-link :to="{ name: 'topic', params: { topic: 'kafka_topic' }}" active-class="active" class="c-hand">
-            reddit_posts
-          </router-link>
-        </li>
-
-        <li class="menu-item">
-          <ul class="pagination flex-center paginate-links schemas" per="5">
-            <li class="left-arrow disabled page-item c-hand">
-              <a>Previous</a>
-            </li>
-            <li class="number active page-item c-hand">
-              <a>1</a></li>
-            <li class="right-arrow disabled page-item c-hand">
-              <a>Next</a>
-            </li>
-          </ul>
-        </li>
-
-        <div v-if="schemasAsArray.length <= 0" class="empty">
-          <p class="empty-title h5">You have no schemas</p>
-          <p class="empty-subtitle">Click the button to create a schema.</p>
-          <div class="empty-action">
-            <router-link :to="{ name: 'new/schema', params: {} }">
-              <button class="btn btn-primary">New schema</button>
+        <paginate name="topics" :list="topicsAsArray" :per="5" tag="div">
+          <li class="menu-item" v-for="{name} of paginated('topics')" :key="name">
+            <div class="menu-badge">
+              <label class="label label-rounded label-primary">AVRO</label>
+            </div>
+            <router-link :to="{ name: 'topic', params: { topic: name }}" active-class="active" class="c-hand">
+              {{name}}
             </router-link>
-          </div>
+          </li>
+        </paginate>
+
+        <li class="menu-item">
+          <paginate-links
+            class="pagination flex-center"
+            for="topics"
+            :per="5"
+
+            :show-step-links="true"
+            :step-links="{
+              next: 'Next',
+              prev: 'Previous'
+            }"
+
+            :classes="{
+              'li': ['page-item', 'c-hand']
+            }">
+          </paginate-links>
+        </li>
+
+        <div v-if="total <= 0" class="empty">
+          <p class="empty-title h5">You have no topics</p>
+          <p class="empty-subtitle">Please create a topic.</p>
         </div>
       </ul>
     </div>
@@ -51,26 +53,25 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'dashboard',
   computed: {
-    ...mapGetters({
-      schemas: 'schemas/latest'
-    }),
+    ...mapState('topics', [
+      'topics'
+    ]),
     total () {
-      return Object.keys(this.schemas).length // Get the total ammount of keys since schemas is a object
+      return Object.keys(this.topics).length // Get the total ammount of keys since topics is a object
     },
-    schemasAsArray () {
-      const keys = Object.keys(this.schemas)
+    topicsAsArray () {
+      const keys = Object.keys(this.topics)
       let array = []
 
-      for (let key of keys) {
+      for (let name of keys) {
         array.push({
-          key,
-          schema: this.schemas[key]
+          name,
+          schema: this.topics[name]
         })
       }
 
@@ -79,18 +80,13 @@ export default {
   },
   data () {
     return {
-      selected: '',
-      paginate: ['schemas']
+      paginate: ['topics']
     }
   },
   async created () {
-    // await this.$store.dispatch('schemas/fetchAvailible')
-    // await this.$store.dispatch('schemas/fetchAllVersions')
+    await this.$store.dispatch('topics/fetchAll')
   },
   methods: {
-    selectSchema (schema) {
-      this.selected = schema
-    }
   }
 }
 </script>
