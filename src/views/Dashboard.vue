@@ -14,10 +14,10 @@
 
     <router-view class="cpp-view"></router-view>
 
-    <div class="toast toast-primary toast-notification">
+    <!-- <div class="toast toast-primary toast-notification">
       <button class="btn btn-clear float-right"></button>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    </div>
+    </div> -->
   </div>
 </template>
 
