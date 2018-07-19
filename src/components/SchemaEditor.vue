@@ -39,7 +39,6 @@ export default {
   },
   methods: {
     setValue (content) {
-      console.log('set value')
       content = this.prettyJSON(content)
       this.editor.session.setValue(content)
     },
@@ -49,7 +48,6 @@ export default {
   },
   watch: {
     content () {
-      console.log('watch content')
       this.setValue(this.content)
     }
   }
