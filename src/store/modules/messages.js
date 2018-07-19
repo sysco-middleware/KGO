@@ -19,6 +19,15 @@ const getters = {
 }
 
 const actions = {
+  /**
+   * Create a new consumer if it does not exists.
+   * The consumer will use the session Kafka group.
+   * @param  {String}  name              Name of consumer
+   * @param  {String}  topic             Name of topic to be used on
+   * @param  {String}  [format='binary'] Deserialization format of data from Kafka
+   * @param  {Object}  [config={}}]      The config given to the consumer
+   * @return {Promise}                   The promise gets resolved if the given consumer is found or created
+   */
   async consumer ({commit, state}, {name, topic, format = 'binary', config = {}}) {
     // Check if the consumer already exists
     if (state.consumers[topic]) {
@@ -45,11 +54,17 @@ const actions = {
       format
     })
   },
+  /**
+   * Fetch the latest messages from the topic consumer.
+   * A Error is thrown if no consumer is found for the given topic.
+   * @param  {String}  topic    Name of topic
+   * @return {Promise}          This promise gets resolved once the latest messages are fetched
+   */
   async fetch ({commit, dispatch, state}, {topic}) {
     const consumer = state.consumers[topic]
 
     if (!consumer) {
-      return
+      throw new Error(`no consumer found for: ${topic}`)
     }
 
     let {data: messages} = await request.get(`${consumer.url}/topics/${topic}`, {
@@ -58,6 +73,7 @@ const actions = {
       }
     })
 
+    // Parse the kafka messages
     messages = messages.map((message) => {
       switch (consumer.format) {
         case 'binary':
