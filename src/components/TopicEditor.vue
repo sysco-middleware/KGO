@@ -36,6 +36,11 @@ export default {
       } catch (err) {}
     })
   },
+  watch: {
+    content () {
+      this.setValue(this.content)
+    }
+  },
   methods: {
     setValue (content) {
       content = this.prettyJSON(content)
