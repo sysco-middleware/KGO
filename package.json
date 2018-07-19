@@ -12,7 +12,7 @@
     "axios": "^0.18.0",
     "brace": "^0.11.1",
     "register-service-worker": "^1.0.0",
-    "spectre.css": "^0.5.1",
+    "spectre.css": "^0.5.3",
     "vue": "^2.5.16",
     "vue-paginate": "^3.6.0",
     "vue-router": "^3.0.1",
