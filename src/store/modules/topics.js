@@ -16,12 +16,12 @@ const getters = {
 const actions = {
   async fetchAll ({commit}) {
     const {data: topics} = await request.get('/topics')
-    commit('setTopics', topics)
+    commit('set', topics)
   },
   async fetch ({commit}, name) {
     const {data: topic} = await request.get(`/topics/${name}`)
 
-    commit('setTopic', {
+    commit('append', {
       name,
       value: topic
     })
@@ -29,7 +29,7 @@ const actions = {
 }
 
 const mutations = {
-  setTopics (state, topics) {
+  set (state, topics) {
     for (let topic of topics) {
       if (state.topics[topic]) {
         continue
@@ -38,8 +38,15 @@ const mutations = {
       Vue.set(state.topics, topic, {})
     }
   },
-  setTopic (state, {name, value}) {
+  append (state, {name, value}) {
     Vue.set(state.topics, name, value)
+  },
+  format (state, {topic, format}) {
+    if (!state.topics[topic]) {
+      Vue.set(state.topics, topic, {})
+    }
+
+    Vue.set(state.topics[topic], 'format', format)
   }
 }
 

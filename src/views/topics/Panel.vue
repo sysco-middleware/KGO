@@ -10,7 +10,20 @@
     </div>
     <Tabs nav="panel-nav" body="panel-body" name="topic" remember>
       <Tab name="Data" class="flush-padding">
-        <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember>
+        <div v-if="!topic.format" class="empty">
+          <p class="empty-title h5">Unknown value format</p>
+          <p class="empty-subtitle">Please select the message value format of this topic.</p>
+          <div class="empty-action columns">
+            <div class="column col-6 col-mx-auto">
+              <div class="btn-group btn-group-block">
+                <button class="btn" @click="setTopicFormat('binary')">Binary</button>
+                <button class="btn" @click="setTopicFormat('json')">JSON</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <Tabs v-if="topic.format" nav="panel-nav" body="panel-body" name="topic-data" remember>
           <Tab name="Table">
             <table class="table table-striped table-scroll table-inline">
               <thead>
@@ -41,7 +54,7 @@
             </table>
           </Tab>
           <Tab name="RAW">
-            <TopicEditor />
+            <TopicEditor :content="consumedMessages" />
           </Tab>
         </Tabs>
       </Tab>
@@ -83,8 +96,7 @@
             </tr>
           </thead>
           <tbody>
-
-            <tr v-for="(value, key) of topic.configs">
+            <tr v-for="(value, key) of topic.configs" :key="key">
               <td>{{key}}</td>
               <td>{{value}}</td>
             </tr>
@@ -107,6 +119,9 @@ export default {
     ...mapState('topics', [
       'topics'
     ]),
+    ...mapState('messages', [
+      'messages'
+    ]),
     topic () {
       return this.topics[this.name] || {}
     },
@@ -119,6 +134,9 @@ export default {
       const [partition] = topic.partitions || []
 
       return partition ? partition.replicas.length : 0
+    },
+    consumedMessages () {
+      return this.messages[this.name] || []
     }
   },
   components: {
@@ -134,21 +152,28 @@ export default {
   },
   async created () {
     await this.$store.dispatch('topics/fetch', this.name)
+  },
+  methods: {
+    async setTopicFormat (format = 'binary') {
+      this.$store.commit('topics/format', {
+        format,
+        topic: this.name
+      })
 
-    await this.$store.dispatch('messages/consumer', {
-      name: 'kafka_consumer',
-      topic: this.name
-    })
+      await this.$store.dispatch('messages/consumer', {
+        format,
+        name: this.name,
+        topic: this.name,
+        config: {
+          'auto.offset.reset': 'smallest'
+        }
+      })
 
-    await this.$store.dispatch('messages/consumer', {
-      name: 'kafka_consumer',
-      topic: this.name
-    })
-
-    await this.$store.dispatch('messages/fetch', {
-      name: 'kafka_consumer',
-      topic: this.name
-    })
+      await this.update()
+    },
+    async update () {
+      await this.$store.dispatch('messages/fetch', { topic: this.name })
+    }
   }
 }
 </script>

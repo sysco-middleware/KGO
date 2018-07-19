@@ -1,63 +1,99 @@
 import Vue from 'vue'
 import axios from 'axios'
+import * as utils from '@/lib/utils'
 
 // FIXME: use set config values
 const request = axios.create({
   baseURL: 'http://localhost:8082'
 })
 
+const KAFKA_GROUP_PREFIX = 'kafka-ui'
+
 const state = {
   consumers: {},
-  messages: {}
+  messages: {},
+  session: utils.GUID()
 }
 
 const getters = {
 }
 
 const actions = {
-  async consumer ({commit}, {topic, name, config = {}}) {
-    try {
-      const {data: consumer} = await request.post(`/consumers/${topic}`, {
-        ...config,
-        name
-      })
-    } catch (error) {
-      const {error_code: errorCode} = error.response.data
+  async consumer ({commit, state}, {name, topic, format = 'binary', config = {}}) {
+    // Check if the consumer already exists
+    if (state.consumers[topic]) {
+      const consumer = state.consumers[topic]
 
-      if (errorCode !== 40902) {
-        throw error
+      if (consumer.format === format) {
+        return
       }
-    } finally {
 
+      commit('revoke', {topic})
     }
+
+    const group = `${KAFKA_GROUP_PREFIX}-${state.session}`
+    await request.post(`/consumers/${group}`, {
+      ...config,
+      format,
+      name
+    })
+
+    commit('consumer', {
+      name,
+      topic,
+      group,
+      format
+    })
   },
-  async fetch ({commit, dispatch, state}, {topic, name}) {
-    if (!state.consumers[topic] || !state.consumers[topic][name]) {
-      throw new Error('the given group or consumer is not found in memory')
+  async fetch ({commit, dispatch, state}, {topic}) {
+    const consumer = state.consumers[topic]
+
+    if (!consumer) {
+      return
     }
 
-    const consumer = state.consumers[topic][name]
-    const messages = await request.get(consumer.base_uri)
+    let {data: messages} = await request.get(`${consumer.url}/topics/${topic}`, {
+      headers: {
+        'Accept': `application/vnd.kafka.v1+json`
+      }
+    })
 
-    console.log(messages)
+    messages = messages.map((message) => {
+      switch (consumer.format) {
+        case 'binary':
+          message.value = atob(message.value)
+          break
+      }
+
+      return message
+    })
+
+    commit('append', {
+      topic,
+      messages
+    })
   }
 }
 
 const mutations = {
-  consumer (state, {name, topic, consumer}) {
-    console.log(state, topic, consumer)
-    if (!state.consumers[topic]) {
-      Vue.set(state.consumers, topic, {})
-    }
+  consumer (state, {group, name, format, topic}) {
+    const {baseURL} = request.defaults
 
-    Vue.set(state.consumers[topic], name, consumer)
+    Vue.set(state.consumers, topic, {
+      url: `${baseURL}/consumers/${group}/instances/${name}`,
+      group,
+      format
+    })
   },
   append (state, {topic, messages}) {
     if (!state.messages[topic]) {
       Vue.set(state.messages, topic, [])
     }
 
-    state.messages[topic].append(...messages)
+    state.messages[topic].push(...messages)
+  },
+  revoke (state, topic) {
+    Vue.delete(state.consumers, topic)
   }
 }
 
