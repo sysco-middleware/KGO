@@ -141,6 +141,16 @@ const actions = {
 }
 
 const mutations = {
+  /**
+   * Set a consumer for the given topic.
+   * If there is already a consumer available for the given topic
+   * is it overridden.
+   * @param  {String} group  Name of the consumer group
+   * @param  {String} name   Name of the consumer
+   * @param  {String} format Format of the consumer
+   * @param  {String} topic  Name of the topic
+   * @param  {Object} config Consumer configurations
+   */
   consumer (state, {group, name, format, topic, config}) {
     const {baseURL} = request.defaults
     const lastActive = new Date()
@@ -155,6 +165,11 @@ const mutations = {
       died: false
     })
   },
+  /**
+   * Check if a consumer has had any activity in the last 5 min.
+   * If a consumer has been inactive for longer then 5 min did it died.
+   * @param  {String} topic Name of the topic
+   */
   checkActivityConsumer (state, topic) {
     if (!state.consumers[topic]) {
       return
@@ -170,6 +185,10 @@ const mutations = {
       Vue.set(state.consumers[topic], 'died', true)
     }
   },
+  /**
+   * Update the last active date of the consumer to "now"
+   * @param  {String} topic Name of topic
+   */
   updateConsumerActivity (state, topic) {
     if (!state.consumers[topic]) {
       return
@@ -178,6 +197,11 @@ const mutations = {
     const currentDate = new Date()
     Vue.set(state.consumers[topic], 'lastActive', currentDate)
   },
+  /**
+   * Append the given messages to the message collection of the given topic.
+   * @param  {String}     topic    Name of topic
+   * @param  {Array<any>} messages Messages to be appended
+   */
   append (state, {topic, messages}) {
     if (!state.messages[topic]) {
       Vue.set(state.messages, topic, [])
@@ -185,6 +209,10 @@ const mutations = {
 
     state.messages[topic].push(...messages)
   },
+  /**
+   * Delete the given topic consumer of consumers object.
+   * @param  {String} topic Name of the topic
+   */
   revokeConsumer (state, topic) {
     Vue.delete(state.consumers, topic)
   }
