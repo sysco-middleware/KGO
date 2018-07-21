@@ -18,12 +18,12 @@ const actions = {
     const {data: topics} = await request.get('/topics')
     commit('set', topics)
   },
-  async fetch ({commit}, name) {
-    const {data: topic} = await request.get(`/topics/${name}`)
+  async fetch ({commit, state}, topic) {
+    const {data: info} = await request.get(`/topics/${topic}`)
 
     commit('append', {
-      name,
-      value: topic
+      topic,
+      info: info
     })
   }
 }
@@ -38,8 +38,16 @@ const mutations = {
       Vue.set(state.topics, topic, {})
     }
   },
-  append (state, {name, value}) {
-    Vue.set(state.topics, name, value)
+  append (state, {topic, info}) {
+    if (!state.topics[topic]) {
+      Vue.set(state.topics, topic, {})
+    }
+
+    // Let's loop over the given info to not override
+    // info set by the store (ex. format)
+    for (let item in info) {
+      Vue.set(state.topics[topic], item, info[item])
+    }
   },
   format (state, {topic, format}) {
     if (!state.topics[topic]) {
