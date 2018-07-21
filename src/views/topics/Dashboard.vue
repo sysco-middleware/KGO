@@ -13,11 +13,12 @@
 
         <paginate name="topics" :list="topicsAsArray" :per="5" tag="div">
           <li class="menu-item" v-for="{name, format} of paginated('topics')" :key="name">
-            <div class="menu-badge" v-show="format">
-              <label class="label label-rounded label-primary text-uppercase">{{format}}</label>
-            </div>
             <router-link :to="{ name: 'topic', params: { topic: name }}" active-class="active" class="c-hand">
               {{name}}
+
+              <div class="menu-badge" v-show="format">
+                <label class="label label-rounded label-primary text-uppercase">{{format}}</label>
+              </div>
             </router-link>
           </li>
         </paginate>
