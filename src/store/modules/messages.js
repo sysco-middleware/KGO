@@ -1,23 +1,27 @@
 import Vue from 'vue'
 import axios from 'axios'
 import * as utils from '@/lib/utils'
+import * as config from '@/lib/config'
 import {CONSUMER_FORMAT_ERROR, KAFKA_GROUP_PREFIX} from '@/lib/constants'
-
-// FIXME: use set config values
-const request = axios.create({
-  baseURL: 'http://localhost:8082'
-})
 
 const state = {
   consumers: {},
   messages: {},
-  session: utils.GUID()
+  session: utils.GUID(),
+  request: null
 }
 
 const getters = {
 }
 
 const actions = {
+  setRequestHandle ({commit, rootGetters}) {
+    const request = axios.create({
+      baseURL: config.get('kafka.proxy.api')
+    })
+
+    commit('setRequestHandle', request)
+  },
   /**
    * Create a new consumer if it does not exists.
    * The consumer will use the session Kafka group.
@@ -40,7 +44,7 @@ const actions = {
     }
 
     const group = `${KAFKA_GROUP_PREFIX}-${state.session}`
-    await request.post(`/consumers/${group}`, {
+    await state.request.post(`/consumers/${group}`, {
       ...config,
       format,
       name
@@ -109,7 +113,7 @@ const actions = {
     }
 
     try {
-      let {data: messages} = await request.get(`${consumer.url}/topics/${topic}`, {
+      let {data: messages} = await state.request.get(`${consumer.url}/topics/${topic}`, {
         headers: {
           'Accept': `application/vnd.kafka.v1+json`
         }
@@ -161,7 +165,7 @@ const mutations = {
    * @param  {Object} config Consumer configurations
    */
   consumer (state, {group, name, format, topic, config}) {
-    const {baseURL} = request.defaults
+    const {baseURL} = state.request.defaults
     const lastActive = new Date()
 
     Vue.set(state.consumers, topic, {
@@ -224,6 +228,9 @@ const mutations = {
    */
   revokeConsumer (state, topic) {
     Vue.delete(state.consumers, topic)
+  },
+  setRequestHandle (state, handle) {
+    state.request = handle
   }
 }
 
