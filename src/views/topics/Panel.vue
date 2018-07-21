@@ -40,18 +40,7 @@
         <template v-if="topic.format">
           <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember>
             <Tab name="Table">
-              <table class="table table-striped table-scroll table-inline">
-                <thead>
-                  <tr>
-                    <th v-for="(header, index) of messagesTable.headers" :key="index">{{header}}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(content, index) of messagesTable.content" :key="index">
-                    <td v-for="(column, key) of content" :key="key">{{column}}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <MessageTable :messages="consumedMessages" />
             </Tab>
             <Tab name="RAW">
               <TopicEditor :content="consumedMessages" />
@@ -114,6 +103,7 @@ import {mapState} from 'vuex'
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
 import TopicEditor from '@/components/TopicEditor.vue'
+import MessageTable from '@/components/MessageTable.vue'
 
 export default {
   computed: {
@@ -166,58 +156,19 @@ export default {
      */
     consumedMessages () {
       return this.messages[this.name] || []
-    },
-    /**
-     * Message table contains all the messages
-     * in a table friendly dataset
-     * @return {Object} The messages table dataset
-     */
-    messagesTable () {
-      let table = {
-        headers: ['offset', 'partition'],
-        content: []
-      }
-
-      for (let message of this.consumedMessages) {
-        let row = [message.offset, message.partition]
-
-        switch (message.value ? message.value.constructor : null) {
-          case Object:
-            for (let key in message.value) {
-              let index = table.headers.indexOf(key)
-              if (index < 0) {
-                table.headers.push(key)
-                index = table.headers.indexOf(key)
-              }
-
-              row[index] = message.value[key]
-            }
-            break
-          default:
-            if (!table.headers.includes('value')) {
-              table.headers.push('value')
-            }
-
-            row.push(message.value)
-            break
-        }
-
-        table.content.push(row)
-      }
-
-      return table
     }
   },
   components: {
     Tab,
     Tabs,
-    TopicEditor
+    TopicEditor,
+    MessageTable
   },
   data () {
     const {topic} = this.$route.params
     return {
       name: topic,
-      updateInterval: null,
+      updateInterval: 0,
       intervalSelection: ''
     }
   },
