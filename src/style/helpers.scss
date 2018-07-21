@@ -1,9 +1,17 @@
-.flex-center {
+.f-center {
   justify-content: center;
 }
 
-.flex-middle {
+.f-middle {
   align-items: center;
+}
+
+.f-end {
+  justify-content: flex-end;
+}
+
+.f-start {
+  justify-content: flex-start;
 }
 
 .text-dark {
