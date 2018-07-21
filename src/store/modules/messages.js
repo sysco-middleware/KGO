@@ -75,14 +75,19 @@ const actions = {
 
     // Parse the kafka messages
     messages = messages.map((message) => {
-      switch (consumer.format) {
-        case 'binary':
-          message.value = atob(message.value)
-          break
+      if (message.value) {
+        switch (consumer.format) {
+          case 'binary':
+            message.value = atob(message.value)
+            break
+        }
       }
 
       return message
     })
+
+    // Make array ascending
+    messages = messages.reverse()
 
     commit('append', {
       topic,
