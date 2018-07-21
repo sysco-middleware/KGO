@@ -209,7 +209,7 @@ export default {
     return {
       name: topic,
       updateInterval: null,
-      intervalSelection: ""
+      intervalSelection: ''
     }
   },
   async created () {
