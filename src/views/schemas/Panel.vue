@@ -1,7 +1,7 @@
 <template>
   <div class="panel" v-if="selected">
     <div class="panel-header bg-primary text-white">
-      <div class="columns flex-middle">
+      <div class="columns f-middle">
         <div class="column">
           <div class="panel-title h5 mt-10">Schema: {{subject}}</div>
           <div class="panel-subtitle">ID: {{selected.id}}</div>

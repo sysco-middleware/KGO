@@ -27,7 +27,7 @@
 
           <li class="menu-item">
             <paginate-links
-              class="pagination flex-center"
+              class="pagination f-center"
               for="schemas"
               :per="5"
 

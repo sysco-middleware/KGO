@@ -22,9 +22,9 @@
           </li>
         </paginate>
 
-        <li class="menu-item">
+        <li class="menu-item" v-if="topicsAsArray.length > 0">
           <paginate-links
-            class="pagination flex-center"
+            class="pagination f-center"
             for="topics"
             :per="5"
 
