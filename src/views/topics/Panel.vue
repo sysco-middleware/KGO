@@ -121,20 +121,16 @@ export default {
       'topics'
     ]),
     ...mapState('messages', [
-      'messages'
+      'messages',
+      'consumers'
     ]),
     /**
      * Check if the given topic has a consumer
      * @return {Boolean} Checksum result
      */
     hasConsumer () {
-      let check = true
-
-      if (!this.topic.format) {
-        check = false
-      }
-
-      return check
+      const topic = this.name
+      return Boolean(this.consumers[topic])
     },
     /**
      * Returns information about the current topic.
@@ -142,7 +138,8 @@ export default {
      * @return {Object} Info about the topic
      */
     topic () {
-      return this.topics[this.name] || {}
+      const topic = this.name
+      return this.topics[topic] || {}
     },
     /**
      * Simply returns the total ammount of partitions available
