@@ -28,7 +28,7 @@ const actions = {
    * @param  {Object}  [config={}]       The config given to the consumer
    * @return {Promise}                   The promise gets resolved if the given consumer is found or created
    */
-  async consumer ({commit, state}, {name, topic, format = 'binary', config = {}}) {
+  async consumer ({commit, state, dispatch}, {name, topic, format = 'binary', config = {}}) {
     // Check if the consumer already exists
     if (state.consumers[topic]) {
       const consumer = state.consumers[topic]
@@ -37,7 +37,7 @@ const actions = {
         return
       }
 
-      commit('revoke', {topic})
+      dispatch('revokeConsumer', {topic})
     }
 
     const group = `${KAFKA_GROUP_PREFIX}-${state.session}`
@@ -53,6 +53,20 @@ const actions = {
       group,
       format
     })
+  },
+  /**
+   * Revoke the given consumer by sending a DELETE request to
+   * the Kafka REST Proxy.
+   * @param  {String}  topic  Name of the topic
+   * @return {Promise}        This promise gets resolved once the consumer is deleted
+   */
+  async revokeConsumer ({commit, state}, {topic}) {
+    try {
+      const consumer = state.consumers[topic]
+      await request.delete(consumer.url)
+    } finally {
+      commit('revokeConsumer', {topic})
+    }
   },
   /**
    * Fetch the latest messages from the topic consumer.
@@ -113,7 +127,7 @@ const mutations = {
 
     state.messages[topic].push(...messages)
   },
-  revoke (state, topic) {
+  revokeConsumer (state, topic) {
     Vue.delete(state.consumers, topic)
   }
 }
