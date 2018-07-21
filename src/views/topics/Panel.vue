@@ -183,7 +183,15 @@ export default {
 
         switch (message.value ? message.value.constructor : null) {
           case Object:
-            // TODO: parse JSON messages
+            for (let key in message.value) {
+              const index = table.headers.indexOf(key)
+              if (index < 0) {
+                table.headers.push(key)
+                index = table.headers.indexOf(key)
+              }
+
+              row[index] = message.value[key]
+            }
             break
           default:
             if (!table.headers.includes('value')) {
