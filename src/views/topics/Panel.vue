@@ -184,7 +184,7 @@ export default {
         switch (message.value ? message.value.constructor : null) {
           case Object:
             for (let key in message.value) {
-              const index = table.headers.indexOf(key)
+              let index = table.headers.indexOf(key)
               if (index < 0) {
                 table.headers.push(key)
                 index = table.headers.indexOf(key)
