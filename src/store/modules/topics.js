@@ -55,6 +55,9 @@ const mutations = {
     }
 
     Vue.set(state.topics[topic], 'format', format)
+  },
+  revokeFormat (state, topic) {
+    Vue.delete(state.topics[topic], 'format')
   }
 }
 

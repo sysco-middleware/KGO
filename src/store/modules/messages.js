@@ -7,6 +7,7 @@ const request = axios.create({
   baseURL: 'http://localhost:8082'
 })
 
+const CONSUMER_FORMAT_ERROR = 40601
 const KAFKA_GROUP_PREFIX = 'kafka-ui'
 
 const state = {
@@ -37,7 +38,7 @@ const actions = {
         return
       }
 
-      await dispatch('revokeConsumer', {topic})
+      await dispatch('revokeConsumer', topic)
     }
 
     const group = `${KAFKA_GROUP_PREFIX}-${state.session}`
@@ -61,12 +62,12 @@ const actions = {
    * @param  {String}  topic  Name of the topic
    * @return {Promise}        This promise gets resolved once the consumer is deleted
    */
-  async revokeConsumer ({commit, state}, {topic}) {
+  async revokeConsumer ({commit, state}, topic) {
     try {
       const consumer = state.consumers[topic]
       await request.delete(consumer.url)
     } finally {
-      commit('revokeConsumer', {topic})
+      commit('revokeConsumer', topic)
     }
   },
   /**
@@ -109,34 +110,44 @@ const actions = {
       await dispatch('resurrectConsumer', {topic})
     }
 
-    let {data: messages} = await request.get(`${consumer.url}/topics/${topic}`, {
-      headers: {
-        'Accept': `application/vnd.kafka.v1+json`
-      }
-    })
-
-    commit('updateConsumerActivity', topic)
-
-    // Parse the kafka messages
-    messages = messages.map((message) => {
-      if (message.value) {
-        switch (consumer.format) {
-          case 'binary':
-            message.value = atob(message.value)
-            break
+    try {
+      let {data: messages} = await request.get(`${consumer.url}/topics/${topic}`, {
+        headers: {
+          'Accept': `application/vnd.kafka.v1+json`
         }
+      })
+
+      commit('updateConsumerActivity', topic)
+
+      // Parse the kafka messages
+      messages = messages.map((message) => {
+        if (message.value) {
+          switch (consumer.format) {
+            case 'binary':
+              message.value = atob(message.value)
+              break
+          }
+        }
+
+        return message
+      })
+
+      // Make array ascending
+      messages = messages.reverse()
+
+      commit('append', {
+        topic,
+        messages
+      })
+    } catch (error) {
+      const {data} = error.response || {}
+      const {error_code: errorCode} = data || {}
+
+      if (errorCode === CONSUMER_FORMAT_ERROR) {
+        await dispatch('revokeConsumer', topic)
+        await commit('topics/revokeFormat', topic, {root: true})
       }
-
-      return message
-    })
-
-    // Make array ascending
-    messages = messages.reverse()
-
-    commit('append', {
-      topic,
-      messages
-    })
+    }
   }
 }
 
