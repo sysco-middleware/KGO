@@ -4,7 +4,7 @@
       <section class="navbar-section">
         <router-link :to="{ name: 'schemas' }" class="btn btn-link">Schemas</router-link>
         <router-link :to="{ name: 'topics' }" class="btn btn-link">Topics</router-link>
-        <router-link :to="{ name: 'topologies' }" class="btn btn-link">Topologies</router-link>
+        <!-- <router-link :to="{ name: 'topologies' }" class="btn btn-link">Topologies</router-link> -->
       </section>
       <section class="navbar-center">
         <!-- centered logo or brand -->
