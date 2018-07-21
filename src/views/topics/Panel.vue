@@ -1,10 +1,24 @@
 <template>
   <div class="panel">
     <div class="panel-header bg-primary text-white">
-      <div class="columns flex-middle">
+      <div class="columns f-middle">
         <div class="column">
           <div class="panel-title h5 mt-10">Topic: {{name}}</div>
           <div class="panel-subtitle"></div>
+        </div>
+        <div class="column col-ml-auto d-flex f-end">
+          <div class="form-group">
+            <select class="form-select form-inline text-dark">
+              <option selected>Auto updating disabled</option>
+              <option>Update every second</option>
+              <option>Update every 5 seconds</option>
+              <option>Update every minute</option>
+            </select>
+          </div>
+
+          <button class="btn btn-action">
+            <i class="icon icon-refresh"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -23,40 +37,27 @@
           </div>
         </div>
 
-        <Tabs v-if="topic.format" nav="panel-nav" body="panel-body" name="topic-data" remember>
-          <Tab name="Table">
-            <table class="table table-striped table-scroll table-inline">
-              <thead>
-                <tr>
-                  <th class="text-center">Partition</th>
-                  <th class="text-center">Replica</th>
-                  <th class="text-center">Replica broker</th>
-                  <th>Is Leader</th>
-                  <th>Is in-sync</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="text-center">0</td>
-                  <td class="text-center">0</td>
-                  <td class="text-center">0</td>
-                  <td>true</td>
-                  <td>true</td>
-                </tr>
-                <tr>
-                  <td class="text-center">1</td>
-                  <td class="text-center">0</td>
-                  <td class="text-center">0</td>
-                  <td>false</td>
-                  <td>true</td>
-                </tr>
-              </tbody>
-            </table>
-          </Tab>
-          <Tab name="RAW">
-            <TopicEditor :content="consumedMessages" />
-          </Tab>
-        </Tabs>
+        <template v-if="topic.format">
+          <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember>
+            <Tab name="Table">
+              <table class="table table-striped table-scroll table-inline">
+                <thead>
+                  <tr>
+                    <th v-for="(header, index) of messagesTable.headers" :key="index">{{header}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(content, index) of messagesTable.content" :key="index">
+                    <td v-for="(column, key) of content" :key="key">{{column}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </Tab>
+            <Tab name="RAW">
+              <TopicEditor :content="consumedMessages" />
+            </Tab>
+          </Tabs>
+        </template>
       </Tab>
       <Tab :name="`Partitions (${totalPartitions})`">
         <div class="card">
@@ -137,6 +138,33 @@ export default {
     },
     consumedMessages () {
       return this.messages[this.name] || []
+    },
+    messagesTable () {
+      let table = {
+        headers: ['offset', 'partition'],
+        content: []
+      }
+
+      for (let message of this.consumedMessages) {
+        let row = [message.offset, message.partition]
+
+        switch (message.value ? message.value.constructor : null) {
+          case Object:
+            // TODO: parse JSON messages
+            break
+          default:
+            if (!table.headers.includes('value')) {
+              table.headers.push('value')
+            }
+
+            row.push(message.value)
+            break
+        }
+
+        table.content.push(row)
+      }
+
+      return table
     }
   },
   components: {
