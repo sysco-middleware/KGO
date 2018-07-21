@@ -8,15 +8,15 @@
         </div>
         <div class="column col-ml-auto d-flex f-end">
           <div class="form-group">
-            <select class="form-select form-inline text-dark" :disabled="!hasConsumer">
-              <option selected>Auto updating disabled</option>
-              <option>Update every second</option>
-              <option>Update every 5 seconds</option>
-              <option>Update every minute</option>
+            <select class="form-select form-inline text-dark" :disabled="!hasConsumer" @change="autoUpdate(intervalSelection)" v-model="intervalSelection">
+              <option value selected>Auto updating disabled</option>
+              <option value="1">Update every second</option>
+              <option value="5">Update every 5 seconds</option>
+              <option value="60">Update every minute</option>
             </select>
           </div>
 
-          <button class="btn btn-action tooltip tooltip-bottom" data-tooltip="Fetch the latest consumed messages" :disabled="!hasConsumer">
+          <button class="btn btn-action tooltip tooltip-bottom" @click="fetchConsumed()" data-tooltip="Fetch the latest consumed messages" :disabled="!hasConsumer">
             <i class="icon icon-refresh"></i>
           </button>
         </div>
@@ -208,7 +208,9 @@ export default {
   data () {
     const {topic} = this.$route.params
     return {
-      name: topic
+      name: topic,
+      updateInterval: null,
+      intervalSelection: ""
     }
   },
   async created () {
@@ -230,10 +232,28 @@ export default {
         }
       })
 
-      await this.update()
+      await this.fetchConsumed()
     },
-    async update () {
+    autoUpdate (interval) {
+      if (this.updateInterval) {
+        clearInterval(this.updateInterval)
+      }
+
+      if (!interval) {
+        return
+      }
+
+      this.updateInterval = setInterval(() => {
+        this.fetchConsumed()
+      }, interval * 1000)
+    },
+    async fetchConsumed () {
       await this.$store.dispatch('messages/fetch', { topic: this.name })
+    }
+  },
+  beforeDestroy () {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval)
     }
   }
 }
