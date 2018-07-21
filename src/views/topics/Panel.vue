@@ -16,7 +16,7 @@
             </select>
           </div>
 
-          <button class="btn btn-action">
+          <button class="btn btn-action tooltip tooltip-bottom" data-tooltip="Fetch the latest consumed messages">
             <i class="icon icon-refresh"></i>
           </button>
         </div>
