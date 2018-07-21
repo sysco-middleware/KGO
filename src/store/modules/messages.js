@@ -91,7 +91,7 @@ const actions = {
    * @param  {String}  topic    Name of topic
    * @return {Promise}          This promise gets resolved once the latest messages are fetched
    */
-  async fetch ({commit, dispatch, state}, {topic}) {
+  async fetch ({commit, dispatch, state}, {topic, bytes = 50000}) {
     const consumer = state.consumers[topic]
 
     if (!consumer) {
@@ -105,7 +105,7 @@ const actions = {
     }
 
     try {
-      let {data: messages} = await state.request.get(`${consumer.url}/topics/${topic}`, {
+      let {data: messages} = await state.request.get(`${consumer.url}/topics/${topic}?max_bytes=${bytes}`, {
         headers: {
           'Accept': `application/vnd.kafka.v1+json`
         }
