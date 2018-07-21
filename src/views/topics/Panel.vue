@@ -4,7 +4,7 @@
       <div class="columns f-middle">
         <div class="column col-6">
           <div class="panel-title h5 mt-10 text-overflow-ellipsis">Topic: {{name}}</div>
-          <div class="panel-subtitle"></div>
+          <div class="panel-subtitle">Total Messages Fetched: {{consumedMessages.length}}</div>
         </div>
         <div class="column col-ml-auto d-flex f-end">
           <div class="form-group">
