@@ -215,7 +215,7 @@ const mutations = {
       Vue.set(state.messages, topic, [])
     }
 
-    state.messages[topic].push(...messages)
+    state.messages[topic].unshift(...messages)
   },
   /**
    * Delete the given topic consumer of consumers object.
