@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button v-if="selected" @click="exportTopic()" class="btn">Export Topic</button>
+    <button v-if="selected" @click="exportTopic()" class="btn" :disabled="consumedMessages.length <= 0">Export Topic</button>
   </div>
 </template>
 
@@ -13,6 +13,9 @@ export default {
     ...mapState('messages', [
       'messages'
     ]),
+    consumedMessages () {
+      return this.messages[this.selected] || []
+    }
   },
   watch: {
     '$route.params' () {
@@ -32,8 +35,7 @@ export default {
         return
       }
 
-      const messages = this.messages[this.selected] || []
-      const data = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(messages))}`
+      const data = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(this.consumedMessages))}`
       const name = `${this.selected}.json`
 
       utils.download(data, name)
