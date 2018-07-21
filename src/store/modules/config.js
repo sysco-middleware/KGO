@@ -1,27 +1,25 @@
-import axios from 'axios'
+import * as config from '@/lib/config'
 
-const state = {
-  active: null
-}
+const state = {}
 
 const getters = {
-  hasActive (state) {
-    return Boolean(state.active)
+  active () {
+    return config.active()
+  },
+  get (state) {
+    return (key) => {
+      return config.get(key)
+    }
   }
 }
 
 const actions = {
   async fetch ({commit}) {
-    const {data: config} = await axios.get('/config.json')
-    commit('setConfig', config)
+    await config.fetch()
   }
 }
 
-const mutations = {
-  setConfig (state, config) {
-    state.active = config
-  }
-}
+const mutations = {}
 
 export default {
   namespaced: true,
