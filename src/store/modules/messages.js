@@ -28,16 +28,16 @@ const actions = {
    * @param  {Object}  [config={}]       The config given to the consumer
    * @return {Promise}                   The promise gets resolved if the given consumer is found or created
    */
-  async consumer ({commit, state, dispatch}, {name, topic, format = 'binary', config = {}}) {
+  async consumer ({commit, state, dispatch}, {name, topic, format = 'binary', config = {}, resurrecting = false}) {
     // Check if the consumer already exists
-    if (state.consumers[topic]) {
+    if (state.consumers[topic] && !(state.consumers[topic].died && resurrecting)) {
       const consumer = state.consumers[topic]
 
       if (consumer.format === format) {
         return
       }
 
-      dispatch('revokeConsumer', {topic})
+      await dispatch('revokeConsumer', {topic})
     }
 
     const group = `${KAFKA_GROUP_PREFIX}-${state.session}`
@@ -51,7 +51,8 @@ const actions = {
       name,
       topic,
       group,
-      format
+      format,
+      config
     })
   },
   /**
@@ -69,6 +70,27 @@ const actions = {
     }
   },
   /**
+   * Resurrect the consumer for the given topic. A consumer needs to be resurrect/created again
+   * if it has been inactive for more then 5 min.
+   * @param  {String}  topic Name of the topic
+   * @return {Promise}       This promise gets resolved once the consumer is resurrected
+   */
+  async resurrectConsumer ({dispatch, state}, {topic}) {
+    const consumer = state.consumers[topic]
+
+    if (!consumer) {
+      throw new Error('there was no consumer found for the given topic')
+    }
+
+    await dispatch('consumer', {
+      topic,
+      name: consumer.name,
+      format: consumer.format,
+      config: consumer.config,
+      resurrecting: true
+    })
+  },
+  /**
    * Fetch the latest messages from the topic consumer.
    * A Error is thrown if no consumer is found for the given topic.
    * @param  {String}  topic    Name of topic
@@ -81,11 +103,19 @@ const actions = {
       throw new Error(`no consumer found for: ${topic}`)
     }
 
+    commit('checkActivityConsumer', topic)
+
+    if (consumer.died) {
+      await dispatch('resurrectConsumer', {topic})
+    }
+
     let {data: messages} = await request.get(`${consumer.url}/topics/${topic}`, {
       headers: {
         'Accept': `application/vnd.kafka.v1+json`
       }
     })
+
+    commit('updateConsumerActivity', topic)
 
     // Parse the kafka messages
     messages = messages.map((message) => {
@@ -111,14 +141,42 @@ const actions = {
 }
 
 const mutations = {
-  consumer (state, {group, name, format, topic}) {
+  consumer (state, {group, name, format, topic, config}) {
     const {baseURL} = request.defaults
+    const lastActive = new Date()
 
     Vue.set(state.consumers, topic, {
       url: `${baseURL}/consumers/${group}/instances/${name}`,
+      name,
       group,
-      format
+      format,
+      config,
+      lastActive,
+      died: false
     })
+  },
+  checkActivityConsumer (state, topic) {
+    if (!state.consumers[topic]) {
+      return
+    }
+
+    const consumer = state.consumers[topic]
+    const now = new Date()
+
+    const diffMs = (now - consumer.lastActive)
+    const diff = Math.round(((diffMs % 86400000) % 3600000) / 60000) // difference in minutes
+
+    if (diff >= 5) {
+      Vue.set(state.consumers[topic], 'died', true)
+    }
+  },
+  updateConsumerActivity (state, topic) {
+    if (!state.consumers[topic]) {
+      return
+    }
+
+    const currentDate = new Date()
+    Vue.set(state.consumers[topic], 'lastActive', currentDate)
   },
   append (state, {topic, messages}) {
     if (!state.messages[topic]) {
