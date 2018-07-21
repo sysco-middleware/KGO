@@ -4,7 +4,6 @@
       <div class="columns f-middle">
         <div class="column col-6">
           <div class="panel-title h5 mt-10 text-overflow-ellipsis">Topic: {{name}}</div>
-          <div class="panel-subtitle">Total Messages Fetched: {{consumedMessages.length}}</div>
         </div>
         <div class="column col-ml-auto d-flex f-end">
           <div class="form-group">
@@ -23,7 +22,7 @@
       </div>
     </div>
     <Tabs nav="panel-nav" body="panel-body" name="topic" remember>
-      <Tab name="Data" class="flush-padding">
+      <Tab :name="`Data (${consumedMessages.length})`" class="flush-padding">
         <div v-if="!topic.format" class="empty">
           <p class="empty-title h5">Unknown value format</p>
           <p class="empty-subtitle">Please select the message value format of this topic.</p>
