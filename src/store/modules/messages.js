@@ -1,14 +1,12 @@
 import Vue from 'vue'
 import axios from 'axios'
 import * as utils from '@/lib/utils'
+import {CONSUMER_FORMAT_ERROR, KAFKA_GROUP_PREFIX} from '@/lib/constants'
 
 // FIXME: use set config values
 const request = axios.create({
   baseURL: 'http://localhost:8082'
 })
-
-const CONSUMER_FORMAT_ERROR = 40601
-const KAFKA_GROUP_PREFIX = 'kafka-ui'
 
 const state = {
   consumers: {},
