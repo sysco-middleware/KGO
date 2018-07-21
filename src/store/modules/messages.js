@@ -105,9 +105,12 @@ const actions = {
     }
 
     try {
-      let {data: messages} = await state.request.get(`${consumer.url}/topics/${topic}?max_bytes=${bytes}`, {
+      let {data: messages} = await state.request.get(`${consumer.url}/topics/${topic}`, {
         headers: {
           'Accept': `application/vnd.kafka.v1+json`
+        },
+        params: {
+          max_bytes: bytes
         }
       })
 
