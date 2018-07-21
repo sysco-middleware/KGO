@@ -27,7 +27,7 @@
 }
 
 .text-overflow-ellipsis {
-  width: fill-available;
+  width: stretch;
   overflow: hidden;
   display: inline-block;
   text-overflow: ellipsis;
