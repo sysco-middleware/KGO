@@ -18,23 +18,11 @@ export default {
     return {
       table: null,
       headers: [],
-      rows: [],
-      columns: []
+      rows: []
     }
   },
   mounted () {
-    this.table = new Handsontable(this.$refs.table, {
-      colHeaders: this.headers,
-      columns: this.columns,
-      data: this.rows,
-      rowHeaders: (index) => {
-        const [offset] = this.rows[index]
-        return offset
-      },
-      startRows: 5,
-      startCols: 4
-    })
-
+    this.table = new Handsontable(this.$refs.table)
     this.updateTableData()
   },
   watch: {
@@ -71,17 +59,15 @@ export default {
         this.rows.push(row)
       }
 
-      // All columns should be read only
-      this.columns = this.headers.map((header) => {
-        return {
-          readOnly: true
-        }
-      })
-
       this.table.updateSettings({
         colHeaders: this.headers,
-        columns: this.columns,
-        data: this.rows
+        data: this.rows,
+        rowHeaders: (index) => {
+          const [offset] = this.rows[index]
+          return offset
+        },
+        startRows: 5,
+        startCols: 4
       })
     }
   }
