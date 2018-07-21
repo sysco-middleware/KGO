@@ -13,11 +13,11 @@ async function init () {
   await config.fetch()
 
   store.commit('messages/setRequestHandle', {
-    baseURL: config.get('kafka.proxy.api')
+    baseURL: config.get('kafka.rest.proxy.api')
   })
 
   store.commit('topics/setRequestHandle', {
-    baseURL: config.get('kafka.proxy.api')
+    baseURL: config.get('kafka.rest.proxy.api')
   })
 
   new Vue({

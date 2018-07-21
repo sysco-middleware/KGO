@@ -1,4 +1,4 @@
 {
   "schema.registry.api": "http://127.0.0.1:8081",
-  "kafka.proxy.api": "http://127.0.0.1:8082"
+  "kafka.rest.proxy.api": "http://127.0.0.1:8082"
 }
