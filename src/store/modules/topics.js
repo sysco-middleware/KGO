@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import axios from 'axios'
-import * as config from '@/lib/config'
 import {LOCAL_STORAGE_PREFIX} from '@/lib/constants'
 
 const state = {
@@ -12,13 +11,6 @@ const getters = {
 }
 
 const actions = {
-  setRequestHandle ({commit, rootGetters}) {
-    const request = axios.create({
-      baseURL: config.get('kafka.proxy.api')
-    })
-
-    commit('setRequestHandle', request)
-  },
   async fetchAll ({commit, state}) {
     const {data: topics} = await state.request.get('/topics')
     commit('set', topics)
@@ -79,8 +71,10 @@ const mutations = {
     localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}-${topic}`)
     Vue.delete(state.topics[topic], 'format')
   },
-  setRequestHandle (state, handle) {
-    state.request = handle
+  setRequestHandle (state, {baseURL}) {
+    state.request = axios.create({
+      baseURL
+    })
   }
 }
 

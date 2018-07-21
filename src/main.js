@@ -12,8 +12,13 @@ Vue.use(VuePaginate)
 async function init () {
   await config.fetch()
 
-  store.dispatch('messages/setRequestHandle')
-  store.dispatch('topics/setRequestHandle')
+  store.commit('messages/setRequestHandle', {
+    baseURL: config.get('kafka.proxy.api')
+  })
+
+  store.commit('topics/setRequestHandle', {
+    baseURL: config.get('kafka.proxy.api')
+  })
 
   new Vue({
     router,

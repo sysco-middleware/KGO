@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
 import * as utils from '@/lib/utils'
-import * as config from '@/lib/config'
 import {CONSUMER_FORMAT_ERROR, KAFKA_GROUP_PREFIX} from '@/lib/constants'
 
 const state = {
@@ -15,13 +14,6 @@ const getters = {
 }
 
 const actions = {
-  setRequestHandle ({commit, rootGetters}) {
-    const request = axios.create({
-      baseURL: config.get('kafka.proxy.api')
-    })
-
-    commit('setRequestHandle', request)
-  },
   /**
    * Create a new consumer if it does not exists.
    * The consumer will use the session Kafka group.
@@ -67,7 +59,7 @@ const actions = {
   async revokeConsumer ({commit, state}, topic) {
     try {
       const consumer = state.consumers[topic]
-      await request.delete(consumer.url)
+      await state.request.delete(consumer.url)
     } finally {
       commit('revokeConsumer', topic)
     }
@@ -229,8 +221,10 @@ const mutations = {
   revokeConsumer (state, topic) {
     Vue.delete(state.consumers, topic)
   },
-  setRequestHandle (state, handle) {
-    state.request = handle
+  setRequestHandle (state, {baseURL}) {
+    state.request = axios.create({
+      baseURL
+    })
   }
 }
 
