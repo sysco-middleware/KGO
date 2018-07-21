@@ -123,22 +123,45 @@ export default {
     ...mapState('messages', [
       'messages'
     ]),
+    /**
+     * Returns information about the current topic.
+     * If the topic is not found is a empty Object returned.
+     * @return {Object} Info about the topic
+     */
     topic () {
       return this.topics[this.name] || {}
     },
+    /**
+     * Simply returns the total ammount of partitions available
+     * @return {Number} Total ammount of partitions
+     */
     totalPartitions () {
       const topic = this.topic
       return topic.partitions ? topic.partitions.length : 0
     },
+    /**
+     * Returns the replication factor of the topic
+     * @return {Number} Replication factor
+     */
     replicationFactor () {
       const topic = this.topic || {}
       const [partition] = topic.partitions || []
 
       return partition ? partition.replicas.length : 0
     },
+    /**
+     * Returns the consumed messaged from the consumer.
+     * If no messages are found is a empty array returned.
+     * @return {Array} Consumed messages
+     */
     consumedMessages () {
       return this.messages[this.name] || []
     },
+    /**
+     * Message table contains all the messages
+     * in a table friendly dataset
+     * @return {Object} The messages table dataset
+     */
     messagesTable () {
       let table = {
         headers: ['offset', 'partition'],
