@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
+import {LOCAL_STORAGE_PREFIX} from '@/lib/constants'
 
 // FIXME: use set config values
 const request = axios.create({
@@ -17,6 +18,19 @@ const actions = {
   async fetchAll ({commit}) {
     const {data: topics} = await request.get('/topics')
     commit('set', topics)
+
+    for (let topic of topics) {
+      const format = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}-${topic}`)
+
+      if (!format) {
+        continue
+      }
+
+      commit('format', {
+        topic,
+        format
+      })
+    }
   },
   async fetch ({commit, state}, topic) {
     const {data: info} = await request.get(`/topics/${topic}`)
@@ -54,9 +68,11 @@ const mutations = {
       Vue.set(state.topics, topic, {})
     }
 
+    localStorage.setItem(`${LOCAL_STORAGE_PREFIX}-${topic}`, format)
     Vue.set(state.topics[topic], 'format', format)
   },
   revokeFormat (state, topic) {
+    localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}-${topic}`)
     Vue.delete(state.topics[topic], 'format')
   }
 }

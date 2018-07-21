@@ -215,6 +215,12 @@ export default {
   },
   async created () {
     await this.$store.dispatch('topics/fetch', this.name)
+
+    // If a topic's format is available create a consumer
+    if (this.topic.format) {
+      await this.createConsumer()
+      await this.fetchConsumed()
+    }
   },
   methods: {
     /**
@@ -228,16 +234,21 @@ export default {
         topic: this.name
       })
 
+      await this.createConsumer()
+      await this.fetchConsumed()
+    },
+    /**
+     * Create a new consumer
+     */
+    async createConsumer () {
       await this.$store.dispatch('messages/consumer', {
-        format,
+        format: this.topic.format,
         name: this.name,
         topic: this.name,
         config: {
           'auto.offset.reset': 'smallest'
         }
       })
-
-      await this.fetchConsumed()
     },
     /**
      * Set a auto update interval that fetches the latest
