@@ -2,13 +2,13 @@
   <div class="panel">
     <div class="panel-header bg-primary text-white">
       <div class="columns f-middle">
-        <div class="column">
-          <div class="panel-title h5 mt-10">Topic: {{name}}</div>
+        <div class="column col-6">
+          <div class="panel-title h5 mt-10 text-overflow-ellipsis">Topic: {{name}}</div>
           <div class="panel-subtitle"></div>
         </div>
         <div class="column col-ml-auto d-flex f-end">
           <div class="form-group">
-            <select class="form-select form-inline text-dark">
+            <select class="form-select form-inline text-dark" :disabled="!hasConsumer">
               <option selected>Auto updating disabled</option>
               <option>Update every second</option>
               <option>Update every 5 seconds</option>
@@ -16,7 +16,7 @@
             </select>
           </div>
 
-          <button class="btn btn-action tooltip tooltip-bottom" data-tooltip="Fetch the latest consumed messages">
+          <button class="btn btn-action tooltip tooltip-bottom" data-tooltip="Fetch the latest consumed messages" :disabled="!hasConsumer">
             <i class="icon icon-refresh"></i>
           </button>
         </div>
@@ -123,6 +123,19 @@ export default {
     ...mapState('messages', [
       'messages'
     ]),
+    /**
+     * Check if the given topic has a consumer
+     * @return {Boolean} Checksum result
+     */
+    hasConsumer () {
+      let check = true
+
+      if (!this.topic.format) {
+        check = false
+      }
+
+      return check
+    },
     /**
      * Returns information about the current topic.
      * If the topic is not found is a empty Object returned.

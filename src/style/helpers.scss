@@ -25,3 +25,11 @@
 .flush-margin {
   margin: 0 !important;
 }
+
+.text-overflow-ellipsis {
+  width: fill-available;
+  overflow: hidden;
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
