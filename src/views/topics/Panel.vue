@@ -217,6 +217,11 @@ export default {
     await this.$store.dispatch('topics/fetch', this.name)
   },
   methods: {
+    /**
+     * Set the topic value format of the active topic and create a representing consumer.
+     * @param  {String}  [format='binary'] Format of the given topic
+     * @return {Promise}                   This promise get's resolved once the format is set a consumer is created and the first consumed messages are fetched
+     */
     async setTopicFormat (format = 'binary') {
       this.$store.commit('topics/format', {
         format,
@@ -234,6 +239,11 @@ export default {
 
       await this.fetchConsumed()
     },
+    /**
+     * Set a auto update interval that fetches the latest
+     * consumed messages ever x seconds.
+     * @param  {Number} interval Interval occurence in seconds
+     */
     autoUpdate (interval) {
       if (this.updateInterval) {
         clearInterval(this.updateInterval)
@@ -247,6 +257,10 @@ export default {
         this.fetchConsumed()
       }, interval * 1000)
     },
+    /**
+     * Fetch the latest consumed messages from the active consumer
+     * @return {Promise} The promise gets resolved once the messages are fetched
+     */
     async fetchConsumed () {
       await this.$store.dispatch('messages/fetch', { topic: this.name })
     }
