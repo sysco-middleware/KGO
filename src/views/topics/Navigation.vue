@@ -35,10 +35,12 @@ export default {
         return
       }
 
-      const data = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(this.consumedMessages))}`
+      const url = URL.createObjectURL(new Blob([encodeURIComponent(JSON.stringify(this.consumedMessages))]), {
+        type: "data:text/json;charset=utf-8"
+      })
       const name = `${this.selected}.json`
 
-      utils.download(data, name)
+      utils.download(url, name)
     }
   }
 }
