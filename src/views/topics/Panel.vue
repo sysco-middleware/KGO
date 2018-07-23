@@ -8,10 +8,8 @@
         <div class="column col-ml-auto d-flex f-end">
           <div class="form-group">
             <select class="form-select form-inline text-dark" :disabled="!hasConsumer" @change="autoUpdate(intervalSelection)" v-model="intervalSelection">
-              <option value selected>Auto updating disabled</option>
-              <option value="1">Update every second</option>
-              <option value="5">Update every 5 seconds</option>
-              <option value="60">Update every minute</option>
+              <option :value="0">Auto updating disabled</option>
+              <option v-for="seconds of intervalOptions" :value="seconds" :key="seconds">Update every {{seconds}} seconds</option>
             </select>
           </div>
 
@@ -39,6 +37,39 @@
 
         <template v-if="topic.format">
           <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember>
+            <div class="columns panel-body flush-padding-bottom">
+              <!-- <div class="column col-xs">
+                <form class="input-group" @submit.prevent="">
+                  <input type="text" class="form-input" placeholder="Filter consumed messages">
+                  <button class="btn btn-primary input-group-btn" submit>Filter</button>
+                </form>
+              </div> -->
+
+              <div class="column col-xs">
+                <div class="form-group">
+                  <select class="form-select form-inline text-dark" :disabled="!hasConsumer" @change="setConsumingMaxBytes(consumingMaxBytes)" v-model="consumingMaxBytes">
+                    <option v-for="byte of consumingBytesOptions" :value="byte" :key="byte">Consuming max {{byte}} bytes at a time</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="columns panel-body flush-padding-bottom">
+              <div class="column col-xs">
+                <form class="input-group" @submit.prevent="onSeekToOffset()">
+                  <input type="number" class="form-input" placeholder="Offset" v-model="seekOffsetInput">
+                  <button class="btn btn-primary input-group-btn" submit>Seek to offset</button>
+                </form>
+              </div>
+
+              <div class="column col-xs">
+                <div class="btn-group btn-group-block">
+                  <button class="btn" @click="onOffsetBeginning()">Seek to beginning</button>
+                  <button class="btn" @click="onOffsetEnd()">Seek to end</button>
+                </div>
+              </div>
+            </div>
+
             <Tab name="Table">
               <MessageTable :messages="consumedMessages" />
             </Tab>
@@ -169,7 +200,20 @@ export default {
     return {
       name: topic,
       updateInterval: 0,
-      intervalSelection: ''
+      intervalSelection: 0,
+      seekOffsetInput: null,
+      intervalOptions: [
+        2,
+        5,
+        60
+      ],
+      consumingMaxBytes: 5000,
+      consumingBytesOptions: [
+        5000,
+        10000,
+        50000,
+        100000
+      ]
     }
   },
   async created () {
@@ -177,8 +221,7 @@ export default {
 
     // If a topic's format is available create a consumer
     if (this.topic.format) {
-      await this.createConsumer()
-      await this.fetchConsumed()
+      await this.setupConsumer()
     }
   },
   methods: {
@@ -193,7 +236,15 @@ export default {
         topic: this.name
       })
 
+      await this.setupConsumer()
+    },
+    /**
+     * Sets up the consumer and starts fetching consumed messages.
+     * This method is mainly used to initialize a consumer once the page is loaded.
+     */
+    async setupConsumer () {
       await this.createConsumer()
+      await this.setOffsetBeginning()
       await this.fetchConsumed()
     },
     /**
@@ -205,9 +256,12 @@ export default {
         name: this.name,
         topic: this.name,
         config: {
-          'auto.offset.reset': 'smallest'
+          'auto.offset.reset': 'earliest',
+          'auto.commit.enable': false
         }
       })
+
+      await this.assignToPartitions()
     },
     /**
      * Set a auto update interval that fetches the latest
@@ -232,7 +286,87 @@ export default {
      * @return {Promise} The promise gets resolved once the messages are fetched
      */
     async fetchConsumed () {
-      await this.$store.dispatch('messages/fetch', { topic: this.name })
+      const interval = this.intervalSelection * 1000
+      let timeout = 5 * 1000 // Max timeout = 5 sec
+
+      // If the interval is faster then the timeout set the interval as timeout
+      if (interval > 0 && interval < timeout) {
+        timeout = interval
+      }
+
+      await this.$store.dispatch('messages/fetch', {
+        topic: this.name,
+        bytes: this.consumingMaxBytes,
+        timeout
+      })
+    },
+    /**
+     * Assign all partitions of the given topic to the active consumer
+     */
+    async assignToPartitions () {
+      const topic = this.name
+      await this.$store.dispatch('messages/assignToPartitions', topic)
+    },
+    /**
+     * This method get's called once a user requests to seek to the beginning
+     * of a topic.
+     */
+    async onOffsetBeginning () {
+      await this.revokeConsumer()
+      await this.createConsumer()
+      await this.setOffsetBeginning()
+      await this.fetchConsumed()
+    },
+    /**
+     * Sets the offset of the active topic consumer to the beginning.
+     * Make sure to assign the partitions first.
+     */
+    async setOffsetBeginning () {
+      const topic = this.name
+      await this.$store.dispatch('messages/setOffsetBeginning', topic)
+    },
+    /**
+     * This method get's called once a user requests to seek to the end
+     * of a topic.
+     */
+    async onOffsetEnd () {
+      await this.revokeConsumer()
+      await this.createConsumer()
+      await this.setOffsetEnd()
+      await this.fetchConsumed()
+    },
+    /**
+     * Sets the offset of the active topic consumer to the end.
+     * Make sure to assign the partitions first.
+     */
+    async setOffsetEnd () {
+      const topic = this.name
+      await this.$store.dispatch('messages/setOffsetEnd', topic)
+    },
+    /**
+     * Revoke the given consumer
+     */
+    async revokeConsumer () {
+      const topic = this.name
+      await this.$store.dispatch('messages/revokeConsumer', topic)
+    },
+    /**
+     * The method get's called once a users requests to seek
+     * to the given offset of a topic
+     */
+    async onSeekToOffset () {
+      await this.revokeConsumer()
+      await this.createConsumer()
+      await this.seekToOffset()
+      await this.fetchConsumed()
+    },
+    /**
+     * Seek to the set offset
+     */
+    async seekToOffset () {
+      const offset = this.seekOffsetInput
+      const topic = this.name
+      await this.$store.dispatch('messages/seekToOffset', {offset, topic})
     }
   },
   beforeDestroy () {

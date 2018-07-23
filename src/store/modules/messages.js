@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import * as utils from '@/lib/utils'
-import {CONSUMER_FORMAT_ERROR, KAFKA_GROUP_PREFIX} from '@/lib/constants'
+import {CONSUMER_FORMAT_ERROR, KAFKA_GROUP_PREFIX, CONTENT_JSON_KAFKA} from '@/lib/constants'
 
 const state = {
   consumers: {},
@@ -59,9 +59,15 @@ const actions = {
   async revokeConsumer ({commit, state}, topic) {
     try {
       const consumer = state.consumers[topic]
-      await state.request.delete(consumer.url)
+      await consumer.request({
+        method: 'DELETE',
+        data: {}
+      })
+    } catch (error) {
+      // TODO: maybe log that the consumer was not found?
     } finally {
       commit('revokeConsumer', topic)
+      commit('flushConsumed', topic)
     }
   },
   /**
@@ -74,7 +80,7 @@ const actions = {
     const consumer = state.consumers[topic]
 
     if (!consumer) {
-      throw new Error('there was no consumer found for the given topic')
+      throw new Error('no consumer found for the given topic')
     }
 
     await dispatch('consumer', {
@@ -85,13 +91,114 @@ const actions = {
       resurrecting: true
     })
   },
+  async setOffsetBeginning ({state, rootState}, topic) {
+    const consumer = state.consumers[topic]
+    const {partitions} = rootState['topics'].topics[topic] || {}
+
+    if (!consumer) {
+      throw new Error('no consumer found for the given topic')
+    }
+
+    if (!partitions) {
+      throw new Error('no paritions found for the given topic')
+    }
+
+    const payload = {
+      partitions: [
+        ...partitions.map((partition) => {
+          return {
+            topic,
+            partition: partition.partition
+          }
+        })
+      ]
+    }
+
+    await consumer.request.post('/positions/beginning', payload)
+  },
+  async setOffsetEnd ({state, rootState}, topic) {
+    const consumer = state.consumers[topic]
+    const {partitions} = rootState['topics'].topics[topic] || {}
+
+    if (!consumer) {
+      throw new Error('no consumer found for the given topic')
+    }
+
+    if (!partitions) {
+      throw new Error('no paritions found for the given topic')
+    }
+
+    const payload = {
+      partitions: [
+        ...partitions.map((partition) => {
+          return {
+            topic,
+            partition: partition.partition
+          }
+        })
+      ]
+    }
+
+    await consumer.request.post('/positions/end', payload)
+  },
+  async seekToOffset ({state, rootState}, {topic, offset}) {
+    const consumer = state.consumers[topic]
+    const {partitions} = rootState['topics'].topics[topic] || {}
+
+    if (!consumer) {
+      throw new Error('no consumer found for the given topic')
+    }
+
+    if (!partitions) {
+      throw new Error('no paritions found for the given topic')
+    }
+
+    const payload = {
+      offsets: [
+        ...partitions.map((partition) => {
+          return {
+            topic,
+            offset,
+            partition: partition.partition
+          }
+        })
+      ]
+    }
+
+    await consumer.request.post('/positions', payload)
+  },
+  async assignToPartitions ({state, rootState}, topic) {
+    const consumer = state.consumers[topic]
+    const {partitions} = rootState['topics'].topics[topic] || {}
+
+    if (!consumer) {
+      throw new Error('no consumer found for the given topic')
+    }
+
+    if (!partitions) {
+      throw new Error('no paritions found for the given topic')
+    }
+
+    const payload = {
+      partitions: [
+        ...partitions.map((partition) => {
+          return {
+            topic,
+            partition: partition.partition
+          }
+        })
+      ]
+    }
+
+    await consumer.request.post('/assignments', payload)
+  },
   /**
    * Fetch the latest messages from the topic consumer.
    * A Error is thrown if no consumer is found for the given topic.
    * @param  {String}  topic    Name of topic
    * @return {Promise}          This promise gets resolved once the latest messages are fetched
    */
-  async fetch ({commit, dispatch, state}, {topic, bytes = 50000}) {
+  async fetch ({commit, dispatch, state}, {topic, bytes = 50000, timeout = 5000}) {
     const consumer = state.consumers[topic]
 
     if (!consumer) {
@@ -105,12 +212,13 @@ const actions = {
     }
 
     try {
-      let {data: messages} = await state.request.get(`${consumer.url}/topics/${topic}`, {
+      let {data: messages} = await consumer.request.get(`/records`, {
         headers: {
           ...utils.getFormatHeaders(consumer.format)
         },
         params: {
-          max_bytes: bytes
+          max_bytes: bytes,
+          timeout
         }
       })
 
@@ -128,9 +236,6 @@ const actions = {
 
         return message
       })
-
-      // Make array ascending
-      messages = messages.reverse()
 
       commit('append', {
         topic,
@@ -162,9 +267,16 @@ const mutations = {
   consumer (state, {group, name, format, topic, config}) {
     const {baseURL} = state.request.defaults
     const lastActive = new Date()
+    const url = `${baseURL}/consumers/${group}/instances/${name}`
 
     Vue.set(state.consumers, topic, {
-      url: `${baseURL}/consumers/${group}/instances/${name}`,
+      request: axios.create({
+        baseURL: url,
+        headers: {
+          'Content-Type': CONTENT_JSON_KAFKA
+        }
+      }),
+      url,
       name,
       group,
       format,
@@ -207,7 +319,7 @@ const mutations = {
   },
   /**
    * Append the given messages to the message collection of the given topic.
-   * @param  {String}     topic    Name of topic
+   * @param  {String}     topic    Name of the topic
    * @param  {Array<any>} messages Messages to be appended
    */
   append (state, {topic, messages}) {
@@ -215,7 +327,14 @@ const mutations = {
       Vue.set(state.messages, topic, [])
     }
 
-    state.messages[topic].unshift(...messages)
+    state.messages[topic].push(...messages)
+  },
+  /**
+   * Flush all the consumed messages of the given topic.
+   * @param  {String} topic Namf of the topic
+   */
+  flushConsumed (state, topic) {
+    Vue.delete(state.messages, topic)
   },
   /**
    * Delete the given topic consumer of consumers object.
@@ -226,7 +345,10 @@ const mutations = {
   },
   setRequestHandle (state, {baseURL}) {
     state.request = axios.create({
-      baseURL
+      baseURL,
+      headers: {
+        'Content-Type': CONTENT_JSON_KAFKA
+      }
     })
   }
 }
