@@ -27,15 +27,15 @@ export function getFormatHeaders (format) {
   switch (format) {
     case 'binary':
       return {
-        'Accept': 'application/vnd.kafka.binary.v1+json'
+        'Accept': 'application/vnd.kafka.binary.v2+json'
       }
     case 'json':
       return {
-        'Accept': 'application/vnd.kafka.json.v1+json'
+        'Accept': 'application/vnd.kafka.json.v2+json'
       }
     case 'avro':
       return {
-        'Accept': 'application/vnd.kafka.avro.v1+json'
+        'Accept': 'application/vnd.kafka.avro.v2+json'
       }
   }
 }
