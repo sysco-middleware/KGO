@@ -12,6 +12,7 @@
     "axios": "^0.18.0",
     "brace": "^0.11.1",
     "handsontable": "^5.0.0",
+    "lunr": "^2.3.0",
     "register-service-worker": "^1.0.0",
     "spectre.css": "^0.5.3",
     "vue": "^2.5.16",

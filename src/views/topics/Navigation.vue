@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <button v-if="selected" @click="exportTopic()" class="btn" :disabled="consumedMessages.length <= 0">Export Topic</button>
+  <div class="input-group">
+    <button v-if="selected" @click="unsetFormat()" class="btn input-group-btn">Change format</button>
+    <button v-if="selected" @click="exportTopic()" class="btn input-group-btn" :disabled="consumedMessages.length <= 0">Export Topic</button>
   </div>
 </template>
 
@@ -41,6 +42,10 @@ export default {
       const name = `${this.selected}.json`
 
       utils.download(url, name)
+    },
+    async unsetFormat () {
+      await this.$store.dispatch('messages/revokeConsumer', this.selected)
+      await this.$store.commit('topics/revokeFormat', this.selected)
     }
   }
 }
