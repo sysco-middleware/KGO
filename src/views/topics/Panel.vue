@@ -39,8 +39,8 @@
           <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember>
             <div class="columns panel-body flush-padding-bottom">
               <!-- <div class="column col-xs">
-                <form class="input-group" @submit.prevent="">
-                  <input type="text" class="form-input" placeholder="Filter consumed messages">
+                <form class="input-group" @submit.prevent="preformFilter()">
+                  <input type="text" class="form-input" placeholder="Filter consumed messages" v-model="filterQuery">
                   <button class="btn btn-primary input-group-btn" submit>Filter</button>
                 </form>
               </div> -->
