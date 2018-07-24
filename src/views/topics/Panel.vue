@@ -35,8 +35,14 @@
           </div>
         </div>
 
+        <div class="empty" v-if="!hasMessages && topic.format">
+          <div class="empty-icon"><i class="icon icon-3x icon-download"></i></div>
+          <p class="empty-title h5">Consuming messages</p>
+          <p class="empty-subtitle">{{waitingMessage}}</p>
+        </div>
+
         <template v-if="topic.format">
-          <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember>
+          <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember v-if="hasMessages">
             <div class="columns panel-body flush-padding-bottom">
               <!-- <div class="column col-xs">
                 <form class="input-group" @submit.prevent="preformFilter()">
@@ -129,7 +135,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapState, mapGetters} from 'vuex'
 
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
@@ -145,6 +151,9 @@ export default {
       'messages',
       'consumers'
     ]),
+    ...mapGetters({
+      waitingMessage: 'waiting/randomMessages'
+    }),
     /**
      * Check if the given topic has a consumer
      * @return {Boolean} Checksum result
@@ -187,6 +196,9 @@ export default {
      */
     consumedMessages () {
       return this.messages[this.name] || []
+    },
+    hasMessages () {
+      return Boolean(this.consumedMessages.length > 0)
     }
   },
   components: {

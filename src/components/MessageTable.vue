@@ -67,7 +67,9 @@ export default {
           return offset
         },
         startRows: 5,
-        startCols: 4
+        startCols: 4,
+        renderAllRows: true,
+        outsideClickDeselects: false
       })
     }
   }

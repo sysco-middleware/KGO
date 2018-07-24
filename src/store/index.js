@@ -8,6 +8,7 @@ import state from './state'
 
 import messages from './modules/messages'
 import schemas from './modules/schemas'
+import waiting from './modules/waiting'
 import config from './modules/config'
 import topics from './modules/topics'
 
@@ -21,6 +22,7 @@ export default new Vuex.Store({
   modules: {
     messages,
     schemas,
+    waiting,
     config,
     topics
   }
