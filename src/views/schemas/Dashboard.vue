@@ -54,6 +54,10 @@
           </div>
         </div>
       </ul>
+
+      <div class="mt-2">
+        <p>Global compatibility level: <b>{{global.config.compatibility}}</b></p>
+      </div>
     </div>
     <div class="column col-8">
       <router-view :key="$route.fullPath"></router-view>
@@ -63,7 +67,7 @@
 
 <script>
 // @ is an alias to /src
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'dashboard',
@@ -71,6 +75,9 @@ export default {
     ...mapGetters({
       schemas: 'schemas/latest'
     }),
+    ...mapState('schemas', [
+      'global'
+    ]),
     total () {
       return Object.keys(this.schemas).length // Get the total ammount of keys since schemas is a object
     },
@@ -96,6 +103,7 @@ export default {
   },
   async created () {
     await this.$store.dispatch('schemas/fetchAvailable')
+    await this.$store.dispatch('schemas/fetchGlobalConfig')
   },
   methods: {
     selectSchema (schema) {
