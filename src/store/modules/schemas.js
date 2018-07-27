@@ -187,15 +187,17 @@ const actions = {
    * @param {String} options.subject Subject name
    * @param {Object} options.config  Subject config
    */
-  async setConfig ({commit}, {subject, config}) {
+  async setConfig ({dispatch}, {subject, config}) {
     await request.put(`/config/${subject}`, config)
+    await dispatch('fetchConfig', subject)
   },
   /**
    * Set the global config for Kafka Schema Registry
    * @param {Object} config Global config
    */
-  async setGlobalConfig ({commit}, config) {
+  async setGlobalConfig ({dispatch}, config) {
     await request.put('/config', config)
+    await dispatch('fetchGlobalConfig')
   }
 }
 

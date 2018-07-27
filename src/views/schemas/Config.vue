@@ -34,14 +34,19 @@ export default {
   },
   async created () {
     await this.$store.dispatch('schemas/fetchGlobalConfig')
-
-    this.usedCompatibility = (this.config ? this.config.compatibility : null) || this.global.config.compatibility
-    this.usesGlobalCompatibility = !this.config || !this.config.compatibility
-    this.compatibility = this.usedCompatibility
+    this.updateUsedCompatibility()
   },
   methods: {
     compatibilityLevelChange () {
-      this.$emit('update:config', this.config)
+      let config = this.config || {}
+      config.compatibility = this.compatibility
+
+      this.$emit('update:config', config)
+    },
+    updateUsedCompatibility () {
+      this.usedCompatibility = (this.config ? this.config.compatibility : null) || this.global.config.compatibility
+      this.usesGlobalCompatibility = !this.config || !this.config.compatibility
+      this.compatibility = this.usedCompatibility
     }
   }
 }

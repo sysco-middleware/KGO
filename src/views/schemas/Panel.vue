@@ -32,7 +32,7 @@
         <Info :schema="schema" />
       </Tab>
       <Tab name="Config">
-        <Config :config.sync="config" />
+        <Config :config.sync="config" ref="config" />
 
         <div class="columns mt-2">
           <div class="column">
@@ -182,6 +182,8 @@ export default {
         subject: this.subject,
         config: this.config
       })
+
+      this.$refs.config.updateUsedCompatibility()
     },
     async newSchemaVersion () {
       await this.$store.dispatch('schemas/newSchemaVersion', {
