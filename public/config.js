@@ -1,4 +1,4 @@
 window.config = {
-  'schema.registry.api': 'http://localhost:8081',
-  'kafka.rest.proxy.api': 'http://localhost:8082'
+  'kafka.rest.proxy.api': 'http://127.0.0.1:8082', // Confluent Kafka REST Proxy
+  'schema.registry.api': 'http://127.0.0.1:8081' // Confluent Schema Registry
 }
