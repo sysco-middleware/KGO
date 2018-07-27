@@ -20,10 +20,10 @@
         <SchemaEditor :content.sync="schema" @change="compatible = false" />
 
         <div class="columns mt-2">
-          <div class="column" v-if="!compatible">
+          <div class="column" v-show="!compatible">
             <button class="btn btn-block" @click="checkCompatibility()">Validate</button>
           </div>
-          <div class="column" v-if="compatible">
+          <div class="column" v-show="compatible">
             <button class="btn btn-block btn-primary" @click="newSchemaVersion()">Update</button>
           </div>
         </div>
