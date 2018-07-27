@@ -11,7 +11,7 @@
         </li>
         <li class="divider"></li>
 
-        <paginate name="topics" :list="topicsAsArray" :per="5" tag="div">
+        <paginate name="topics" :list="topicsAsArray" :per="8" tag="div">
           <li class="menu-item" v-for="{name, format} of paginated('topics')" :key="name">
             <router-link :to="{ name: 'topic', params: { topic: name }}" active-class="active" class="c-hand">
               {{name}}
