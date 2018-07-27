@@ -12,9 +12,20 @@
 
 <script>
 export default {
-  data () {
-    return {
-      level: 'none'
+  props: {
+    schema: {
+      type: Object,
+      required: true,
+      default: () => {}
+    }
+  },
+  computed: {
+    config () {
+      const schema = this.schema
+      return schema.config || {}
+    },
+    level () {
+      return this.config.level || 'none'
     }
   }
 }
