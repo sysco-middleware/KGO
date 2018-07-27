@@ -3,7 +3,7 @@
     <div class="panel-header bg-primary text-white">
       <div class="columns f-middle">
         <div class="column">
-          <div class="panel-title h5 mt-10">Create a new schema</div>
+          <div class="panel-title h5 mt-10">New subject<span v-show="name">: {{name}}</span></div>
         </div>
       </div>
     </div>
@@ -46,7 +46,7 @@ export default {
   data () {
     return {
       name: '',
-      config: {},
+      config: null,
       schema: {
         type: 'record',
         name: '',
@@ -63,15 +63,24 @@ export default {
   },
   methods: {
     async newSchemaVersion () {
+      const subject = this.name
+
       await this.$store.dispatch('schemas/newSchemaVersion', {
-        subject: this.name,
+        subject,
         schema: this.schema
       })
+
+      if (this.config) {
+        await this.$store.dispatch('schemas/setConfig', {
+          subject,
+          config: this.config
+        })
+      }
 
       this.$router.push({
         name: 'schema',
         params: {
-          subject: this.name
+          subject
         }
       })
     }
