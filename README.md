@@ -44,11 +44,12 @@ $ docker-compose pull
 Listed below are all available config options and their default values.
 If a API url is not given will that module be disabled.
 
-```json
-{
-  "kafka.rest.proxy.api": "http://127.0.0.1:8082",
-  "schema.registry.api": "http://127.0.0.1:8081"
+```javascript
+window.config = {
+  'kafka.rest.proxy.api': 'http://127.0.0.1:8082', // Confluent Kafka REST Proxy
+  'schema.registry.api': 'http://127.0.0.1:8081' // Confluent Schema Registry
 }
+
 ```
 
 ## Prerequisites Confluent schema registry
