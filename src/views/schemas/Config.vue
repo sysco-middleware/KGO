@@ -1,31 +1,45 @@
 <template>
   <div class="form-group">
-    <label class="form-label">Schema uses the global compatibility level <b>[{{level}}]</b><br>Change compatibility level to:</label>
-    <select class="form-select" v-model="level">
-      <option class="c-hand" value="none">None</option>
-      <option class="c-hand" value="full">Full</option>
-      <option class="c-hand" value="forward">Forward</option>
-      <option class="c-hand" value="backward">Backward</option>
+    <label class="form-label">Schema uses the <span v-if="usesGlobalCompatibility">global</span> compatibility level <b>[{{usedCompatibility}}]</b><br>Change compatibility level to:</label>
+    <select class="form-select" v-model="config.compatibility" @change="compatibilityLevelChange">
+      <option class="c-hand" value="NONE">None</option>
+      <option class="c-hand" value="FULL">Full</option>
+      <option class="c-hand" value="FORWARD">Forward</option>
+      <option class="c-hand" value="BACKWARD">Backward</option>
     </select>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   props: {
-    schema: {
+    config: {
       type: Object,
-      required: true,
-      default: () => {}
+      required: true
     }
   },
   computed: {
-    config () {
-      const schema = this.schema
-      return schema.config || {}
-    },
-    level () {
-      return this.config.level || 'none'
+    ...mapState('schemas', [
+      'global'
+    ])
+  },
+  data () {
+    return {
+      usesGlobalCompatibility: '',
+      usedCompatibility: ''
+    }
+  },
+  async created () {
+    await this.$store.dispatch('schemas/fetchGlobalConfig')
+
+    this.usedCompatibility = this.config.compatibility || this.global.config.compatibility
+    this.usesGlobalCompatibility = !this.config.compatibility
+  },
+  methods: {
+    compatibilityLevelChange () {
+      this.$emit('update:config', this.config)
     }
   }
 }
