@@ -35,8 +35,10 @@ export default {
         return
       }
 
-      const json = JSON.parse(content)
-      this.$emit('update:content', json)
+      try {
+        const json = JSON.parse(content)
+        this.$emit('update:content', json)
+      } catch (error) {}
     })
 
     this.editor.on('change', () => {
