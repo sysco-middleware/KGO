@@ -53,10 +53,18 @@ export default {
   },
   watch: {
     left () {
+      if (!this.editor) {
+        return
+      }
+
       const {left} = this.editor.getEditors()
       left.setValue(this.prettyLeft, 1)
     },
     right () {
+      if (!this.editor) {
+        return
+      }
+
       const {right} = this.editor.getEditors()
       right.setValue(this.prettyRight, 1)
     }
