@@ -42,6 +42,10 @@ export default {
   },
   computed: {
     fields () {
+      if (!this.schema.fields) {
+        return []
+      }
+
       const fields = this.schema.fields.map(function (field) {
         field.type = Array.isArray(field.type) ? field.type.join(', ') : field.type
         return field

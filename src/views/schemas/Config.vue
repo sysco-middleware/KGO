@@ -1,7 +1,7 @@
 <template>
   <div class="form-group">
     <label class="form-label">Schema uses the <span v-if="usesGlobalCompatibility">global</span> compatibility level <b>[{{usedCompatibility}}]</b><br>Change compatibility level to:</label>
-    <select class="form-select" v-model="config.compatibility" @change="compatibilityLevelChange">
+    <select class="form-select" v-model="compatibility" @change="compatibilityLevelChange">
       <option class="c-hand" value="NONE">None</option>
       <option class="c-hand" value="FULL">Full</option>
       <option class="c-hand" value="FORWARD">Forward</option>
@@ -17,7 +17,7 @@ export default {
   props: {
     config: {
       type: Object,
-      required: true
+      default: () => {}
     }
   },
   computed: {
@@ -28,14 +28,16 @@ export default {
   data () {
     return {
       usesGlobalCompatibility: '',
-      usedCompatibility: ''
+      usedCompatibility: '',
+      compatibility: ''
     }
   },
   async created () {
     await this.$store.dispatch('schemas/fetchGlobalConfig')
 
-    this.usedCompatibility = this.config.compatibility || this.global.config.compatibility
-    this.usesGlobalCompatibility = !this.config.compatibility
+    this.usedCompatibility = (this.config ? this.config.compatibility : null) || this.global.config.compatibility
+    this.usesGlobalCompatibility = !this.config || !this.config.compatibility
+    this.compatibility = this.usedCompatibility
   },
   methods: {
     compatibilityLevelChange () {

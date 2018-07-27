@@ -32,7 +32,7 @@
         <Info :schema="schema" />
       </Tab>
       <Tab name="Config">
-        <Config :config.sync="config" v-if="config" />
+        <Config :config.sync="config" />
 
         <div class="columns mt-2">
           <div class="column">
