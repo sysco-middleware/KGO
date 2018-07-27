@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Store from './store'
 
 import Dashboard from './views/Dashboard.vue'
 
@@ -81,11 +80,6 @@ const router = new Router({
 })
 
 router.beforeEach(async function (to, from, next) {
-  const hasActiveConfig = Store.getters['config/hasActive']
-  if (!hasActiveConfig) {
-    await Store.dispatch('config/fetch')
-  }
-
   next()
 })
 
