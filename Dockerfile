@@ -4,13 +4,11 @@ FROM node:10-alpine as builder
 # Create and navigate to working directory
 WORKDIR /ui
 COPY . .
-ARG environment
-RUN echo Environment mode set to: ${environment}
 
 # Install deps and build project
 RUN npm set progress=false && npm config set depth 0 && \
     npm i && \
-    npm run build -- --modern --mode ${environment} && \
+    npm run build -- --modern && \
     npm run lint && \
     npm cache clean --force
 
