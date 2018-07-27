@@ -1,5 +1,13 @@
 <template>
   <div class="panel">
+    <div class="panel-header bg-primary text-white">
+      <div class="columns f-middle">
+        <div class="column">
+          <div class="panel-title h5 mt-10">Create a new schema</div>
+        </div>
+      </div>
+    </div>
+
     <Tabs nav="panel-nav" body="panel-body">
       <Tab name="Schema">
         <div class="form-group">
@@ -9,28 +17,15 @@
 
         <div class="form-group">
           <label class="form-label">Schema</label>
-          <!-- eslint-disable -->
-<SchemaEditor>{
-	"type": "record",
-	"name": "",
-	"namespace": "",
-	"doc": "",
-	"fields": [
-		{
-			"name": "example",
-			"type": "string"
-		}
-	]
-}</SchemaEditor>
-          <!-- eslint-enable -->
+          <SchemaEditor :content.sync="schema" />
         </div>
       </Tab>
       <Tab name="Config">
-        <Config />
+        <Config :config.sync="config" />
       </Tab>
     </Tabs>
     <div class="panel-footer">
-      <button class="btn btn-block">Save</button>
+      <button class="btn btn-block" @click="newSchemaVersion()">Save</button>
     </div>
   </div>
 </template>
@@ -50,13 +45,36 @@ export default {
   },
   data () {
     return {
-      name: ''
+      name: '',
+      config: {},
+      schema: {
+        type: 'record',
+        name: '',
+        namespace: '',
+        doc: '',
+        fields: [
+          {
+            name: 'example',
+            type: 'string'
+          }
+        ]
+      }
     }
   },
-  mounted () {
-  },
   methods: {
+    async newSchemaVersion () {
+      await this.$store.dispatch('schemas/newSchemaVersion', {
+        subject: this.name,
+        schema: this.schema
+      })
 
+      this.$router.push({
+        name: 'schema',
+        params: {
+          subject: this.name
+        }
+      })
+    }
   }
 }
 </script>

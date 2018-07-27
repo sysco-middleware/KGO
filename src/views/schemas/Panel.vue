@@ -164,7 +164,7 @@ export default {
      */
     async checkCompatibility () {
       try {
-        await this.$store.dispatch('schemas/checkCompatibility', {
+        await this.$store.dispatch('schemas/checkCompatibilityLatest', {
           subject: this.subject,
           schema: this.schema
         })

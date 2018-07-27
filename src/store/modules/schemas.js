@@ -125,7 +125,7 @@ const actions = {
    * @param  {String} options.subject Subject name
    * @param  {Object} options.schema  Schema to be validated
    */
-  async checkCompatibility ({state}, {subject, schema}) {
+  async checkCompatibilityLatest ({state}, {subject, schema}) {
     const info = state.subjects[subject]
     schema = JSON.stringify(schema)
 
@@ -154,6 +154,11 @@ const actions = {
       throw new Error('the given schema is incompatible with the latest version')
     }
   },
+  /**
+   * Create a new schema version for the given subject.
+   * @param  {String} options.subject  Subject name
+   * @param  {Object} options.schema   Subject schema
+   */
   async newSchemaVersion ({dispatch}, {subject, schema}) {
     schema = JSON.stringify(schema)
 
@@ -162,6 +167,20 @@ const actions = {
     })
 
     await dispatch('fetchVersions', subject)
+  },
+  /**
+   * Create a new subject with the given Schema
+   * @param  {String} options.subject  Subject name
+   * @param  {Object} options.schema   Subject schema
+   */
+  async newSubject ({dispatch}, {subject, schema}) {
+    schema = JSON.stringify(schema)
+
+    await request.post(`/subjects/${subject}`, {
+      schema
+    })
+
+    await dispatch('fetchAvailable')
   },
   /**
    * Set the config for the given subject
