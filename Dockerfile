@@ -6,11 +6,11 @@ WORKDIR /ui
 COPY . .
 
 # Install deps and build project
-RUN npm set progress=false && npm config set depth 0 && \
-    npm i && \
-    npm run build -- --modern && \
-    npm run lint && \
-    npm cache clean --force
+RUN npm set progress=false && npm config set depth 0
+RUN npm i
+RUN npm run build --modern
+RUN npm run lint
+RUN npm cache clean --force
 
 ### STAGE 2: Setup ###
 FROM nginx:1.14-alpine
