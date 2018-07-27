@@ -5,7 +5,7 @@
         <li class="menu-item">
           <div class="tile tile-centered">
             <div class="tile-content">
-              {{total}} Schemas
+              {{total}} Subjects
             </div>
 
             <router-link :to="{ name: 'new/schema' }">
@@ -18,7 +18,7 @@
         <div v-if="schemasAsArray.length > 0">
           <paginate name="schemas" :list="schemasAsArray" :per="5" tag="div">
             <li class="menu-item" v-for="{key, schema} of paginated('schemas')" :key="key">
-              <div class="menu-badge">
+              <div class="menu-badge" v-if="schema.version">
                 <label class="label label-rounded label-primary">v{{schema.version}}</label>
               </div>
               <router-link :to="{ name: 'schema', params: { subject: key }}" active-class="active" class="c-hand">{{key}}</router-link>
@@ -95,8 +95,7 @@ export default {
     }
   },
   async created () {
-    // await this.$store.dispatch('schemas/fetchAvailible')
-    // await this.$store.dispatch('schemas/fetchAllVersions')
+    await this.$store.dispatch('schemas/fetchAvailable')
   },
   methods: {
     selectSchema (schema) {
