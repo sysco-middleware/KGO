@@ -36,9 +36,7 @@
         </div>
 
         <div class="empty" v-if="!hasMessages && topic.format">
-          <div class="empty-icon"><i class="icon icon-3x icon-download"></i></div>
-          <p class="empty-title h5">Consuming messages</p>
-          <p class="empty-subtitle">{{waitingMessage}}</p>
+          <div class="loading loading-lg"></div>
         </div>
 
         <template v-if="topic.format">
@@ -151,9 +149,6 @@ export default {
       'messages',
       'consumers'
     ]),
-    ...mapGetters({
-      waitingMessage: 'waiting/randomMessages'
-    }),
     /**
      * Check if the given topic has a consumer
      * @return {Boolean} Checksum result
