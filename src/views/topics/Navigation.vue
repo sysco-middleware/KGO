@@ -36,7 +36,7 @@ export default {
         return
       }
 
-      const url = URL.createObjectURL(new Blob([encodeURIComponent(JSON.stringify(this.consumedMessages))]), {
+      const url = URL.createObjectURL(new Blob([JSON.stringify(this.consumedMessages, null, '\t')]), {
         type: 'data:text/json;charset=utf-8'
       })
       const name = `${this.selected}.json`
