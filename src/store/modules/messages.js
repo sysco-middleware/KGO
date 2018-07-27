@@ -1,7 +1,15 @@
 import Vue from 'vue'
 import axios from 'axios'
 import * as utils from '@/lib/utils'
+import * as config from '@/lib/config'
 import {CONSUMER_FORMAT_ERROR, KAFKA_GROUP_PREFIX, CONTENT_JSON_KAFKA} from '@/lib/constants'
+
+const request = axios.create({
+  baseURL: config.get('kafka.rest.proxy.api'),
+  headers: {
+    'Content-Type': CONTENT_JSON_KAFKA
+  }
+})
 
 const state = {
   consumers: {},
@@ -36,7 +44,7 @@ const actions = {
     }
 
     const group = `${KAFKA_GROUP_PREFIX}-${state.session}`
-    await state.request.post(`/consumers/${group}`, {
+    await request.post(`/consumers/${group}`, {
       ...config,
       format,
       name
@@ -265,7 +273,7 @@ const mutations = {
    * @param  {Object} config Consumer configurations
    */
   consumer (state, {group, name, format, topic, config}) {
-    const {baseURL} = state.request.defaults
+    const {baseURL} = request.defaults
     const lastActive = new Date()
     const url = `${baseURL}/consumers/${group}/instances/${name}`
 
@@ -342,14 +350,6 @@ const mutations = {
    */
   revokeConsumer (state, topic) {
     Vue.delete(state.consumers, topic)
-  },
-  setRequestHandle (state, {baseURL}) {
-    state.request = axios.create({
-      baseURL,
-      headers: {
-        'Content-Type': CONTENT_JSON_KAFKA
-      }
-    })
   }
 }
 

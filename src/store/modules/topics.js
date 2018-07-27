@@ -1,10 +1,14 @@
 import Vue from 'vue'
 import axios from 'axios'
+import * as config from '@/lib/config'
 import {LOCAL_STORAGE_PREFIX} from '@/lib/constants'
 
+const request = axios.create({
+  baseURL: config.get('kafka.rest.proxy.api')
+})
+
 const state = {
-  topics: {},
-  request: null
+  topics: {}
 }
 
 const getters = {
@@ -12,7 +16,7 @@ const getters = {
 
 const actions = {
   async fetchAll ({commit, state}) {
-    const {data: topics} = await state.request.get('/topics')
+    const {data: topics} = await request.get('/topics')
     commit('set', topics)
 
     for (let topic of topics) {
@@ -29,7 +33,7 @@ const actions = {
     }
   },
   async fetch ({commit, state}, topic) {
-    const {data: info} = await state.request.get(`/topics/${topic}`)
+    const {data: info} = await request.get(`/topics/${topic}`)
 
     commit('append', {
       topic,
@@ -70,11 +74,6 @@ const mutations = {
   revokeFormat (state, topic) {
     localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}-${topic}`)
     Vue.delete(state.topics[topic], 'format')
-  },
-  setRequestHandle (state, {baseURL}) {
-    state.request = axios.create({
-      baseURL
-    })
   }
 }
 
