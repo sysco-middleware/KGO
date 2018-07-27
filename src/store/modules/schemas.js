@@ -154,7 +154,7 @@ const actions = {
       throw new Error('the given schema is incompatible with the latest version')
     }
   },
-  async newSchema ({dispatch}, {subject, schema}) {
+  async newSchemaVersion ({dispatch}, {subject, schema}) {
     schema = JSON.stringify(schema)
 
     await request.post(`/subjects/${subject}/versions`, {

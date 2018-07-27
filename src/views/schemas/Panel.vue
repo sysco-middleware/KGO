@@ -24,7 +24,7 @@
             <button class="btn btn-block" @click="checkCompatibility()">Validate</button>
           </div>
           <div class="column" v-if="compatible">
-            <button class="btn btn-block btn-primary" @click="newSchema()">Update</button>
+            <button class="btn btn-block btn-primary" @click="newSchemaVersion()">Update</button>
           </div>
         </div>
       </Tab>
@@ -183,8 +183,8 @@ export default {
         config: this.config
       })
     },
-    async newSchema () {
-      await this.$store.dispatch('schemas/newSchema', {
+    async newSchemaVersion () {
+      await this.$store.dispatch('schemas/newSchemaVersion', {
         subject: this.subject,
         schema: this.schema
       })
