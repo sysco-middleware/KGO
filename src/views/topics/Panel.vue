@@ -133,7 +133,7 @@
 </template>
 
 <script>
-import {mapState, mapGetters} from 'vuex'
+import {mapState} from 'vuex'
 
 import Tab from '@/components/Tab.vue'
 import Tabs from '@/components/Tabs.vue'
