@@ -44,6 +44,8 @@ $ docker-compose pull
 Listed below are all available config options and their default values.
 If a API url is not given will that module be disabled.
 
+The `config.js` file should be located in the public directory.
+
 ```javascript
 window.config = {
   'kafka.rest.proxy.api': 'http://127.0.0.1:8082', // Confluent Kafka REST Proxy
