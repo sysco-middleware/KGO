@@ -21,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, index) of schema.fields" :key="index">
+        <tr v-for="(row, index) of fields" :key="index">
           <td>{{row.name}}</td>
           <td>{{row.type}}</td>
           <td>{{row.default}}</td>
@@ -38,6 +38,16 @@ export default {
     schema: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    fields () {
+      const fields = this.schema.fields.map(function (field) {
+        field.type = Array.isArray(field.type) ? field.type.join(', ') : field.type
+        return field
+      })
+
+      return fields
     }
   }
 }
