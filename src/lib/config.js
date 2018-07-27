@@ -1,6 +1,4 @@
-import axios from 'axios'
-
-let config = null
+const config = window.config
 
 export function get (key) {
   if (!config) {
@@ -12,9 +10,4 @@ export function get (key) {
 
 export function active () {
   return config
-}
-
-export async function fetch () {
-  const {data} = await axios.get('/config.json')
-  config = data
 }

@@ -14,9 +14,6 @@ const getters = {
 }
 
 const actions = {
-  async fetch ({commit}) {
-    await config.fetch()
-  }
 }
 
 const mutations = {}
