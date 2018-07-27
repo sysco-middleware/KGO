@@ -29,12 +29,18 @@ export default {
       this.setValue(this.content)
     }
 
-    this.editor.session.on('change', () => {
-      try {
-        const content = this.editor.session.getValue()
-        const json = JSON.parse(content)
-        this.$emit('update:content', json)
-      } catch (err) {}
+    this.editor.on('blur', () => {
+      const content = this.editor.session.getValue()
+      if (!content) {
+        return
+      }
+
+      const json = JSON.parse(content)
+      this.$emit('update:content', json)
+    })
+
+    this.editor.on('change', () => {
+      this.$emit('change')
     })
   },
   methods: {
