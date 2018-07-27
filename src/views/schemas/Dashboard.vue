@@ -1,4 +1,4 @@
-<template>
+\<template>
   <div class="columns">
     <div class="column col-4">
       <ul class="menu">
@@ -56,7 +56,7 @@
       </ul>
 
       <div class="mt-2">
-        <p>Global compatibility level: <b>{{global.config.compatibility}}</b></p>
+        <p>Global compatibility level: <b>{{global.config.compatibility || 'unknown'}}</b></p>
       </div>
     </div>
     <div class="column col-8">
