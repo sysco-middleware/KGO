@@ -7,7 +7,7 @@ Currently does ... support the following Kafka APIs:
 
 ## Getting Started
 
-> 🚧 When you want to connect ... to the Confluent schema registry [make sure](#prerequisites-confluent-schema-registry) to set the required CORS settings.
+> 🚧 When you want to connect ... to the Confluent schema registry or proxy [make sure](#prerequisites-confluent) to set the required CORS settings.
 
 In order to get started do you need to have [`docker`](https://docs.docker.com/install/) installed.
 You could pull the docker image from docker hub or build the application yourself.
@@ -52,12 +52,12 @@ window.config = {
 
 ```
 
-## Prerequisites Confluent schema registry
+## Prerequisites Confluent
 
 You will need to enable CORS in your schema registry service.
 Open and modify the schema registry properties file.
 
-`confluent-x.x.x/etc/schema-registry/schema-registry.properties`
+`confluent-x.x.x/etc/(schema-registry|kafka-rest)/(schema-registry|kafka-rest).properties`
 
 Set the allow origin to any hostname (`*`) or to the hostname where the UI will be hosted (`http://example.com`).
 You can read more about CORS at [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
