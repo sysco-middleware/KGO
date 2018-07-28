@@ -65,24 +65,31 @@ export default {
     async newSchemaVersion () {
       const subject = this.name
 
-      await this.$store.dispatch('schemas/newSchemaVersion', {
-        subject,
-        schema: this.schema
-      })
-
-      if (this.config) {
-        await this.$store.dispatch('schemas/setConfig', {
+      try {
+        await this.$store.dispatch('schemas/newSchemaVersion', {
           subject,
-          config: this.config
+          schema: this.schema
+        })
+
+        if (this.config) {
+          await this.$store.dispatch('schemas/setConfig', {
+            subject,
+            config: this.config
+          })
+        }
+
+        this.$router.push({
+          name: 'schema',
+          params: {
+            subject
+          }
+        })
+      } catch (error) {
+        this.$notify({
+          message: 'The schema is invalid.',
+          type: 'error'
         })
       }
-
-      this.$router.push({
-        name: 'schema',
-        params: {
-          subject
-        }
-      })
     }
   }
 }

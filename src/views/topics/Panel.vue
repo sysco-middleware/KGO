@@ -35,12 +35,12 @@
           </div>
         </div>
 
-        <div class="empty" v-if="!hasMessages && topic.format">
+        <div class="empty" v-if="(!hasMessages && !unknownError) && topic.format">
           <div class="loading loading-lg"></div>
         </div>
 
         <template v-if="topic.format">
-          <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember v-if="hasMessages">
+          <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember v-if="hasMessages || unknownError">
             <div class="columns panel-body flush-padding-bottom">
               <!-- <div class="column col-xs">
                 <form class="input-group" @submit.prevent="preformFilter()">
@@ -75,10 +75,10 @@
             </div>
 
             <Tab name="Table">
-              <MessageTable :messages="consumedMessages" />
+              <MessageTable :messages="consumedMessages" v-show="hasMessages" />
             </Tab>
             <Tab name="RAW">
-              <TopicEditor :content="consumedMessages" />
+              <TopicEditor :content="consumedMessages" v-show="hasMessages" />
             </Tab>
           </Tabs>
         </template>
@@ -220,7 +220,8 @@ export default {
         10000,
         50000,
         100000
-      ]
+      ],
+      unknownError: false
     }
   },
   async created () {
@@ -301,11 +302,31 @@ export default {
         timeout = interval
       }
 
-      await this.$store.dispatch('messages/fetch', {
-        topic: this.name,
-        bytes: this.consumingMaxBytes,
-        timeout
-      })
+      try {
+        await this.$store.dispatch('messages/fetch', {
+          topic: this.name,
+          bytes: this.consumingMaxBytes,
+          timeout
+        })
+      } catch (error) {
+        if (!error.response) {
+          this.$notify({
+            message: String(error),
+            type: 'error'
+          })
+          return
+        }
+
+        const {data} = error.response || {}
+        const {error_code: errorCode, message} = data || {}
+
+        this.$notify({
+          message: `${errorCode} - ${message}`,
+          type: 'error'
+        })
+
+        this.unknownError = true
+      }
     },
     /**
      * Assign all partitions of the given topic to the active consumer

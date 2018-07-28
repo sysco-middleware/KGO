@@ -172,12 +172,17 @@ export default {
           schema: this.schema
         })
 
-        // TODO: send a notification
+        this.$notify({
+          message: 'The schema is valid.',
+          type: 'success'
+        })
 
         this.compatible = true
       } catch (error) {
-        // TODO: send a notification
-        console.log(String(error))
+        this.$notify({
+          message: String(error),
+          type: 'error'
+        })
       }
     },
     async setConfig () {
