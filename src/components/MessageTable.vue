@@ -71,6 +71,15 @@ export default {
         renderAllRows: true,
         outsideClickDeselects: false
       })
+
+      // This is a chrome only feature
+      try {
+        const observer = new ResizeObserver(() => {
+          this.table.render()
+        })
+
+        observer.observe(this.$refs.table)
+      } catch (error) {}
     }
   }
 }
