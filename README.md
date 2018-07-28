@@ -7,37 +7,35 @@ Currently does ... support the following Kafka APIs:
 
 ## Getting Started
 
-In order to get started do you need to have [`docker`](https://docs.docker.com/install/) and [`docker-compose`](https://docs.docker.com/compose/install/) installed.
-Clone the master branch of this repository and pull the latest docker images.
-
-```
-$ git clone ...
-$ cd ...
-$ docker-compose pull
-```
-
-Modify the configuration [options](#config-options).
-
 > 🚧 When you want to connect ... to the Confluent schema registry [make sure](#prerequisites-confluent-schema-registry) to set the required CORS settings.
 
-`$ nano config.json`
+In order to get started do you need to have [`docker`](https://docs.docker.com/install/) installed.
+You could pull the docker image from docker hub or build the application yourself.
 
-By default is ... running on port `8080` if you want to change the default port, update the `docker-compose.yml` file.
-Once you have set the configuration options, run the docker compose containers.
-The `-d` flag runs the docker containers in demonised mode.
+**Docker**
 
+```bash
+$ ...
 ```
-$ docker-compose up -d
+
+**Locally**
+
+```bash
+$ git clone ...
+$ cd ...
+```
+
+Modify or set the configuration [options](#config-options) at `/public/config.js`.
+You could create a docker image or run the application locally.
+
+```bash
+$ npm i
+$ npm run serve
 ```
 
 ## Updating
 
-When wanting to update ..., pull the latest changes from git and images from docker hub.
-
-```
-$ git pull
-$ docker-compose pull
-```
+When wanting to update ..., pull the latest changes from git or docker hub.
 
 ## Config options
 
