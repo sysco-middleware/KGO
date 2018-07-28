@@ -24,12 +24,14 @@
 }
 
 // TOAST
-.toast {
-  &.toast-notification {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-    max-width: 90%;
-    width: auto;
+.toast-notification {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  max-width: 90%;
+  width: auto;
+
+  .toast {
+    margin-top: .5rem;
   }
 }
