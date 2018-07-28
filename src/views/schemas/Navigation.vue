@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button v-if="selected" class="btn" @click="exportSchema()">Export Schemas</button>
+    <button v-if="selected" class="btn" @click="exportSchema()">Export Schema<span v-show="hasMultipleSchemas">s</span></button>
   </div>
 </template>
 
@@ -15,6 +15,9 @@ export default {
     ]),
     subject () {
       return this.subjects[this.selected] || {}
+    },
+    hasMultipleSchemas () {
+      return Boolean(Object.keys(this.subject).length > 1)
     }
   },
   data () {
