@@ -14,12 +14,11 @@
 
     <router-view class="cpp-view"></router-view>
 
-    <!-- <div class="toast toast-primary toast-notification">
-      <button class="btn btn-clear float-right"></button>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    </div> -->
+    <Notifications />
   </div>
 </template>
 
 <script>
+export default {
+}
 </script>
