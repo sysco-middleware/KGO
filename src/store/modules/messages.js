@@ -256,7 +256,10 @@ const actions = {
       if (errorCode === CONSUMER_FORMAT_ERROR) {
         await dispatch('revokeConsumer', topic)
         await commit('topics/revokeFormat', topic, {root: true})
+        return
       }
+
+      throw error
     }
   }
 }
