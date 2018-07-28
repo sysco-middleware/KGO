@@ -2,13 +2,16 @@
   <div class="panel" v-if="selected">
     <div class="panel-header bg-primary text-white">
       <div class="columns f-middle">
-        <div class="column">
+        <div class="column col-6">
           <div class="panel-title h5 mt-10">Schema: {{subject}}</div>
           <div class="panel-subtitle">ID: {{selected.id}}</div>
         </div>
+        <div class="column col-2 d-flex f-end">
+          <button class="btn btn-error text-capitalize" @click="deleteSubject()"><i class="icon icon-delete"></i> delete</button>
+        </div>
         <div class="column">
-          <div class="form-group text-dark">
-            <select class="form-select select-sm" v-model="version" :disabled="versions.length <= 1">
+          <div class="form-group">
+            <select class="form-select text-dark" v-model="version" :disabled="versions.length <= 1">
               <option v-for="version of versions" :key="version" :value="version">v{{version}}</option>
             </select>
           </div>
@@ -192,6 +195,19 @@ export default {
       })
 
       this.version = this.latest
+    },
+    /**
+     * Delete the active subject from the store
+     */
+    async deleteSubject () {
+      const confirmed = confirm(`are you sure that you want to delete: ${this.subject}`)
+
+      if (!confirmed) {
+        return
+      }
+
+      await this.$store.dispatch('schemas/deleteSubject', this.subject)
+      this.$router.push({name: 'schemas'})
     }
   }
 }

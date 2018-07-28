@@ -51,7 +51,7 @@ const actions = {
    */
   async fetchAllVersions ({dispatch, state}, subject) {
     if (!state.subjects[subject]) {
-      throw new Error('the given subject is not found')
+      throw new Error(`the given subject: ${subject} is not found`)
     }
 
     for (let version in state.subjects[subject]) {
@@ -198,6 +198,14 @@ const actions = {
   async setGlobalConfig ({dispatch}, config) {
     await request.put('/config', config)
     await dispatch('fetchGlobalConfig')
+  },
+  /**
+   * Delete the given subject from the store.
+   * @param {String} subject Subject name
+   */
+  async deleteSubject ({commit}, subject) {
+    await request.delete(`/subjects/${subject}`)
+    commit('delete', subject)
   }
 }
 
@@ -259,6 +267,13 @@ const mutations = {
    */
   setGlobalConfig (state, config) {
     Vue.set(state.global, 'config', config)
+  },
+  /**
+   * Delete the given subject from the store.
+   * @param  {String} subject Subject name
+   */
+  delete (state, subject) {
+    Vue.delete(state.subjects, subject)
   }
 }
 
