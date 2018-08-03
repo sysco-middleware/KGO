@@ -1,13 +1,13 @@
-... is a web UI that enables you to govern your Kafka clusters. When connected to the [Confluent rest proxy](https://docs.confluent.io/current/kafka-rest/docs/intro.html) are you additionally able to track changes and store information.
+KGO (Kafka governance) is a web UI that enables you to govern your Kafka clusters. When connected to the [Confluent rest proxy](https://docs.confluent.io/current/kafka-rest/docs/intro.html) are you additionally able to track changes and store information.
 
-Currently does ... support the following Kafka APIs:
+Currently does KGO support the following Kafka APIs:
 
 - [Confluent rest proxy](https://docs.confluent.io/current/kafka-rest/docs/intro.html)
 - [Confluent schema registry](https://docs.confluent.io/current/schema-registry/docs/index.html)
 
 ## Getting Started
 
-> 🚧 When you want to connect ... to the Confluent schema registry or proxy [make sure](#prerequisites-confluent) to set the required CORS settings.
+> 🚧 When you want to connect KGO to the Confluent schema registry or proxy [make sure](#prerequisites-confluent) to set the required CORS settings.
 
 In order to get started do you need to have [`docker`](https://docs.docker.com/install/) installed.
 You could pull the docker image from docker hub or build the application yourself.
@@ -29,13 +29,13 @@ Modify or set the configuration [options](#config-options) at `/public/config.js
 You could create a docker image or run the application locally.
 
 ```bash
-$ npm i
+$ npm install
 $ npm run serve
 ```
 
 ## Updating
 
-When wanting to update ..., pull the latest changes from git or docker hub.
+When wanting to update KGO, pull the latest changes from git or docker hub.
 
 ## Config options
 
