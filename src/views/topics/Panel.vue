@@ -194,7 +194,7 @@ export default {
       return this.messages[this.name] || []
     },
     hasMessages () {
-      return Boolean(this.consumedMessages.length > 0)
+      return Boolean(this.consumedMessages.length > 0 || this.consumerReturned)
     }
   },
   components: {
@@ -222,7 +222,8 @@ export default {
         50000,
         100000
       ],
-      unknownError: false
+      unknownError: false,
+      consumerReturned: false
     }
   },
   async created () {
@@ -309,6 +310,8 @@ export default {
           bytes: this.consumingMaxBytes,
           timeout
         })
+
+        this.consumerReturned = true
       } catch (error) {
         if (!error.response) {
           this.$notify({
