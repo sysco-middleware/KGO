@@ -27,6 +27,7 @@
           <div class="empty-action columns">
             <div class="column col-6 col-mx-auto">
               <div class="btn-group btn-group-block">
+                <button class="btn" @click="setTopicFormat('binary+json')">Binary+JSON</button>
                 <button class="btn" @click="setTopicFormat('binary')">Binary</button>
                 <button class="btn" @click="setTopicFormat('json')">JSON</button>
                 <button class="btn" @click="setTopicFormat('avro')">AVRO</button>

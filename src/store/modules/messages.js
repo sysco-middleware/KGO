@@ -43,10 +43,14 @@ const actions = {
       await dispatch('revokeConsumer', topic)
     }
 
+    // A format could also have a 'local' decoder (ex. json)
+    // Local formats are given after a + (ex. 'binary+json')
+    const [apiFormat] = format.split('+')
+
     const group = `${KAFKA_GROUP_PREFIX}-${state.session}`
     await request.post(`/consumers/${group}`, {
       ...config,
-      format,
+      format: apiFormat,
       name
     })
 
@@ -235,9 +239,15 @@ const actions = {
       // Parse the kafka messages
       messages = messages.map((message) => {
         if (message.value) {
-          switch (consumer.format) {
+          const [format, localFormat] = consumer.format.split('+')
+          switch (format) {
             case 'binary':
               message.value = atob(message.value)
+
+              switch (localFormat) {
+                case 'json':
+                  message.value = JSON.parse(message.value)
+              }
               break
           }
         }
