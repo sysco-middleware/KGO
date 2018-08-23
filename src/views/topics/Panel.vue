@@ -36,12 +36,12 @@
           </div>
         </div>
 
-        <div class="empty" v-if="(!hasMessages && !unknownError) && topic.format">
+        <div class="empty" v-if="(!consumerReturned && !unknownError) && topic.format">
           <div class="loading loading-lg"></div>
         </div>
 
         <template v-if="topic.format">
-          <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember v-if="hasMessages || unknownError">
+          <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember v-if="consumerReturned || unknownError">
             <div class="columns panel-body flush-padding-bottom">
               <!-- <div class="column col-xs">
                 <form class="input-group" @submit.prevent="preformFilter()">
@@ -77,6 +77,11 @@
 
             <Tab name="Table">
               <MessageTable :messages="consumedMessages" v-show="hasMessages" />
+
+              <div v-if="!hasMessages" class="empty">
+                <p class="empty-title h5">No messages received</p>
+                <p class="empty-subtitle">This topic could still be empty or no messages were found on the given offset.</p>
+              </div>
             </Tab>
             <Tab name="RAW">
               <TopicEditor :content="consumedMessages" v-show="hasMessages" />
@@ -194,7 +199,7 @@ export default {
       return this.messages[this.name] || []
     },
     hasMessages () {
-      return Boolean(this.consumedMessages.length > 0 || this.consumerReturned)
+      return Boolean(this.consumedMessages.length > 0)
     }
   },
   components: {
