@@ -75,17 +75,19 @@
               </div>
             </div>
 
-            <Tab name="Table">
-              <MessageTable :messages="consumedMessages" v-show="hasMessages" />
+            <Tab name="Table" v-if="hasMessages">
+              <MessageTable :messages="consumedMessages" />
+            </Tab>
+            <Tab name="RAW" v-if="hasMessages">
+              <TopicEditor :content="consumedMessages" />
+            </Tab>
 
-              <div v-if="!hasMessages" class="empty">
+            <div class="panel-body" v-if="!hasMessages">
+              <div class="empty">
                 <p class="empty-title h5">No messages received</p>
                 <p class="empty-subtitle">This topic could still be empty or no messages were found on the given offset.</p>
               </div>
-            </Tab>
-            <Tab name="RAW">
-              <TopicEditor :content="consumedMessages" v-show="hasMessages" />
-            </Tab>
+            </div>
           </Tabs>
         </template>
       </Tab>
