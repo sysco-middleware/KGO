@@ -36,12 +36,12 @@
           </div>
         </div>
 
-        <div class="empty" v-if="(!consumerReturned && !unknownError) && topic.format">
+        <div class="empty" v-if="(!hasConsumer && !unknownError) && topic.format">
           <div class="loading loading-lg"></div>
         </div>
 
         <template v-if="topic.format">
-          <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember v-if="consumerReturned || unknownError">
+          <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember v-if="hasConsumer || unknownError">
             <div class="columns panel-body flush-padding-bottom">
               <!-- <div class="column col-xs">
                 <form class="input-group" @submit.prevent="preformFilter()">
@@ -227,15 +227,14 @@ export default {
         50000,
         100000
       ],
-      unknownError: false,
-      consumerReturned: false
+      unknownError: false
     }
   },
   async created () {
     await this.$store.dispatch('topics/fetch', this.name)
 
     // If a topic's format is available create a consumer
-    if (this.topic.format) {
+    if (this.topic.format && !this.hasConsumer) {
       await this.setupConsumer()
     }
   },
@@ -315,8 +314,6 @@ export default {
           bytes: this.consumingMaxBytes,
           timeout
         })
-
-        this.consumerReturned = true
       } catch (error) {
         if (!error.response) {
           this.$notify({
