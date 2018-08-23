@@ -250,6 +250,7 @@ const actions = {
               }
               break
           }
+          message.key = atob(message.key)
         }
 
         return message
