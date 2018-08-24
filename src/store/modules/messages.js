@@ -1,21 +1,13 @@
 import Vue from 'vue'
 import axios from 'axios'
 import * as utils from '@/lib/utils'
-import * as config from '@/lib/config'
-import {CONSUMER_FORMAT_ERROR, KAFKA_GROUP_PREFIX, CONTENT_JSON_KAFKA} from '@/lib/constants'
-
-const request = axios.create({
-  baseURL: config.get('kafka.rest.proxy.api'),
-  headers: {
-    'Content-Type': CONTENT_JSON_KAFKA
-  }
-})
+import * as clusters from '@/lib/clusters'
+import {CONSUMER_FORMAT_ERROR, KAFKA_GROUP_PREFIX, CONTENT_JSON_KAFKA, CLUSTER_REST_PROXY} from '@/lib/constants'
 
 const state = {
   consumers: {},
   messages: {},
-  session: utils.GUID(),
-  request: null
+  session: utils.GUID()
 }
 
 const getters = {
@@ -31,7 +23,7 @@ const actions = {
    * @param  {Object}  [config={}]       The config given to the consumer
    * @return {Promise}                   The promise gets resolved if the given consumer is found or created
    */
-  async consumer ({commit, state, dispatch}, {name, topic, format = 'binary', config = {}, resurrecting = false}) {
+  async consumer ({commit, state, dispatch, getters}, {name, topic, format = 'binary', config = {}, resurrecting = false}) {
     // Check if the consumer already exists
     if (state.consumers[topic] && !(state.consumers[topic].died && resurrecting)) {
       const consumer = state.consumers[topic]
@@ -48,7 +40,7 @@ const actions = {
     const [apiFormat] = format.split('+')
 
     const group = `${KAFKA_GROUP_PREFIX}-${state.session}`
-    await request.post(`/consumers/${group}`, {
+    await clusters.request(CLUSTER_REST_PROXY).post(`/consumers/${group}`, {
       ...config,
       format: apiFormat,
       name
@@ -287,9 +279,9 @@ const mutations = {
    * @param  {Object} config Consumer configurations
    */
   consumer (state, {group, name, format, topic, config}) {
-    const {baseURL} = request.defaults
+    const cluster = clusters.active()[CLUSTER_REST_PROXY]
+    const url = `${cluster}/consumers/${group}/instances/${name}`
     const lastActive = new Date()
-    const url = `${baseURL}/consumers/${group}/instances/${name}`
 
     Vue.set(state.consumers, topic, {
       request: axios.create({

@@ -1,10 +1,6 @@
 import Vue from 'vue'
-import axios from 'axios'
-import * as config from '@/lib/config'
-
-const request = axios.create({
-  baseURL: config.get('schema.registry.api')
-})
+import * as clusters from '@/lib/clusters'
+import {CLUSTER_SCHEMA_REGISTRY} from '@/lib/constants'
 
 const state = {
   subjects: {},
@@ -42,7 +38,7 @@ const actions = {
    * Fetch all available subjects in the Kafka Schema registry.
    */
   async fetchAvailable ({commit}) {
-    const {data: subjects} = await request.get('/subjects')
+    const {data: subjects} = await clusters.request(CLUSTER_SCHEMA_REGISTRY).get('/subjects')
     commit('setAvailible', subjects)
   },
   /**
@@ -63,7 +59,7 @@ const actions = {
    * @param  {String} subject Subject name
    */
   async fetchVersions ({commit}, subject) {
-    const {data: versions} = await request.get(`/subjects/${subject}/versions`)
+    const {data: versions} = await clusters.request(CLUSTER_SCHEMA_REGISTRY).get(`/subjects/${subject}/versions`)
 
     commit('setVersions', {
       subject,
@@ -76,7 +72,7 @@ const actions = {
    * @param  {Number} object.version Schema version number
    */
   async fetchSchemaByVersion ({commit}, {subject, version}) {
-    const {data: info} = await request.get(`/subjects/${subject}/versions/${version}`)
+    const {data: info} = await clusters.request(CLUSTER_SCHEMA_REGISTRY).get(`/subjects/${subject}/versions/${version}`)
     info.schema = JSON.parse(info.schema)
 
     commit('setSchema', {
@@ -92,7 +88,7 @@ const actions = {
    */
   async fetchConfig ({commit}, subject) {
     try {
-      const {data} = await request.get(`/config/${subject}`)
+      const {data} = await clusters.request(CLUSTER_SCHEMA_REGISTRY).get(`/config/${subject}`)
       const config = {
         compatibility: data.compatibilityLevel
       }
@@ -112,7 +108,7 @@ const actions = {
    * Fetch the global config from Kafka Schema Registry
    */
   async fetchGlobalConfig ({commit}) {
-    const {data} = await request.get('/config')
+    const {data} = await clusters.request(CLUSTER_SCHEMA_REGISTRY).get('/config')
     const config = {
       compatibility: data.compatibilityLevel
     }
@@ -146,7 +142,7 @@ const actions = {
       throw new Error('the schema has not been changed')
     }
 
-    const {data} = await request.post(`/compatibility/subjects/${subject}/versions/${latest}`, {
+    const {data} = await clusters.request(CLUSTER_SCHEMA_REGISTRY).post(`/compatibility/subjects/${subject}/versions/${latest}`, {
       schema
     })
 
@@ -162,7 +158,7 @@ const actions = {
   async newSchemaVersion ({dispatch}, {subject, schema}) {
     schema = JSON.stringify(schema)
 
-    await request.post(`/subjects/${subject}/versions`, {
+    await clusters.request(CLUSTER_SCHEMA_REGISTRY).post(`/subjects/${subject}/versions`, {
       schema
     })
 
@@ -176,7 +172,7 @@ const actions = {
   async newSubject ({dispatch}, {subject, schema}) {
     schema = JSON.stringify(schema)
 
-    await request.post(`/subjects/${subject}`, {
+    await clusters.request(CLUSTER_SCHEMA_REGISTRY).post(`/subjects/${subject}`, {
       schema
     })
 
@@ -188,7 +184,7 @@ const actions = {
    * @param {Object} options.config  Subject config
    */
   async setConfig ({dispatch}, {subject, config}) {
-    await request.put(`/config/${subject}`, config)
+    await clusters.request(CLUSTER_SCHEMA_REGISTRY).put(`/config/${subject}`, config)
     await dispatch('fetchConfig', subject)
   },
   /**
@@ -196,7 +192,7 @@ const actions = {
    * @param {Object} config Global config
    */
   async setGlobalConfig ({dispatch}, config) {
-    await request.put('/config', config)
+    await clusters.request(CLUSTER_SCHEMA_REGISTRY).put('/config', config)
     await dispatch('fetchGlobalConfig')
   },
   /**
@@ -204,7 +200,7 @@ const actions = {
    * @param {String} subject Subject name
    */
   async deleteSubject ({commit}, subject) {
-    await request.delete(`/subjects/${subject}`)
+    await clusters.request(CLUSTER_SCHEMA_REGISTRY).delete(`/subjects/${subject}`)
     commit('delete', subject)
   }
 }

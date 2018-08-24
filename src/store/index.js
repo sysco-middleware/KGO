@@ -7,6 +7,7 @@ import actions from './actions'
 import state from './state'
 
 import messages from './modules/messages'
+import clusters from './modules/clusters'
 import schemas from './modules/schemas'
 import config from './modules/config'
 import topics from './modules/topics'
@@ -20,6 +21,7 @@ export default new Vuex.Store({
   state,
   modules: {
     messages,
+    clusters,
     schemas,
     config,
     topics

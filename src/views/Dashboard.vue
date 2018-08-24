@@ -7,7 +7,7 @@
         <!-- <router-link :to="{ name: 'topologies' }" class="btn btn-link">Topologies</router-link> -->
       </section>
       <section class="navbar-center">
-        <!-- Middle -->
+        <b class="text-uppercase">{{selected.name}}</b>
       </section>
       <router-view class="navbar-section" name="navigation"></router-view>
     </header>
@@ -19,6 +19,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
+  computed: {
+    ...mapState('clusters', [
+      'selected'
+    ])
+  }
 }
 </script>

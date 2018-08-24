@@ -1,11 +1,6 @@
 import Vue from 'vue'
-import axios from 'axios'
-import * as config from '@/lib/config'
-import {LOCAL_STORAGE_PREFIX} from '@/lib/constants'
-
-const request = axios.create({
-  baseURL: config.get('kafka.rest.proxy.api')
-})
+import * as clusters from '@/lib/clusters'
+import {LOCAL_STORAGE_PREFIX, CLUSTER_REST_PROXY} from '@/lib/constants'
 
 const state = {
   topics: {}
@@ -16,7 +11,8 @@ const getters = {
 
 const actions = {
   async fetchAll ({commit, state}) {
-    const {data: topics} = await request.get('/topics')
+    const {data: topics} = await clusters.request(CLUSTER_REST_PROXY).get('/topics')
+
     commit('set', topics)
 
     for (let topic of topics) {
@@ -32,8 +28,8 @@ const actions = {
       })
     }
   },
-  async fetch ({commit, state}, topic) {
-    const {data: info} = await request.get(`/topics/${topic}`)
+  async fetch ({commit, state, rootGetters: getters}, topic) {
+    const {data: info} = await clusters.request(CLUSTER_REST_PROXY).get(`/topics/${topic}`)
 
     commit('append', {
       topic,
