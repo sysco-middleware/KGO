@@ -1,5 +1,5 @@
 <template>
-  <section v-show="isActive" :id="hash" :class="[body]">
+  <section v-show="isActive && show" :id="hash" :class="[body]">
     <slot />
   </section>
 </template>

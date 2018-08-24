@@ -7,7 +7,7 @@
         <!-- <router-link :to="{ name: 'topologies' }" class="btn btn-link">Topologies</router-link> -->
       </section>
       <section class="navbar-center">
-        <!-- centered logo or brand -->
+        <!-- Middle -->
       </section>
       <router-view class="navbar-section" name="navigation"></router-view>
     </header>

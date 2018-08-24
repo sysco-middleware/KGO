@@ -68,7 +68,7 @@ export default {
     },
     findDefault () {
       let defaultTab = this.tabs.find((tab) => tab.default)
-      if (!defaultTab) {
+      if (!defaultTab && this.tabs[0]) {
         defaultTab = this.tabs[0].hash
       }
 

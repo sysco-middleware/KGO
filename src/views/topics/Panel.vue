@@ -75,10 +75,10 @@
               </div>
             </div>
 
-            <Tab name="Table" v-if="hasMessages">
+            <Tab name="Table" :show="hasMessages">
               <MessageTable :messages="consumedMessages" />
             </Tab>
-            <Tab name="RAW" v-if="hasMessages">
+            <Tab name="RAW" :show="hasMessages">
               <TopicEditor :content="consumedMessages" />
             </Tab>
 
