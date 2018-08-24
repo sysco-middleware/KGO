@@ -26,6 +26,9 @@ export default {
     ...mapState('clusters', [
       'selected'
     ])
+  },
+  created () {
+    this.$store.dispatch('clusters/fetch')
   }
 }
 </script>
