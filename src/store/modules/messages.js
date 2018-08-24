@@ -2,7 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import * as utils from '@/lib/utils'
 import * as clusters from '@/lib/clusters'
-import {CONSUMER_FORMAT_ERROR, KAFKA_GROUP_PREFIX, CONTENT_JSON_KAFKA, CLUSTER_REST_PROXY} from '@/lib/constants'
+import {CONSUMER_FORMAT_ERROR, KAFKA_GROUP_PREFIX, PROXY_CONTENT_JSON, CLUSTER_REST_PROXY} from '@/lib/constants'
 
 const state = {
   consumers: {},
@@ -40,7 +40,10 @@ const actions = {
     const [apiFormat] = format.split('+')
 
     const group = `${KAFKA_GROUP_PREFIX}-${state.session}`
-    await clusters.request(CLUSTER_REST_PROXY).post(`/consumers/${group}`, {
+    await clusters.request(CLUSTER_REST_PROXY, {
+      content: PROXY_CONTENT_JSON,
+      accept: PROXY_CONTENT_JSON
+    }).post(`/consumers/${group}`, {
       ...config,
       format: apiFormat,
       name
@@ -287,7 +290,7 @@ const mutations = {
       request: axios.create({
         baseURL: url,
         headers: {
-          'Content-Type': CONTENT_JSON_KAFKA
+          'Content-Type': PROXY_CONTENT_JSON
         }
       }),
       url,

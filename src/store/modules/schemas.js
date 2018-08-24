@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import * as clusters from '@/lib/clusters'
-import {CLUSTER_SCHEMA_REGISTRY} from '@/lib/constants'
+import {CLUSTER_SCHEMA_REGISTRY, SCHEMA_CONTENT_JSON} from '@/lib/constants'
 
 const state = {
   subjects: {},
@@ -38,7 +38,9 @@ const actions = {
    * Fetch all available subjects in the Kafka Schema registry.
    */
   async fetchAvailable ({commit}) {
-    const {data: subjects} = await clusters.request(CLUSTER_SCHEMA_REGISTRY).get('/subjects')
+    const {data: subjects} = await clusters.request(CLUSTER_SCHEMA_REGISTRY, {
+      accept: SCHEMA_CONTENT_JSON
+    }).get('/subjects')
     commit('setAvailible', subjects)
   },
   /**
@@ -59,7 +61,9 @@ const actions = {
    * @param  {String} subject Subject name
    */
   async fetchVersions ({commit}, subject) {
-    const {data: versions} = await clusters.request(CLUSTER_SCHEMA_REGISTRY).get(`/subjects/${subject}/versions`)
+    const {data: versions} = await clusters.request(CLUSTER_SCHEMA_REGISTRY, {
+      accept: SCHEMA_CONTENT_JSON
+    }).get(`/subjects/${subject}/versions`)
 
     commit('setVersions', {
       subject,
@@ -72,7 +76,9 @@ const actions = {
    * @param  {Number} object.version Schema version number
    */
   async fetchSchemaByVersion ({commit}, {subject, version}) {
-    const {data: info} = await clusters.request(CLUSTER_SCHEMA_REGISTRY).get(`/subjects/${subject}/versions/${version}`)
+    const {data: info} = await clusters.request(CLUSTER_SCHEMA_REGISTRY, {
+      accept: SCHEMA_CONTENT_JSON
+    }).get(`/subjects/${subject}/versions/${version}`)
     info.schema = JSON.parse(info.schema)
 
     commit('setSchema', {
@@ -88,7 +94,9 @@ const actions = {
    */
   async fetchConfig ({commit}, subject) {
     try {
-      const {data} = await clusters.request(CLUSTER_SCHEMA_REGISTRY).get(`/config/${subject}`)
+      const {data} = await clusters.request(CLUSTER_SCHEMA_REGISTRY, {
+        accept: SCHEMA_CONTENT_JSON
+      }).get(`/config/${subject}`)
       const config = {
         compatibility: data.compatibilityLevel
       }
@@ -108,7 +116,9 @@ const actions = {
    * Fetch the global config from Kafka Schema Registry
    */
   async fetchGlobalConfig ({commit}) {
-    const {data} = await clusters.request(CLUSTER_SCHEMA_REGISTRY).get('/config')
+    const {data} = await clusters.request(CLUSTER_SCHEMA_REGISTRY, {
+      accept: SCHEMA_CONTENT_JSON
+    }).get('/config')
     const config = {
       compatibility: data.compatibilityLevel
     }
@@ -142,7 +152,9 @@ const actions = {
       throw new Error('the schema has not been changed')
     }
 
-    const {data} = await clusters.request(CLUSTER_SCHEMA_REGISTRY).post(`/compatibility/subjects/${subject}/versions/${latest}`, {
+    const {data} = await clusters.request(CLUSTER_SCHEMA_REGISTRY, {
+      accept: SCHEMA_CONTENT_JSON
+    }).post(`/compatibility/subjects/${subject}/versions/${latest}`, {
       schema
     })
 
@@ -158,7 +170,9 @@ const actions = {
   async newSchemaVersion ({dispatch}, {subject, schema}) {
     schema = JSON.stringify(schema)
 
-    await clusters.request(CLUSTER_SCHEMA_REGISTRY).post(`/subjects/${subject}/versions`, {
+    await clusters.request(CLUSTER_SCHEMA_REGISTRY, {
+      accept: SCHEMA_CONTENT_JSON
+    }).post(`/subjects/${subject}/versions`, {
       schema
     })
 
@@ -172,7 +186,9 @@ const actions = {
   async newSubject ({dispatch}, {subject, schema}) {
     schema = JSON.stringify(schema)
 
-    await clusters.request(CLUSTER_SCHEMA_REGISTRY).post(`/subjects/${subject}`, {
+    await clusters.request(CLUSTER_SCHEMA_REGISTRY, {
+      accept: SCHEMA_CONTENT_JSON
+    }).post(`/subjects/${subject}`, {
       schema
     })
 
@@ -184,7 +200,9 @@ const actions = {
    * @param {Object} options.config  Subject config
    */
   async setConfig ({dispatch}, {subject, config}) {
-    await clusters.request(CLUSTER_SCHEMA_REGISTRY).put(`/config/${subject}`, config)
+    await clusters.request(CLUSTER_SCHEMA_REGISTRY, {
+      accept: SCHEMA_CONTENT_JSON
+    }).put(`/config/${subject}`, config)
     await dispatch('fetchConfig', subject)
   },
   /**
@@ -192,7 +210,9 @@ const actions = {
    * @param {Object} config Global config
    */
   async setGlobalConfig ({dispatch}, config) {
-    await clusters.request(CLUSTER_SCHEMA_REGISTRY).put('/config', config)
+    await clusters.request(CLUSTER_SCHEMA_REGISTRY, {
+      accept: SCHEMA_CONTENT_JSON
+    }).put('/config', config)
     await dispatch('fetchGlobalConfig')
   },
   /**
@@ -200,7 +220,9 @@ const actions = {
    * @param {String} subject Subject name
    */
   async deleteSubject ({commit}, subject) {
-    await clusters.request(CLUSTER_SCHEMA_REGISTRY).delete(`/subjects/${subject}`)
+    await clusters.request(CLUSTER_SCHEMA_REGISTRY, {
+      accept: SCHEMA_CONTENT_JSON
+    }).delete(`/subjects/${subject}`)
     commit('delete', subject)
   }
 }

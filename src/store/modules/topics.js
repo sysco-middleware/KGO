@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import * as clusters from '@/lib/clusters'
-import {LOCAL_STORAGE_PREFIX, CLUSTER_REST_PROXY} from '@/lib/constants'
+import {LOCAL_STORAGE_PREFIX, CLUSTER_REST_PROXY, PROXY_CONTENT_JSON} from '@/lib/constants'
 
 const state = {
   topics: {}
@@ -11,7 +11,9 @@ const getters = {
 
 const actions = {
   async fetchAll ({commit, state}) {
-    const {data: topics} = await clusters.request(CLUSTER_REST_PROXY).get('/topics')
+    const {data: topics} = await clusters.request(CLUSTER_REST_PROXY, {
+      accept: PROXY_CONTENT_JSON
+    }).get('/topics')
 
     commit('set', topics)
 
@@ -29,7 +31,9 @@ const actions = {
     }
   },
   async fetch ({commit, state, rootGetters: getters}, topic) {
-    const {data: info} = await clusters.request(CLUSTER_REST_PROXY).get(`/topics/${topic}`)
+    const {data: info} = await clusters.request(CLUSTER_REST_PROXY, {
+      accept: PROXY_CONTENT_JSON
+    }).get(`/topics/${topic}`)
 
     commit('append', {
       topic,
