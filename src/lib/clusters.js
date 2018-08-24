@@ -17,7 +17,8 @@ export function request (key) {
   const client = axios.create({
     baseURL: cluster[key],
     headers: {
-      'Content-Type': CONTENT_JSON_KAFKA
+      'Content-Type': CONTENT_JSON_KAFKA,
+      'Accept': CONTENT_JSON_KAFKA
     }
   })
 
