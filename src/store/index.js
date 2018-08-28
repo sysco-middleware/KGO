@@ -12,6 +12,7 @@ import clusters from './modules/clusters'
 import schemas from './modules/schemas'
 import config from './modules/config'
 import topics from './modules/topics'
+import user from './modules/user'
 
 Vue.use(Vuex)
 
@@ -26,6 +27,7 @@ export default new Vuex.Store({
     clusters,
     schemas,
     config,
-    topics
+    topics,
+    user
   }
 })

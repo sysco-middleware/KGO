@@ -1,6 +1,9 @@
 export const CONSUMER_FORMAT_ERROR = 40601
 export const KAFKA_GROUP_PREFIX = 'kafka-ui'
+
 export const LOCAL_STORAGE_PREFIX = 'kafka-ui'
+export const LOCAL_STORAGE_EMAIL = `${LOCAL_STORAGE_PREFIX}-user-email`
+export const LOCAL_STORAGE_NAME = `${LOCAL_STORAGE_PREFIX}-user-name`
 
 export const PROXY_CONTENT_JSON = 'application/vnd.kafka.v2+json'
 export const PROXY_CONTENT_JSON_JSON = 'application/vnd.kafka.json.v2+json'

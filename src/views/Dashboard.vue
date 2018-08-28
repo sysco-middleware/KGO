@@ -15,20 +15,37 @@
     <router-view class="cpp-view"></router-view>
 
     <Notifications />
+
+    <div class="columns f-end" v-if="user">
+      <div class="chip">
+        <figure class="avatar avatar-sm" :data-initial="user.shortname" style="background-color: #5755d9;"></figure>
+        {{user.name}}
+        <a class="btn btn-clear" aria-label="Close" role="button" @click="unregister()"></a>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   computed: {
     ...mapState('clusters', [
       'selected'
-    ])
+    ]),
+    ...mapGetters({
+      user: 'user/active'
+    })
   },
   created () {
     this.$store.dispatch('clusters/fetch')
+  },
+  methods: {
+    unregister () {
+      this.$store.dispatch('user/clear')
+      this.$router.push({ name: 'register' })
+    }
   }
 }
 </script>

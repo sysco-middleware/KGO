@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Store from '@/store'
 
+import Register from './views/Register.vue'
 import Dashboard from './views/Dashboard.vue'
 
 import SchemaDashboard from './views/schemas/Dashboard.vue'
@@ -19,8 +21,17 @@ Vue.use(Router)
 const router = new Router({
   routes: [
     {
+      name: 'register',
+      path: '/register',
+      component: Register
+    },
+    {
       path: '',
+      name: 'dashboard',
       component: Dashboard,
+      meta: {
+        registered: true
+      },
       children: [
         {
           path: '/schemas',
@@ -64,15 +75,6 @@ const router = new Router({
               component: TopicsPanel
             }
           ]
-        },
-        {
-          path: '/topologies',
-          children: [
-            {
-              path: '',
-              name: 'topologies'
-            }
-          ]
         }
       ]
     }
@@ -80,6 +82,15 @@ const router = new Router({
 })
 
 router.beforeEach(async function (to, from, next) {
+  const requiresToBeRegistered = to.matched.some((record) => record.meta.registered)
+  if (requiresToBeRegistered) {
+    const user = Store.state.user.active
+    console.log(user)
+    if (!user) {
+      return router.push({ name: 'register' })
+    }
+  }
+
   next()
 })
 

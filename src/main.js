@@ -7,6 +7,8 @@ import router from './router'
 import store from './store/'
 import './registerServiceWorker'
 
+store.dispatch('user/fetchFromCache')
+
 Vue.use(VuePaginate)
 Vue.use(Notify)
 
