@@ -99,19 +99,39 @@ export default {
       'subjects',
       'configs'
     ]),
+    /**
+     * Return the active schema
+     * @return {Object} Active schema
+     */
     schemas () {
       const {subject} = this.$route.params
       return this.subjects[subject] || {}
     },
+    /**
+     * Return all available versions in the active schemas
+     * @return {Array} Array containing all schema versions
+     */
     versions () {
       return Object.keys(this.schemas || {})
     },
+    /**
+     * Returns boolean for if to show the diff tab
+     * @return {Boolean} show diff tab or not
+     */
     showDiff () {
       return this.versions.length > 1
     },
+    /**
+     * Returns the latest version found in the schemas versions
+     * @return {Number} The latest schema version
+     */
     latest () {
       return this.versions.length > 0 ? Math.max(...this.versions) : null
     },
+    /**
+     * Returns the selected schema if no schema is found is a null returned
+     * @return {Object|Null} The selected schema if found
+     */
     selected () {
       return this.version && this.schemas ? this.schemas[this.version] : null
     },
