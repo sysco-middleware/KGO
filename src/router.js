@@ -85,7 +85,6 @@ router.beforeEach(async function (to, from, next) {
   const requiresToBeRegistered = to.matched.some((record) => record.meta.registered)
   if (requiresToBeRegistered) {
     const user = Store.state.user.active
-    console.log(user)
     if (!user) {
       return router.push({ name: 'register' })
     }
