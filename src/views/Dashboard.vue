@@ -5,9 +5,11 @@
         <router-link :to="{ name: 'schemas' }" class="btn btn-link">Schemas</router-link>
         <router-link :to="{ name: 'topics' }" class="btn btn-link">Topics</router-link>
       </section>
-      <section class="navbar-center">
-        <b class="text-uppercase">{{selected.name}}</b>
-      </section>
+      <div class="navbar-center form-group">
+        <select class="form-select" v-model="cluster">
+          <option v-for="(cluster, index) of clusters" :key="index">{{cluster.name}}</option>
+        </select>
+      </div>
       <router-view class="navbar-section" name="navigation"></router-view>
     </header>
 
@@ -31,11 +33,27 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapState('clusters', [
+      'clusters',
       'selected'
     ]),
     ...mapGetters({
       user: 'user/active'
     })
+  },
+  data () {
+    return {
+      cluster: null
+    }
+  },
+  watch: {
+    selected () {
+      const selected = this.selected.name
+      if (this.cluster === selected) {
+        return
+      }
+
+      this.cluster = selected
+    }
   },
   created () {
     this.$store.dispatch('clusters/fetch')
