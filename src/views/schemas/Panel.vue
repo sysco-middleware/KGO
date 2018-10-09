@@ -18,58 +18,75 @@
         </div>
       </div>
     </div>
-    <Tabs nav="panel-nav" body="panel-body" name="schema" remember>
-      <Tab name="Schema">
-        <SchemaEditor :content.sync="schema" @change="compatible = false" />
+    <Tabs name="schema-panel" remember>
+      <Tab name="Insight">
+        <Tabs nav="panel-nav" body="panel-body" name="schema" remember>
+          <Tab name="Schema">
+            <SchemaEditor :content.sync="schema" @change="compatible = false" />
 
-        <div class="columns mt-2">
-          <div class="column" v-show="!compatible">
-            <button class="btn btn-block" @click="checkCompatibility()">Validate</button>
-          </div>
-          <div class="column" v-show="compatible">
-            <button class="btn btn-block btn-primary" @click="newSchemaVersion()">Update</button>
-          </div>
-        </div>
-      </Tab>
-      <Tab name="Info">
-        <Info :schema="schema" />
-      </Tab>
-      <Tab name="Config">
-        <Config :config.sync="config" ref="config" />
-
-        <div class="columns mt-2">
-          <div class="column">
-            <button class="btn btn-block btn-primary" @click="setConfig()">Update</button>
-          </div>
-        </div>
-      </Tab>
-      <Tab name="Diff" :show="showDiff">
-        <div class="columns mb-2">
-          <div class="column">
-            <div class="form-group">
-              <select class="form-select select-sm" v-model="compareLeftVersion">
-                <option v-for="version of versions" :key="version" :value="version">v{{version}}</option>
-              </select>
+            <div class="columns mt-2">
+              <div class="column" v-show="!compatible">
+                <button class="btn btn-block" @click="checkCompatibility()">Validate</button>
+              </div>
+              <div class="column" v-show="compatible">
+                <button class="btn btn-block btn-primary" @click="newSchemaVersion()">Update</button>
+              </div>
             </div>
-          </div>
+          </Tab>
+          <Tab name="Info">
+            <Info :schema="schema" />
+          </Tab>
+          <Tab name="Config">
+            <Config :config.sync="config" ref="config" />
 
-          <div class="column">
-            <div class="divider-vert"></div>
-          </div>
-
-          <div class="column">
-            <div class="form-group">
-              <select class="form-select select-sm" v-model="compareRightVersion">
-                <option v-for="version of versions" :key="version" :value="version">v{{version}}</option>
-              </select>
+            <div class="columns mt-2">
+              <div class="column">
+                <button class="btn btn-block btn-primary" @click="setConfig()">Update</button>
+              </div>
             </div>
-          </div>
-        </div>
+          </Tab>
+          <Tab name="Diff" :show="showDiff">
+            <div class="columns mb-2">
+              <div class="column">
+                <div class="form-group">
+                  <select class="form-select select-sm" v-model="compareLeftVersion">
+                    <option v-for="version of versions" :key="version" :value="version">v{{version}}</option>
+                  </select>
+                </div>
+              </div>
 
-        <SchemaDiffEditor
-          :left="compareLeftSchema"
-          :right="compareRightSchema"
-          class="relative" />
+              <div class="column">
+                <div class="divider-vert"></div>
+              </div>
+
+              <div class="column">
+                <div class="form-group">
+                  <select class="form-select select-sm" v-model="compareRightVersion">
+                    <option v-for="version of versions" :key="version" :value="version">v{{version}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <SchemaDiffEditor
+              :left="compareLeftSchema"
+              :right="compareRightSchema"
+              class="relative" />
+          </Tab>
+        </Tabs>
+      </Tab>
+      <Tab name="Changelog">
+        <Tabs nav="panel-nav" body="panel-body" name="changelog" remember>
+          <Tab name="Commits">
+
+          </Tab>
+          <Tab name="Contributers">
+
+          </Tab>
+          <Tab name="Contributers">
+
+          </Tab>
+        </Tabs>
       </Tab>
     </Tabs>
   </div>
