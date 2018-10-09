@@ -5,6 +5,10 @@ const state = {
 }
 
 const getters = {
+  /**
+   * Get the active user's profile
+   * @return {Object} Object containing the users profile
+   */
   active (state) {
     if (!state.active) {
       return {}
@@ -29,6 +33,9 @@ const getters = {
 }
 
 const actions = {
+  /**
+   * Fetch locally stored information about the user if found
+   */
   fetchFromCache ({commit}) {
     const name = localStorage.getItem(LOCAL_STORAGE_NAME)
     const email = localStorage.getItem(LOCAL_STORAGE_EMAIL)
@@ -42,6 +49,11 @@ const actions = {
       email
     })
   },
+  /**
+   * Register a new user with the given name and email
+   * @param  {String} options.name   Name of the user
+   * @param  {String} options.email  Email of the user
+   */
   async register ({commit}, {name, email}) {
     // TODO: commit a users information to kafka
     if (!name || !email) {
@@ -53,6 +65,10 @@ const actions = {
       email
     })
   },
+  /**
+   * Clear the information about the active user
+   * from the state and local storage.
+   */
   clear ({commit}) {
     commit('clear')
   }

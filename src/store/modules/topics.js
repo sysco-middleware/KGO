@@ -10,6 +10,10 @@ const getters = {
 }
 
 const actions = {
+  /**
+   * Fetch all available topics and commit fetch all available
+   * formats stored in local storage.
+   */
   async fetchAll ({commit, state}) {
     const {data: topics} = await clusters.request(CLUSTER_REST_PROXY, {
       accept: PROXY_CONTENT_JSON
@@ -30,6 +34,10 @@ const actions = {
       })
     }
   },
+  /**
+   * Fetch detailed information about the given topic.
+   * @param {String} topic Name of the topic
+   */
   async fetch ({commit, state, rootGetters: getters}, topic) {
     const {data: info} = await clusters.request(CLUSTER_REST_PROXY, {
       accept: PROXY_CONTENT_JSON
