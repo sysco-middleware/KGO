@@ -14,7 +14,7 @@
           </div>
 
           <button class="btn btn-action tooltip tooltip-bottom" @click="fetchConsumed()" data-tooltip="Fetch the latest consumed messages" :disabled="!hasConsumer">
-            <i class="icon icon-refresh"></i>
+            <i class="icon icon-refresh" :class="{ spinning: isLoading }"></i>
           </button>
         </div>
       </div>
@@ -235,7 +235,8 @@ export default {
         100000
       ],
       unknownError: false,
-      reverseMessages: true
+      reverseMessages: true,
+      isLoading: false
     }
   },
   async created () {
@@ -311,6 +312,7 @@ export default {
      * @return {Promise} The promise gets resolved once the messages are fetched
      */
     async fetchConsumed () {
+      this.isLoading = true
       const interval = this.intervalSelection * 1000
       let timeout = 5 * 1000 // Max timeout = 5 sec
 
@@ -343,6 +345,8 @@ export default {
         })
 
         this.unknownError = true
+      } finally {
+        this.isLoading = false
       }
     },
     /**

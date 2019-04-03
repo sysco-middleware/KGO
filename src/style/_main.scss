@@ -18,3 +18,8 @@
 .btn.router-link-active {
   border-color: $primary-color;
 }
+
+.spinning {
+  -webkit-animation: loading 500ms infinite linear;
+  animation: loading 500ms infinite linear;
+}
