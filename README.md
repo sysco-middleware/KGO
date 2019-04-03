@@ -1,13 +1,12 @@
-KGO (Kafka governance) is a web UI that enables you to govern your Kafka clusters. When connected to the [Confluent rest proxy](https://docs.confluent.io/current/kafka-rest/docs/intro.html) are you additionally able to track changes and store information.
-
-Currently does KGO support the following Kafka APIs:
+KGO (Kafka governance) is a web UI that enables you to govern your Kafka clusters.
+Currently does KGO support the following Confluent APIs:
 
 - [Confluent rest proxy](https://docs.confluent.io/current/kafka-rest/docs/intro.html)
 - [Confluent schema registry](https://docs.confluent.io/current/schema-registry/docs/index.html)
 
 ## Getting Started
 
-> 🚧 When you want to connect KGO to the Confluent schema registry or proxy [make sure](#prerequisites-confluent) to set the required CORS settings.
+> 🚧 Before getting started make sure that Confluent schema registry or proxy [is setup](#prerequisites-confluent).
 
 In order to get started do you need to have [`docker`](https://docs.docker.com/install/) installed.
 You could pull the docker image from docker hub or build the application yourself.
@@ -21,8 +20,8 @@ $ ...
 **Locally**
 
 ```bash
-$ git clone ...
-$ cd ...
+$ git clone git@github.com:sysco-middleware/KGO.git
+$ cd KGO
 ```
 
 Modify or set the configuration [options](#config-options) at `/public/config.js`.
@@ -42,17 +41,26 @@ When wanting to update KGO, pull the latest changes from git or docker hub.
 Listed below are all available config options and their default values.
 If a API url is not given will that module be disabled.
 
-The `config.js` file should be located in the public directory.
+The `config.js` file should be located in the public directory (`/public/config.js`).
+
+Multiple clusters could be defined inside the config.
+This allowes to quickly switch between clusters.
 
 ```javascript
-window.config = {
-  'kafka.rest.proxy.api': 'http://127.0.0.1:8082', // Confluent Kafka REST Proxy
-  'schema.registry.api': 'http://127.0.0.1:8081' // Confluent Schema Registry
-}
-
+window.config = [{
+  "name": "cluster 1", // Kafka cluster name
+  "kafka.rest.proxy.api": "http://127.0.0.1:8082", // Confluent Kafka REST Proxy
+  "schema.registry.api": "http://127.0.0.1:8081" // Confluent Schema Registry
+}, {
+  "name": "cluster 2",
+  "kafka.rest.proxy.api": "http://127.0.0.1:8082",
+  "schema.registry.api": "http://127.0.0.1:8081"
+}]
 ```
 
 ## Prerequisites Confluent
+
+An example [docker compose file](https://github.com/sysco-middleware/KGO/blob/develop/docker-compose.yaml) is included inside this project.
 
 You will need to enable CORS in your schema registry service.
 Open and modify the schema registry properties file.
