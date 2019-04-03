@@ -198,7 +198,12 @@ export default {
      * @return {Array} Consumed messages
      */
     consumedMessages () {
-      return this.messages[this.name] || []
+      let messages = (this.messages[this.name] || []).slice()
+      if (this.reverseMessages) {
+        messages = messages.reverse()
+      }
+
+      return messages
     },
     hasMessages () {
       return Boolean(this.consumedMessages.length > 0)
@@ -229,7 +234,8 @@ export default {
         50000,
         100000
       ],
-      unknownError: false
+      unknownError: false,
+      reverseMessages: true
     }
   },
   async created () {
@@ -241,6 +247,9 @@ export default {
     }
   },
   methods: {
+    setConsumingMaxBytes (bytes) {
+      this.consumingMaxBytes = bytes
+    },
     /**
      * Set the topic value format of the active topic and create a representing consumer.
      * @param  {String}  [format='binary'] Format of the given topic
