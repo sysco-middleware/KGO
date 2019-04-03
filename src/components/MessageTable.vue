@@ -38,22 +38,30 @@ export default {
       for (let message of this.messages) {
         let row = [message.offset, message.partition]
 
-        if (message.value) {
-          switch (message.value.constructor) {
-            case Object:
-              for (let key in message.value) {
-                let index = this.headers.indexOf(key)
-                if (index < 0) {
-                  index = this.headers.length
-                  this.headers.push(key)
-                }
+        const constructor = message.value ? message.value.constructor : String
 
-                row[index] = message.value[key]
+        switch (constructor) {
+          case Object:
+            for (let key in message.value) {
+              let index = this.headers.indexOf(key)
+              if (index < 0) {
+                index = this.headers.length
+                this.headers.push(key)
               }
-              break
-            default:
-              break
-          }
+
+              row[index] = message.value[key]
+            }
+            break
+          default:
+            const key = 'value'
+            let index = this.headers.indexOf(key)
+            if (index < 0) {
+              index = this.headers.length
+              this.headers.push(key)
+            }
+
+            row[index] = String(message.value)
+            break
         }
 
         this.rows.push(row)
