@@ -44,7 +44,7 @@
           <Tabs nav="panel-nav" body="panel-body" name="topic-data" remember v-if="hasConsumer || unknownError">
             <div class="columns panel-body flush-padding-bottom">
               <!-- <div class="column col-xs">
-                <form class="input-group" @submit.prevent="preformFilter()">
+                <form class="input-group" @submit.prevent="setFilter()">
                   <input type="text" class="form-input" placeholder="Filter consumed messages" v-model="filterQuery">
                   <button class="btn btn-primary input-group-btn" submit>Filter</button>
                 </form>
@@ -221,6 +221,7 @@ export default {
   data () {
     const {topic} = this.$route.params
     return {
+      filterQuery: '',
       name: topic,
       updateInterval: 0,
       intervalSelection: 0,
@@ -251,6 +252,9 @@ export default {
     }
   },
   methods: {
+    setFilter (query) {
+      this.filterQuery = query
+    },
     setConsumingMaxBytes (bytes) {
       this.consumingMaxBytes = bytes
     },
