@@ -86,6 +86,9 @@
               <div class="empty">
                 <p class="empty-title h5">No messages received</p>
                 <p class="empty-subtitle">This topic could still be empty or no messages were found on the given offset.</p>
+                <div class="empty-action margin-top-30" v-show="isLoading">
+                  <i class="loading loading-lg"></i>
+                </div>
               </div>
             </div>
           </Tabs>
